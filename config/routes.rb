@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
 
   get '/schedule' => 'users#show'
+  resources :calendars, only: [:index, :show, :update]
+
 end
