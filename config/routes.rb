@@ -5,5 +5,6 @@ Rails.application.routes.draw do
 
   get '/schedule' => 'users#show'
   resources :calendars, only: [:index, :show, :update]
+  resources :classes, only: [:index, :new, :create]
 
 end
