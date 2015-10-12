@@ -18,38 +18,40 @@ ActiveRecord::Schema.define(version: 20151004225807) do
 
   create_table "appointments", force: :cascade do |t|
     t.integer  "reminder"
-    t.integer  "users_id"
-    t.integer  "classes_id"
+    t.integer  "user_id"
+    t.integer  "class_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "appointments", ["classes_id"], name: "index_appointments_on_classes_id", using: :btree
-  add_index "appointments", ["users_id"], name: "index_appointments_on_users_id", using: :btree
+  add_index "appointments", ["class_id"], name: "index_appointments_on_class_id", using: :btree
+  add_index "appointments", ["user_id"], name: "index_appointments_on_user_id", using: :btree
 
   create_table "classes", force: :cascade do |t|
+    t.string   "name"
     t.string   "type"
     t.string   "level"
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "duration"
     t.datetime "date"
-    t.integer  "studios_id"
+    t.string   "instructor"
+    t.integer  "studio_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "classes", ["studios_id"], name: "index_classes_on_studios_id", using: :btree
+  add_index "classes", ["studio_id"], name: "index_classes_on_studio_id", using: :btree
 
   create_table "filters", force: :cascade do |t|
+    t.string   "class_name"
     t.string   "class_type"
-    t.string   "class_level"
-    t.integer  "users_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "filters", ["users_id"], name: "index_filters_on_users_id", using: :btree
+  add_index "filters", ["user_id"], name: "index_filters_on_user_id", using: :btree
 
   create_table "studios", force: :cascade do |t|
     t.string   "name"
