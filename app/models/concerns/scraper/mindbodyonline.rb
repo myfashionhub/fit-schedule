@@ -9,6 +9,8 @@ module Scraper
       session.visit url
       sleep 2
 
+      navigate(url, session)
+
       studio_name = session.title.sub(" Online","")
       page = session.within_frame 'mainFrame' do
         Nokogiri::HTML(session.html)
@@ -30,12 +32,12 @@ module Scraper
               cols = row.css('td')
 
               klass = {
-                date: date.gsub("\u00A0", "").strip,
-                time: cols[0].text.gsub("\u00A0", "").strip,
-                name: cols[2].text.gsub("\u00A0", "").strip,
+                date:       date.gsub("\u00A0", "").strip,
+                start_time: cols[0].text.gsub("\u00A0", "").strip,
+                name:       cols[2].text.gsub("\u00A0", "").strip,
                 instructor: cols[3].text.gsub("\u00A0", "").strip,
-                room: cols[4].text.gsub("\u00A0", "").strip,
-                duration: cols[5].text.gsub("\u00A0", "").strip
+                room:       cols[4].text.gsub("\u00A0", "").strip,
+                duration:   cols[5].text.gsub("\u00A0", "").strip
               }
 
               classes.push(klass)
@@ -49,6 +51,15 @@ module Scraper
       { studio_name: studio_name, classes: classes }
     end
 
+    def self.navigate(url, session)
+      if url.index('851') > -1
+        binding.pry
+        #session.find('#tabTD10').click
+        session.find('a', :text => 'AILEY EXTENSION').click
+        sleep 1
+        session.find('#week-tog-c').click
+      end
+    end
   end
 
 end
