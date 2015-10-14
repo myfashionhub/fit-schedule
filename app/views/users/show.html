@@ -8,10 +8,13 @@
 
 <h3>Paste a studio's schedule</h3>
 (We currently support mindbodyonline.com and fitreserve.com)
-
-<form id='studio-schedule'>
   
-</form>
+<%= form_tag("/classes", method: "POST", id: 'studio-schedule') do %>
+  <%= text_field_tag :url %>
+  <%= submit_tag('View classes') %>
+<% end %>
+
+https://www.fitreserve.com/nyc/studios/1019-body-pole
 
 
 <h3>Specify your class preference</h3>

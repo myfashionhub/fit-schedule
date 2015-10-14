@@ -1,7 +1,11 @@
 class SessionsController < ApplicationController
 
   def new
-    render 'sessions/new'
+    if session[:user_id]
+      redirect_to '/schedule'
+    else
+      render 'sessions/new'
+    end
   end
 
   def create

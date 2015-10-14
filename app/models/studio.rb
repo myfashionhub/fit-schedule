@@ -1,10 +1,10 @@
 class Studio < ActiveRecord::Base
-  has_many :classes
+  has_many :klasses
 
   validates :schedule_url, presence: true
 
   def all_classes
-    Class.where(studio_id: self.id)
+    Klass.where(studio_id: self.id)
   end
 
 end

@@ -10,13 +10,12 @@ module Scraper
       studio_name = page.css('.details .name').text
       logo = page.css('.details .logo').last.attributes['src'].value
       address = page.css('.details .address').text.strip.gsub("\n",' ')
-      studio = {
-        name:    studio_name,
-        url:     url,
-        address: address,
-        logo:    logo
-      }
-      #Studio.find_or_create_by()
+      studio = Studio.find_or_create_by({
+        name:         studio_name,
+        schedule_url: url,
+        address:      address,
+        logo:         logo
+      })
 
       classes = []
       page.css('.row.schedule').each do |day|
@@ -32,10 +31,10 @@ module Scraper
             klass = {
               date: date,
               start_time: time[:start_time],
-              end_time: time[:end_time],
-              name: format_class(row.css('.name').text),
+              end_time:   time[:end_time],
+              name:       format_class(row.css('.name').text),
               instructor: row.css('.instructor').text,
-              duration: time[:duration]
+              duration:   time[:duration]
             }  
 
             classes.push(klass)
