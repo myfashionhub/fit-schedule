@@ -7,7 +7,9 @@ class CalendarsController < ApplicationController
       calendars = @calendar.list
       render json: { calendars: calendars }
     rescue => error
-      render json: { error: error }
+      reset_session
+      msg = "Your Google session has expired. Please re-authenticate."
+      render json: { error: msg }
     end
   end
     

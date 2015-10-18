@@ -12,7 +12,8 @@ function Calendar() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        if (data.error) {
+        if (data.error.length > 0) {
+          window.alert(data.error);
           window.location = '/'; 
         } else {
           that.populateCalendars(data.calendars);
