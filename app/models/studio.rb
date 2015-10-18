@@ -4,7 +4,7 @@ class Studio < ActiveRecord::Base
   validates :schedule_url, presence: true
 
   def all_classes
-    Klass.where(studio_id: self.id)
+    Klass.where(studio_id: self.id).where('date >= ?', Date.today)
   end
 
 end
