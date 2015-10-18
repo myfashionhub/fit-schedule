@@ -5,8 +5,13 @@ class FiltersController < ApplicationController
     render json: { filters: filters }
   end
 
-  def update_user_preferences
-    Filter.update_user(params[:filters], current_user)
+  def update
+    Filter.update_user_preferences(params[:filters], current_user)
+  end
+
+  def apply
+    classes = Filter.suggest_classes(current_user, params[:studio_id])
+    render json: { classes: classes }
   end
 
 end
