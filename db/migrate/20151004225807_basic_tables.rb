@@ -8,6 +8,7 @@ class BasicTables < ActiveRecord::Migration
       t.string :google_uid
       t.string :google_token
       t.text   :availability
+      t.string :calendar_id
       t.string :zipcode
       t.timestamps
     end

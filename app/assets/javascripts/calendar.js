@@ -3,7 +3,8 @@ function Calendar() {
   var that = this;
 
   this.init = function() {
-
+    // when calendar is chosen var calendarId = $('')
+    // this.updateUserCalendar(calendarId);
   };
 
   this.get = function() {
@@ -34,6 +35,33 @@ function Calendar() {
       var item = $('<li>').html(cal.summary).attr('data-id', cal.id);
       list.append(item);
     }
+  };
+
+  this.getEvents = function(calendarId) {
+    $.ajax({
+      url: '/calendars/events?id='+calendarId,
+      type: 'GET',
+      success: function(data) {
+        console.log(data)
+      },
+      error: function(err) {
+        console.log(err)
+      }
+    });
+  };
+
+  this.updateUserCalendar = function(calendarId) {
+    $.ajax({
+      url: '/users',
+      type: 'PUT',
+      data: { calendar_id: calendarId },
+      success: function(data) {
+        console.log(data);
+      },
+      error: function(err) {
+        console.log(err); 
+      }
+    });
   };
 
   this.init();
