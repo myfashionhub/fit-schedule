@@ -12,7 +12,11 @@ function Calendar() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        that.populateCalendars(data.calendars)
+        if (data.error) {
+          window.location = '/'; 
+        } else {
+          that.populateCalendars(data.calendars);
+        }
       }
     });
   }
@@ -21,7 +25,7 @@ function Calendar() {
 
   };
 
-  this.populateCalendars = function(calendars) {
+  this.populateCalendars = function(calendars) {  
     var list = $('.all-calendars');
 
     for (var i = 0; i < calendars.length; i++) {
