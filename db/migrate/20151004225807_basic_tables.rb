@@ -15,6 +15,7 @@ class BasicTables < ActiveRecord::Migration
     create_table :filters do |t|
       t.string   :class_name
       t.string   :class_type
+      t.references :studio, index: true
       t.references :user, index: true
       t.timestamps
     end

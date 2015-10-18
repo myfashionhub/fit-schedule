@@ -46,11 +46,13 @@ ActiveRecord::Schema.define(version: 20151004225807) do
   create_table "filters", force: :cascade do |t|
     t.string   "class_name"
     t.string   "class_type"
+    t.integer  "studio_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "filters", ["studio_id"], name: "index_filters_on_studio_id", using: :btree
   add_index "filters", ["user_id"], name: "index_filters_on_user_id", using: :btree
 
   create_table "studios", force: :cascade do |t|
