@@ -8,7 +8,7 @@ class Klass < ActiveRecord::Base
   
   def self.create_from_raw(data)
     data[:classes].map do |klass|
-      new_class = Klass.find_or_create_by({
+      Klass.find_or_create_by({
         name:       klass[:name],
         date:       klass[:date],
         start_time: klass[:start_time],
@@ -17,8 +17,6 @@ class Klass < ActiveRecord::Base
         duration:   klass[:duration],
         studio_id:  data[:studio].id
       })
-
-      new_class.save ? new_class : nil
     end
   end
 
