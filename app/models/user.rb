@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
         image: auth_hash['info']['image'],
         google_token: auth_hash['credentials']['token']
       )
+    else
+      user.update(google_token: auth_hash['credentials']['token'])
     end
 
     user
