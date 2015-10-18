@@ -30,8 +30,8 @@ class BasicTables < ActiveRecord::Migration
       t.string   :name
       t.string   :type
       t.string   :level   
-      t.datetime :start_time
-      t.datetime :end_time
+      t.string   :start_time
+      t.string   :end_time
       t.integer  :duration
       t.datetime :date
       t.string   :instructor
