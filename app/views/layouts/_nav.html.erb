@@ -1,0 +1,3 @@
+<% if current_user %>
+  <%= button_to 'Sign out', delete_session_path, method: :delete %>
+<% end %>
