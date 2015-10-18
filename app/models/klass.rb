@@ -3,10 +3,12 @@ class Klass < ActiveRecord::Base
 
   belongs_to :studio
   has_many   :appointments
+
+  validates_uniqueness_of :name, scope: [:studio_id, :date, :start_time]
   
   def self.create_from_raw(data)
     data[:classes].map do |klass|
-      Klass.find_or_create_by({
+      new_class = Klass.find_or_create_by({
         name:       klass[:name],
         date:       klass[:date],
         start_time: klass[:start_time],
@@ -15,6 +17,8 @@ class Klass < ActiveRecord::Base
         duration:   klass[:duration],
         studio_id:  data[:studio].id
       })
+
+      new_class.save ? new_class : nil
     end
   end
 
