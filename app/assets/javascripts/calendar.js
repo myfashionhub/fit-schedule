@@ -12,7 +12,7 @@ function Calendar() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        if (data.error.length > 0) {
+        if ('error' in data) {
           window.alert(data.error);
           window.location = '/'; 
         } else {
