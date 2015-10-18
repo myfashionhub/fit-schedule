@@ -32,6 +32,7 @@ function Studio() {
     var studio = data.studio;
     var name   = $('<a>').attr('src', studio.schedule_url).
                    attr('target','_blank').wrapInner(studio.name);
+    $('.studio').attr('data-id', studio.id);
     $('.studio .name').html(name);
     $('.studio .address').html(studio.address);
     window.location.hash = studio.id;

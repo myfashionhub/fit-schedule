@@ -23,8 +23,8 @@ function Calendar() {
     });
   }
 
-  this.show = function() {
-
+  this.addEvent = function() {
+    // Get class id & save appointment
   };
 
   this.populateCalendars = function(calendars) {  
@@ -35,19 +35,6 @@ function Calendar() {
       var item = $('<li>').html(cal.summary).attr('data-id', cal.id);
       list.append(item);
     }
-  };
-
-  this.getEvents = function(calendarId) {
-    $.ajax({
-      url: '/calendars/events?id='+calendarId,
-      type: 'GET',
-      success: function(data) {
-        console.log(data)
-      },
-      error: function(err) {
-        console.log(err)
-      }
-    });
   };
 
   this.updateUserCalendar = function(calendarId) {
