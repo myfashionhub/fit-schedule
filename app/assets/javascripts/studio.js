@@ -22,6 +22,7 @@ function Studio() {
         },
         error: function(err) {
           console.log(err);
+          window.alert('Please enter a valid schedule URL.');
         }
       });
     });
@@ -29,10 +30,11 @@ function Studio() {
 
   this.populateStudio = function(data) {
     var studio = data.studio;
-    var name   = $('<a>').addClass('url').attr('src', studio.schedule_url).
-                  wrapInner(studio.name);
+    var name   = $('<a>').attr('src', studio.schedule_url).
+                   attr('target','_blank').wrapInner(studio.name);
     $('.studio .name').html(name);
     $('.studio .address').html(studio.address);
+    window.location.hash = studio.id;
   };
 
   this.populateClasses = function(data) {
@@ -70,6 +72,18 @@ function Studio() {
                          html(classes[i].instructor);
       classLi.append(name).append(time).append(instructor);
       $('.schedule').append(classLi);
+    }
+
+    this.suggestClasses(classes);
+  };
+
+  this.suggestClasses = function(classes) {
+    var classTypes = _.uniq(_.pluck(classes, 'name'));
+    classTypes = _.sortBy(classTypes, function(self) { return self; });
+
+    for (var i=0; i < classTypes.length; i++) {
+      var classLi = $('<li>').addClass('class').html(classTypes[i]);
+      $('.class-types').append(classLi)
     }
   };
 
