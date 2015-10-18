@@ -4,8 +4,11 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
   delete '/sessions' => 'sessions#destroy', as: 'delete_session'
 
+  put '/users' => 'users#update'
   get '/schedule' => 'users#show'
-  resources :calendars, only: [:index, :show, :update]
+
+  resources :calendars, only: [:index, :update]
+  get '/calendars/events' => 'calendars#show'
 
   get '/classes' => 'klasses#index'
   post '/classes' => 'klasses#create'
