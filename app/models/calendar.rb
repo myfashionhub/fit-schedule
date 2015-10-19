@@ -1,7 +1,10 @@
 class Calendar
 
   def initialize(token)
-    @client = Google::APIClient.new
+    @client = Google::APIClient.new(
+      application_name: 'calendar',
+      application_version: 'v3'
+    )
     @client.authorization.access_token = token
     @service = @client.discovered_api('calendar', 'v3')  
   end
@@ -85,12 +88,13 @@ class Calendar
     )
 
     events = JSON.parse(result.response.body)['items']
+
     events.map do |event|
       if event['kind'] == 'calendar#event' && event['status'] == 'confirmed'
         {
           name: event['summary'],
-          start_time: event['start']['dateTime'],
-          end_time: event['end']['dateTime'],
+          start_time: Time.parse(event['start']['dateTime']),
+          end_time: Time.parse(event['end']['dateTime']),
           link: event['htmlLink']
         }
       end

@@ -3,6 +3,7 @@ function Filter() {
 
   this.init = function() {
 
+    this.apply();
   };
 
   this.updateUserAvailability = function() {
@@ -28,12 +29,15 @@ function Filter() {
   this.apply = function() {
     $('.suggested-classes').click(function() {
       var studioId = $('.studio').attr('data-id');
-      
+
       $.ajax({
         url: '/filters/apply?studio_id='+studioId,
         type: 'GET',
         success: function(data) {
           console.log(data);
+          if (data.classes.error !== undefined) {
+            window.alert(data.classes.error);
+          }          
         },
         error: function(data) {
           console.log(data);

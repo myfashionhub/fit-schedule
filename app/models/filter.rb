@@ -18,37 +18,43 @@ class Filter < ActiveRecord::Base
   end
 
   def self.suggest_classes(user, studio_id)
-    calendar = Calendar.new(user.google_token)
-    events = calendar.list_events(user.calendar_id)
-    classes = Filter.get_preferences(user.id, studio_id)
-    # search through classes & compare with filtered events
+    if user.calendar_id
+      calendar = Calendar.new(user.google_token)
+      events = calendar.list_events(user.calendar_id)
+      classes = Filter.get_preferences(user.id, studio_id)
 
-    classes.select do |klass|
-      date_str   = klass.date.to_date.to_s
-      start_time = convert_to_datetime(klass.start_time, date_str)
-      end_time   = convert_to_datetime(klass.end_time, date_str)
+      classes.select do |klass|
+        date_str   = klass.date.to_date.to_s
+        start_time = convert_to_datetime(klass.start_time, date_str)
+        end_time   = convert_to_datetime(klass.end_time, date_str)  
 
-      events.each do |event|
-        klass if start_time > event['end_time'] && end_time < event['start_time']
+        events.each do |event|
+          klass if start_time > event[:end_time] && end_time < event[:start_time]
+        end
       end
-    end
+    else
+      { error: "The calendar with id #{user.calendar_id.inspect} is not found." }
+    end 
   end
 
   def self.get_preferences(user_id, studio_id)
     class_names = Filter.where(user_id: user_id, studio_id: studio_id).
                     pluck(:class_name).uniq
 
-    classes = Klass.where(studio_id: studio_id).map do |klass|
+    classes = []
+    Klass.where(studio_id: studio_id).each do |klass|
       class_names.each do |name|
-        klass if klass.name == name
+        classes.push(klass) if klass.name == name
       end
-    end.compact
+    end
+
+    classes
   end
 
-  def convert_to_datetime(time_str, date_str)
+  def self.convert_to_datetime(time_str, date_str)
     time_str = time_str.include?('AM') ?
                  time_str.split(' ').first :
-                 (parseInt(time_str.split(' ').first) + 12).to_s
+                 ((time_str.split(' ').first).to_i + 12).to_s
 
     Time.parse(date_str + ' ' + time_str)
   end
