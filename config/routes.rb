@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   root 'sessions#new'
   get "/auth/:provider/callback" => "sessions#create"
-  delete '/sessions' => 'sessions#destroy', as: 'delete_session'
+  get '/logout' => 'sessions#destroy'
 
   put '/users' => 'users#update'
   get '/schedule' => 'users#schedule'
