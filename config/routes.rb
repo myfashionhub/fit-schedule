@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   delete '/sessions' => 'sessions#destroy', as: 'delete_session'
 
   put '/users' => 'users#update'
-  get '/schedule' => 'users#show'
+  get '/schedule' => 'users#schedule'
+  get '/customize' => 'users#customize'
 
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'

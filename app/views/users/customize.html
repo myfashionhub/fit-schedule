@@ -22,7 +22,7 @@
 </p>
 
 
-<div class='studio'>
+<div class='studio' data-id=''>
   <h2 class="name"></h2>  
   <p class="address"></p>
 
@@ -35,8 +35,11 @@
 
 
 <h3>Choose your time preference</h3>
-(Sunday through Monday)
-<ul></ul>
+<p>Click, hold Shift and drag to mark weekly work hours.</p>
+<ul class="calendar"></ul>
+
+
+<button class='suggested-classes'>View matches</button>
 
 <script type="text/javascript">
   var calendar = new Calendar();
@@ -44,4 +47,6 @@
 
   var studio = new Studio();
   studio.getClasses();
+
+  var filter = new Filter();
 </script>
