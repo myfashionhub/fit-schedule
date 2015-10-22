@@ -1,10 +1,8 @@
 <nav>
   <h1>Fit Schedule</h1>
 
-  <% if current_user %>
-    <a href="/logout" class="logout">Log out</a>
-  <% end %>
-
-  <a href="/schedule" class="schedule">My Schedule</a>
-  <a href="/customize" class='customize'>Preferences</a>
+  <div class="options">
+    <a href="/schedule" class="schedule">My Schedule</a>
+    <a href="/customize" class='customize'>Preferences</a>
+  </div>
 </nav>

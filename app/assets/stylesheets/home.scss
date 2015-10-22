@@ -1,3 +1,24 @@
+nav {
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+
+  a {
+    color: #fff;
+    margin-right: .7em;
+  }
+
+  h1 {
+    display: inline-block;
+    margin: .6em 1em;
+  }
+
+  .options {
+    float: right;
+    margin: 1em;
+  }
+}
+
 .new-session {
   width: 70%;
   min-width: 600px;
