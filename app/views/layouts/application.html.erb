@@ -8,7 +8,9 @@
 </head>
 <body>
 
+<% if self.controller.class != SessionsController %>
 <%= render 'layouts/nav' %>
+<% end %>
 
 <%= yield %>
 

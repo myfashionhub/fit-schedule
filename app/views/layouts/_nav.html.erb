@@ -1,3 +1,10 @@
-<% if current_user %>
-  <%= button_to 'Sign out', delete_session_path, method: :delete %>
-<% end %>
+<nav>
+  <h1>Fit Schedule</h1>
+
+  <% if current_user %>
+    <%= button_to 'Sign out', delete_session_path, method: :delete %>
+  <% end %>
+
+  <a href="/schedule" class="schedule">My Schedule</a>
+  <a href="/customize" class='customize'>Preferences</a>
+</nav>
