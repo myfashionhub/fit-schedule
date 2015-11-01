@@ -24,7 +24,7 @@ class BasicTables < ActiveRecord::Migration
     create_table :appointments do |t|
       t.integer    :reminder # number of minutes prior to appt
       t.references :user, index: true
-      t.references :class, index: true
+      t.references :klass, index: true
       t.timestamps
     end
 

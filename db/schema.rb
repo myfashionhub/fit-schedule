@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018172256) do
+ActiveRecord::Schema.define(version: 20151004225807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,12 +19,12 @@ ActiveRecord::Schema.define(version: 20151018172256) do
   create_table "appointments", force: :cascade do |t|
     t.integer  "reminder"
     t.integer  "user_id"
-    t.integer  "class_id"
+    t.integer  "klass_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "appointments", ["class_id"], name: "index_appointments_on_class_id", using: :btree
+  add_index "appointments", ["klass_id"], name: "index_appointments_on_klass_id", using: :btree
   add_index "appointments", ["user_id"], name: "index_appointments_on_user_id", using: :btree
 
   create_table "classes", force: :cascade do |t|
@@ -71,10 +71,10 @@ ActiveRecord::Schema.define(version: 20151018172256) do
     t.string   "google_uid"
     t.string   "google_token"
     t.text     "availability"
+    t.string   "calendar_id"
     t.string   "zipcode"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "calendar_id"
   end
 
 end
