@@ -1,3 +1,4 @@
+/* NAV BAR */
 nav {
   overflow: hidden;
   background: #000;
@@ -19,14 +20,20 @@ nav {
   }
 }
 
+
+/* HOME PAGE */
+.home-wrapper {
+  height: 98vh;
+  background: url('/assets/fitness.jpg');
+  background-size: cover;
+  overflow: hidden;
+}
+
 .new-session {
   width: 70%;
   min-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20vh;
-  //transform-y: -50%;
-  text-align: center;
+  margin: 2% 0 0 2%;
+  text-align: left;
 }
 
 .new-session {
