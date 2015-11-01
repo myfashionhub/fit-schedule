@@ -4,8 +4,12 @@ class SessionsController < ApplicationController
     if session[:user_id]
       redirect_to '/schedule'
     else
-      render 'sessions/new'
+      redirect_to '/welcome'
     end
+  end
+
+  def welcome
+    render 'sessions/new'
   end
 
   def create
