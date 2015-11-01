@@ -1,13 +1,21 @@
 class AppointmentsController < ApplicationController
 
   def index
-    classes = Appointment.get_classes(current_user.id)
+    classes = User.find(current_user.id).klasses
     render json: { classes: classes }
   end
 
-  def create
-    Appointment.update_or_create(params)
-    classes = Appointment.get_classes(user_id)
+  def update
+    user_id = current_user.id
+    Appointment.update_or_create(params, user_id)
+    classes = User.find(user_id).klasses
+    render json: { classes: classes }
+  end
+
+  def destroy
+    Appointment.destroy(params[:id])
+    classes = User.find(current_user.id).klasses
+
     render json: { classes: classes }
   end
 

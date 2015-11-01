@@ -3,6 +3,7 @@ class Klass < ActiveRecord::Base
 
   belongs_to :studio
   has_many   :appointments
+  has_many   :users, through: :appointments
 
   validates_uniqueness_of :name, scope: [:studio_id, :date, :start_time]
   
