@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :authorize
 
   def update
     current_user.update(calendar_id: params[:calendar_id]) if current_user
