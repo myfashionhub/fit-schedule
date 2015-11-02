@@ -1,4 +1,5 @@
-<imput type='hidden' data-user="<%= current_user.id if current_user %>">
+<% body_class('customize-wrapper') %>
+<input type='hidden' data-user="<%= current_user.id if current_user %>">
 
 <h2>Customize Your Schedule</h2>
 
@@ -37,6 +38,8 @@
   
   <h3>Specify your class preference</h3>
   <ul class="class-types"></ul>
+
+  <button class="save-filters">Save preferences</button>
 </section>
 
 
@@ -46,7 +49,7 @@
   <ul class="calendar"></ul>
 </section>
 
-<a href="/schedule#matches">View matches</button>
+<button class="suggested-classes">View matches</button>
 
 <script type="text/javascript">
   var calendar = new Calendar();

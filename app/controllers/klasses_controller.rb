@@ -13,7 +13,7 @@ class KlassesController < ApplicationController
     result = nil
     new_studio = false
 
-    studio = Studio.find_by(schedule_url: params[:url])
+    studio = Studio.find_by(schedule_url: params[:url].strip)
     
     if !studio
       result = scraper_class.constantize.get_classes(params[:url])

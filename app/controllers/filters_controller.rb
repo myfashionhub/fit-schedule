@@ -6,7 +6,7 @@ class FiltersController < ApplicationController
   end
 
   def update
-    Filter.update_user_preferences(params[:filters], current_user)
+    Filter.update_user_preferences(params, current_user)
   end
 
   def show
