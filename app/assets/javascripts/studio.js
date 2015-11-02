@@ -3,7 +3,7 @@ function Studio() {
   var that = this;
 
   this.init = function() {
-    
+
   };
 
   this.getClasses = function() {
@@ -18,7 +18,8 @@ function Studio() {
         success: function(data) {
           console.log(data);
           that.populateStudio(data);
-          that.populateClasses(data);
+          // that.populateClasses(data.classes);
+          that.suggestClasses(data.classes);
         },
         error: function(err) {
           console.log(err);
@@ -35,12 +36,10 @@ function Studio() {
     $('.studio').attr('data-id', studio.id);
     $('.studio .name').html(name);
     $('.studio .address').html(studio.address);
-    window.location.hash = studio.id;
+    //window.location.hash = studio.id;
   };
 
-  this.populateClasses = function(data) {
-    var classes = data.classes;
-
+  this.populateClasses = function(classes) {
     _.sortBy(classes, function(klass) {
       return klass.date || klass.start_time;
     });
@@ -74,18 +73,25 @@ function Studio() {
       classLi.append(name).append(time).append(instructor);
       $('.classes .schedule').append(classLi);
     }
-
-    this.suggestClasses(classes);
   };
 
   this.suggestClasses = function(classes) {
     var classTypes = _.uniq(_.pluck(classes, 'name'));
     classTypes = _.sortBy(classTypes, function(self) { return self; });
 
+    $('.class-types').empty();
+
     for (var i=0; i < classTypes.length; i++) {
-      var classLi = $('<li>').addClass('class').html(classTypes[i]);
+      var classLi = $('<li>').addClass('class');
+      var name = $('<span>').addClass('name').html(classTypes[i]);
+      var checkbox = $('<span>').addClass('checkbox').
+                       html('<i class="fa fa-square-o"></i>');
+      classLi.append(name).append(checkbox);
       $('.class-types').append(classLi)
     }
+
+    var filter = new Filter();
+    // Event listeners for saving suggested classes as filters
   };
 
   var convertDate = function(dateObj) {

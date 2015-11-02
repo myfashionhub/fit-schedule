@@ -35,7 +35,7 @@ function Schedule() {
 
       classLi.append(date).append(name).append(time).append(instructor);
       el.append(classLi);
-    }    
+    }
   };
 
   this.saveAppointments = function() {
@@ -43,6 +43,7 @@ function Schedule() {
   };
 
   this.suggestClasses = function() {
+    // Suggest all classes from user's favorite studios
     $.ajax({
       url: '/filters/apply',
       type: 'GET',
