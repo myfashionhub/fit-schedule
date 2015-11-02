@@ -18,6 +18,7 @@ A Google Calendar-integrated app that lets you stay on top of your fitness sched
 ```
 FS_GOOGLE_ID=
 FS_GOOGLE_SECRET=
+API_URL=localhost:3000
 ```
 
 - Start the app with `rails s`, it should be available at `localhost:3000`
@@ -33,6 +34,7 @@ $ git push heroku master
 ```
 $ heroku config:set FS_GOOGLE_ID=[Google id]
                     FS_GOOGLE_SECRET=[Google secret]
+                    API_URL=[Heroku app URL]
 ```
 
 - If assets are not showing up, precompile them:
