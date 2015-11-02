@@ -1,5 +1,12 @@
-
-<h2>Available classes</h2>
-
+<% body_class('schedule-wrapper') %>
 
 <h2>Booked classes</h2>
+<ul class="current-schedule"></ul>
+
+<h2>Available classes</h2>
+<ul class='suggested-classes'></ul>
+
+<script type="text/javascript">
+  var schedule = new Schedule();
+  schedule.getClasses();
+</script>
