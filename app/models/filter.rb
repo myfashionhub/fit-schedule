@@ -51,6 +51,10 @@ class Filter < ActiveRecord::Base
     classes
   end
 
+  def self.favorite_studios(user_id)
+    User.find(user_id).klasses.pluck(:studio_id).uniq
+  end
+
   def self.convert_to_datetime(time_str, date_str)
     time_str = time_str.include?('AM') ?
                  time_str.split(' ').first :
@@ -58,4 +62,5 @@ class Filter < ActiveRecord::Base
 
     Time.parse(date_str + ' ' + time_str)
   end
+
 end

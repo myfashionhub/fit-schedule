@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '/classes' => 'klasses#create'
 
   resources :filters, only: [:index]
+  get '/filters/show' => 'filters#show'
   get '/filters/apply' => 'filters#apply'
   post '/filters' => 'filters#update'
 
