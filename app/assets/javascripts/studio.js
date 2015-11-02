@@ -50,7 +50,7 @@ function Studio() {
         dateCounter = 0;
     
     var firstDate = $('<li>').addClass('date').html(convertDate(currentDate));
-        $('.schedule').append(firstDate);
+        $('.classes .schedule').append(firstDate);
 
     for (var i=0; i < classes.length; i++) {
       if (classes[i].date !== currentDate) {
@@ -62,7 +62,7 @@ function Studio() {
 
       if (dateCounter === 0) {
         var dateLi = $('<li>').addClass('date').html(convertDate(currentDate));
-        $('.schedule').append(dateLi);
+        $('.classes .schedule').append(dateLi);
       }
 
       var classLi = $('<li>').addClass('class'),
@@ -72,7 +72,7 @@ function Studio() {
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor);
       classLi.append(name).append(time).append(instructor);
-      $('.schedule').append(classLi);
+      $('.classes .schedule').append(classLi);
     }
 
     this.suggestClasses(classes);
