@@ -11,7 +11,7 @@ function Schedule() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        that.populateClasses(data.classes);
+        that.populateClasses(data.classes, $('.current-schedule'));
       },
       error: function(data) {
         console.log(data);
@@ -19,7 +19,7 @@ function Schedule() {
     });
   };
 
-  this.populateClasses = function(classes) {
+  this.populateClasses = function(classes, el) {
     for (var i=0; i < classes.length; i++) {
       var classLi = $('<li>').addClass('class'),
           
@@ -34,12 +34,26 @@ function Schedule() {
                          html(classes[i].instructor);
 
       classLi.append(date).append(name).append(time).append(instructor);
-      $('.current-schedule').append(classLi);
+      el.append(classLi);
     }    
   };
 
   this.saveAppointments = function() {
 
+  };
+
+  this.suggestClasses = function() {
+    $.ajax({
+      url: '/filters/apply',
+      type: 'GET',
+      success: function(data) {
+        console.log(data);
+        that.populateClasses(data.classes, $('.schedule-wrapper .suggested-classes'));
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
   };
 
   var formatDate = function(dateStr) {

@@ -31,7 +31,7 @@ function Filter() {
       var studioId = $('.studio').attr('data-id');
 
       $.ajax({
-        url: '/filters/apply?studio_id='+studioId,
+        url: '/filters/show?studio_id='+studioId,
         type: 'GET',
         success: function(data) {
           console.log(data);
