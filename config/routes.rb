@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   get '/filters/apply' => 'filters#apply'
   post '/filters' => 'filters#update'
 
+  resources :appointments, only: [:index, :update, :destroy]
 end
