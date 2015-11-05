@@ -6,15 +6,17 @@ class Filter < ActiveRecord::Base
   
   def self.create_from_raw(filter_obj, studio_id, user_id)
     Filter.find_or_create_by({
-      user_id:    filter_obj.user_id,
-      studio_id:  filter_obj.studio_id,
-      class_name: filter_obj.class_name
+      user_id:    user_id,
+      studio_id:  studio_id,
+      class_name: filter_obj['class_name']
     })
   end
 
   def self.update_user_preferences(params, user)
-    params[:filters].each do |filter_obj|
-      Filter.create_from_raw(filter_obj, studio_id, user.id)
+    filters = JSON.parse(params[:filters])
+
+    filters.each do |filter_obj|
+      Filter.create_from_raw(filter_obj, params[:studio_id], user.id)
     end
   end
 

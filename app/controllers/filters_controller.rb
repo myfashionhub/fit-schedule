@@ -7,6 +7,9 @@ class FiltersController < ApplicationController
 
   def update
     Filter.update_user_preferences(params, current_user)
+    filters = Filter.where(user_id: current_user.id, studio_id: params[:studio_id])
+
+    render json: { filters: filters }
   end
 
   def show
