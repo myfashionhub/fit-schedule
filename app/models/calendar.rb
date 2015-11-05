@@ -99,6 +99,9 @@ class Calendar
         }
       end
     end
+
+    rescue => error
+    { error: 'Token expired' }
   end
 
 end

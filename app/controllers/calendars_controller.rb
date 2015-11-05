@@ -19,6 +19,7 @@ class CalendarsController < ApplicationController
   def show # for testing only
     id = params[:id] || current_user.calendar_id
     events = @calendar.list_events(id)
+
     render json: { events: events }
   end
 

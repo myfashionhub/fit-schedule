@@ -26,7 +26,12 @@ class FiltersController < ApplicationController
       Filter.suggest_classes(current_user, studio_id)
     end.flatten
 
-    render json: { classes: classes }
+    if classes[:error]
+      msg = "Your Google session has expired. Please re-authenticate."
+      render json: { error: msg }
+    else
+      render json: { classes: classes }
+    end
   end
 
 end

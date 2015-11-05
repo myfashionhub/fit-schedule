@@ -49,7 +49,13 @@ function Schedule() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        that.populateClasses(data.classes, $('.schedule-wrapper .suggested-classes'));
+        if (data.error != undefined) {
+          window.alert(data.error);
+        } else {
+          that.populateClasses(
+            data.classes, $('.schedule-wrapper .suggested-classes')
+          );
+        }
       },
       error: function(data) {
         console.log(data);
