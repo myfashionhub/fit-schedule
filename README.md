@@ -30,6 +30,11 @@ $ heroku create [app name]
 $ git push heroku master
 ```
 
+- Create the database:
+```
+$ heroku run rake db:create db:migrate
+```
+
 - Set environment variables:
 ```
 $ heroku config:set FS_GOOGLE_ID=[Google id]
