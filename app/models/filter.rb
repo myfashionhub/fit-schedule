@@ -25,6 +25,7 @@ class Filter < ActiveRecord::Base
       calendar = Calendar.new(user.google_token)
       events = calendar.list_events(user.calendar_id)
       classes = Filter.get_preferences(user.id, studio_id)
+      return { error: 'Google token expired' } if events.respond_to?(:error)
 
       classes.select do |klass|
         date_str   = klass.date.to_date.to_s
@@ -37,7 +38,7 @@ class Filter < ActiveRecord::Base
       end
     else
       { error: "The calendar with id #{user.calendar_id.inspect} is not found." }
-    end 
+    end
   end
 
   def self.get_preferences(user_id, studio_id)
