@@ -90,18 +90,24 @@ class Calendar
     events = JSON.parse(result.response.body)['items']
 
     events.map do |event|
-      if event['kind'] == 'calendar#event' && event['status'] == 'confirmed'
+      start_time = Time.parse(event['start']['dateTime'])
+
+      if event['kind'] == 'calendar#event' &&
+         event['status'] == 'confirmed' &&
+         start_time >= Time.now &&
+         start_time <= Time.now + 1814400
+         # Events maximum 3 weeks in the future
         {
           name: event['summary'],
-          start_time: Time.parse(event['start']['dateTime']),
+          start_time: start_time,
           end_time: Time.parse(event['end']['dateTime']),
           link: event['htmlLink']
         }
       end
-    end
+    end.compact
 
     rescue => error
-    { error: 'Token expired' }
+    return false
   end
 
 end

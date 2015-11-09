@@ -25,19 +25,36 @@ class Filter < ActiveRecord::Base
       calendar = Calendar.new(user.google_token)
       events = calendar.list_events(user.calendar_id)
       classes = Filter.get_preferences(user.id, studio_id)
-      return { error: 'Google token expired' } if events.respond_to?(:error)
 
-      classes.select do |klass|
+      return { error: 'Google token expired' } if !events
+
+      results = []
+      classes.each do |klass|
         date_str   = klass.date.to_date.to_s
-        start_time = convert_to_datetime(klass.start_time, date_str)
-        end_time   = convert_to_datetime(klass.end_time, date_str)  
+        start_time = time_to_datetime(klass.start_time, date_str)
+        end_time   = time_to_datetime(klass.end_time, date_str)
 
-        events.each do |event|
-          klass if start_time > event[:end_time] && end_time < event[:start_time]
+        weekday = JSON.parse(user.availability).detect do |day|
+          day['day'] == klass.date.wday
+        end
+
+        no_conflict = time_to_24hrs(klass.start_time) > weekday['end_time'] &&
+                      time_to_24hrs(klass.end_time) < weekday['start_time'] rescue true
+
+        events.each_with_index do |event, i|
+          if ( klass.date.to_date == event[:start_time].to_date ||
+               klass.date.to_date == event[:end_time].to_date ) &&
+             i < events.length
+            results.push(klass) if no_conflict &&
+                                   start_time > event[:end_time] &&
+                                   end_time < events[i+1][:start_time]
+          end
         end
       end
+
+      results
     else
-      { error: "The calendar with id #{user.calendar_id.inspect} is not found." }
+      { error: "User has not specified a Google calendar." }
     end
   end
 
@@ -48,7 +65,7 @@ class Filter < ActiveRecord::Base
     classes = []
     Klass.where(studio_id: studio_id).each do |klass|
       class_names.each do |name|
-        classes.push(klass) if klass.name == name
+        classes.push(klass) if klass.name == name && klass.date >= Time.now
       end
     end
 
@@ -59,12 +76,24 @@ class Filter < ActiveRecord::Base
     User.find(user_id).klasses.pluck(:studio_id).uniq
   end
 
-  def self.convert_to_datetime(time_str, date_str)
-    time_str = time_str.include?('AM') ?
-                 time_str.split(' ').first :
-                 ((time_str.split(' ').first).to_i + 12).to_s
-
+  # Helper
+  def self.time_to_datetime(time_str, date_str)
+    time_str = time_to_24hrs(time_str)
     Time.parse(date_str + ' ' + time_str)
+  end
+
+  def self.time_to_24hrs(time_str)
+    if time_str.include?('12') && time_str.include?('PM')
+      time_str.split(' ').first
+    else
+      if time_str.include?('PM')
+        time = time_str.split(' ').first
+        hour = ( time.split(':').first ).to_i + 12
+        hour.to_s+ ':' + time.split(':').last
+      else
+        time_str.split(' ').first
+      end
+    end
   end
 
 end

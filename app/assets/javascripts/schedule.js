@@ -48,9 +48,9 @@ function Schedule() {
       url: '/filters/apply',
       type: 'GET',
       success: function(data) {
-        console.log(data);
         if (data.error != undefined) {
           window.alert(data.error);
+          window.location.href = '/';
         } else {
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes')
