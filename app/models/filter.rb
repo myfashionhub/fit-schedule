@@ -28,31 +28,7 @@ class Filter < ActiveRecord::Base
 
       return { error: 'Google token expired' } if !events
 
-      results = []
-      classes.each do |klass|
-        date_str   = klass.date.to_date.to_s
-        start_time = time_to_datetime(klass.start_time, date_str)
-        end_time   = time_to_datetime(klass.end_time, date_str)
-
-        weekday = JSON.parse(user.availability).detect do |day|
-          day['day'] == klass.date.wday
-        end
-
-        no_conflict = time_to_24hrs(klass.start_time) > weekday['end_time'] &&
-                      time_to_24hrs(klass.end_time) < weekday['start_time'] rescue true
-
-        events.each_with_index do |event, i|
-          if ( klass.date.to_date == event[:start_time].to_date ||
-               klass.date.to_date == event[:end_time].to_date ) &&
-             i < events.length
-            results.push(klass) if no_conflict &&
-                                   start_time > event[:end_time] &&
-                                   end_time < events[i+1][:start_time]
-          end
-        end
-      end
-
-      results
+      classes.select { |klass| no_conflict(klass, user, events) }
     else
       { error: "User has not specified a Google calendar." }
     end
@@ -74,6 +50,32 @@ class Filter < ActiveRecord::Base
 
 
   # Helper
+
+  def self.no_conflict(klass, user, events)
+    date_str   = klass.date.to_date.to_s
+    start_time = time_to_datetime(klass.start_time, date_str)
+    end_time   = time_to_datetime(klass.end_time, date_str)
+
+    # Compare with user weekly availibility
+    JSON.parse(user.availability).each do |weekday|
+      if weekday['day'] == klass.date.wday
+        conflict = time_to_24hrs(klass.start_time) < weekday['end_time'] ||
+                   time_to_24hrs(klass.end_time) > weekday['start_time']
+        return false if conflict
+      end
+    end
+
+    events.each_with_index do |event, i|
+      if ( klass.date.to_date == event[:start_time].to_date ||
+           klass.date.to_date == event[:end_time].to_date ) &&
+         i < events.length
+        return false if start_time < event[:end_time] ||
+                        end_time > events[i+1][:start_time]
+      end
+    end
+
+    true
+  end
 
   def self.time_to_datetime(time_str, date_str)
     time_str = time_to_24hrs(time_str)
