@@ -99,6 +99,39 @@ function Studio() {
     return date.toDateString().replace(' ',', ').replace(/\s\d{4}/i, '');
   };
 
+  this.showFavorites = function() {
+    $.ajax({
+      url: '/users/studios',
+      type: 'GET',
+      success: function(data) {
+        console.log(data.studios);
+        that.populateStudiosAndFilters(data.studios);
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+  };
+
+  this.populateStudiosAndFilters = function(studios) {
+    var studioUl = $('.schedule-wrapper .favorite-studios');
+
+    for (var i=0; i < studios.length; i++) {
+      var studioLi = $('<li>').addClass('studio');
+      var studioName = $('<h4>').html(studios[i].studio.name);
+
+      var filters = studios[i].filters;
+      var filterUl = $('<ul>');
+      for (var j=0; j < filters.length; j++) {
+        var filterLi = $('<li>').html(filters[j].class_name);
+        filterUl.append(filterLi)
+      }
+
+      studioLi.append(studioName).append(filterUl);
+      studioUl.append(studioLi);
+    }
+  };
+
   this.init();
 
 }

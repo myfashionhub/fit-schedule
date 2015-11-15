@@ -4,7 +4,7 @@ function Filter() {
 
   this.init = function() {
     this.select();
-    this.apply();
+    this.show();
 
     $('.save-filters').click(function() { that.updateUserPreferences(); });
   };
@@ -71,7 +71,8 @@ function Filter() {
     });
   };
 
-  this.apply = function() {
+  // Show unique classes from a studio
+  this.show = function() {
     $('.customize-wrapper .suggested-classes').click(function(e) {
       e.preventDefault();
       var studioId = $('.studio').attr('data-id');

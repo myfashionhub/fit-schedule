@@ -3,6 +3,10 @@
 <h2>Booked classes</h2>
 <ul class="current-schedule"></ul>
 
+<h2>Your studios</h2>
+<a href="/customize"><i class="fa fa-pencil-square-o"></i> Add/Edit</a>
+<ul class="favorite-studios"></ul>
+
 <h2>Available classes</h2>
 <ul class='suggested-classes'></ul>
 
@@ -10,4 +14,7 @@
   var schedule = new Schedule();
   schedule.getClasses();
   schedule.suggestClasses();
+
+  var studio = new Studio();
+  studio.showFavorites();
 </script>

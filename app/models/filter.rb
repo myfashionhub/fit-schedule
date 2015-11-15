@@ -72,11 +72,9 @@ class Filter < ActiveRecord::Base
     classes
   end
 
-  def self.favorite_studios(user_id)
-    User.find(user_id).klasses.pluck(:studio_id).uniq
-  end
 
   # Helper
+
   def self.time_to_datetime(time_str, date_str)
     time_str = time_to_24hrs(time_str)
     Time.parse(date_str + ' ' + time_str)

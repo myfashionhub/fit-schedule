@@ -20,7 +20,7 @@ class FiltersController < ApplicationController
 
   def apply
     # suggested classes for all user's studios
-    studio_ids = Filter.favorite_studios(current_user.id)
+    studio_ids = current_user.klasses.pluck(:studio_id).uniq
 
     classes = studio_ids.map do |studio_id|
       Filter.suggest_classes(current_user, studio_id)

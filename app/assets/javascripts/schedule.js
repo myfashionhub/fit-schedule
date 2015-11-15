@@ -53,7 +53,7 @@ function Schedule() {
           var session = new Session('/');
           session.destroy();
         } else {
-          console.og(data.classes)
+          console.log(data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes')
           );

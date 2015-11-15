@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   put '/users' => 'users#update'
   get '/schedule' => 'users#schedule'
   get '/customize' => 'users#customize'
+  get '/users/studios' => 'users#studios'
 
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'
