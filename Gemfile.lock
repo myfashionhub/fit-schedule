@@ -51,6 +51,9 @@ GEM
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
     cliver (0.3.2)
+    clockwork (1.2.0)
+      activesupport
+      tzinfo
     coderay (1.1.0)
     dotenv (2.0.2)
     dotenv-rails (2.0.2)
@@ -218,6 +221,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   capybara
+  clockwork
   dotenv-rails
   font-awesome-sass
   google-api-client
