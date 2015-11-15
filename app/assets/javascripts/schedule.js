@@ -50,8 +50,10 @@ function Schedule() {
       success: function(data) {
         if (data.error != undefined) {
           window.alert(data.error);
-          window.location.href = '/';
+          var session = new Session('/');
+          session.destroy();
         } else {
+          console.og(data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes')
           );

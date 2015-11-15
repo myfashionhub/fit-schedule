@@ -83,7 +83,8 @@ function Filter() {
           console.log(data);
           if (data.classes.error !== undefined) {
             window.alert(data.classes.error);
-            window.location.href = '/welcome';
+            var session = new session('/welcome');
+            session.destroy();
           }          
         },
         error: function(data) {

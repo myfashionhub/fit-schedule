@@ -17,7 +17,8 @@ function Calendar() {
         console.log(data);
         if ('error' in data) {
           window.alert(data.error);
-          window.location = '/'; 
+          var session = new session('/');
+          session.destroy();
         } else {
           that.populateCalendars(data.calendars);
         }
