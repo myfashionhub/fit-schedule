@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
+
   before_filter :authorize
+
+  def show
+  end
 
   def update
     current_user.update(calendar_id: params[:calendar_id]) if current_user
@@ -25,6 +29,16 @@ class UsersController < ApplicationController
     end
 
     render json: { studios: result }
+  end
+
+  def filters
+    # All filters for one studio
+    filters = Filter.where(
+      user_id: params[:user_id].to_i,
+      studio_id: params[:studio_id].to_i
+    )
+
+    render json: { filters: filters }
   end
 
 end

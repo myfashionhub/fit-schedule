@@ -5,10 +5,14 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
   get '/logout' => 'sessions#destroy'
 
-  put '/users' => 'users#update'
+  #put '/users' => 'users#update'
   get '/schedule' => 'users#schedule'
   get '/customize' => 'users#customize'
-  get '/users/studios' => 'users#studios'
+
+  resources :users, only: [:show, :update] do
+    get '/studios' => 'users#studios'
+    get '/filters' => 'users#filters'
+  end
 
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'

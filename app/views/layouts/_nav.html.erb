@@ -8,3 +8,7 @@
     <a href="/customize" class='customize'>Preferences</a>
   </div>
 </nav>
+
+<% if current_user %>
+  <input type='hidden' id='user' data-id="<%= current_user.id %>" ></input>
+<% end %>
