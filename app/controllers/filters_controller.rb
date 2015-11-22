@@ -27,7 +27,7 @@ class FiltersController < ApplicationController
     classes = Rails.cache.fetch(
       "users/#{current_user.id}", expires_in: 2.hours
     ) do
-      studio_ids = current_user.klasses.pluck(:studio_id).uniq
+      studio_ids = current_user.filters.pluck(:studio_id).uniq
 
       studio_ids.map do |studio_id|
         Filter.suggest_classes(current_user, studio_id)
@@ -36,7 +36,9 @@ class FiltersController < ApplicationController
 
     error = classes.first.has_key?(:error) rescue nil
     if error
+      Rails.cache.delete("users/#{current_user.id}")
       session[:user_id] = nil
+
       msg = "Your Google session has expired. Please re-authenticate."
       render json: { error: msg }
     else

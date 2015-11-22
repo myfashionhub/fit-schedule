@@ -1,5 +1,5 @@
 class Filter < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user,   inverse_of: :filters
   belongs_to :studio
 
   validates_uniqueness_of :class_name, scope: [:studio_id, :user_id]
@@ -24,15 +24,15 @@ class Filter < ActiveRecord::Base
     end
 
     user_filters.each do |filter|
-      filter.delete if class_names.index(filter.class_name).nil?
+      filter.destroy if class_names.index(filter.class_name).nil?
     end
   end
 
   def self.suggest_classes(user, studio_id)
-    if user.calendar_id
+    if user.calendar_id.present?
       calendar = Calendar.new(user.google_token)
       events = calendar.list_events(user.calendar_id)
-      classes = Filter.get_preferences(user.id, studio_id)
+      classes = Filter.match_classes(user.id, studio_id)
 
       return { error: 'Google token expired' } if !events
 
@@ -42,7 +42,7 @@ class Filter < ActiveRecord::Base
     end
   end
 
-  def self.get_preferences(user_id, studio_id)
+  def self.match_classes(user_id, studio_id)
     class_names = Filter.where(user_id: user_id, studio_id: studio_id).
                     pluck(:class_name).uniq
 
