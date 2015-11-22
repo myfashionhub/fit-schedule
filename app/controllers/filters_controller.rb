@@ -20,11 +20,16 @@ class FiltersController < ApplicationController
 
   def apply
     # suggested classes for all user's studios
-    studio_ids = current_user.klasses.pluck(:studio_id).uniq
 
-    classes = studio_ids.map do |studio_id|
-      Filter.suggest_classes(current_user, studio_id)
-    end.flatten
+    classes = Rails.cache.fetch(
+      "users/#{current_user.id}", expires_in: 2.hours
+    ) do
+      studio_ids = current_user.klasses.pluck(:studio_id).uniq
+
+      studio_ids.map do |studio_id|
+        Filter.suggest_classes(current_user, studio_id)
+      end.flatten
+    end
 
     error = classes.first.has_key?(:error) rescue nil
     if error
