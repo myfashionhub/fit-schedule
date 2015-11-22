@@ -3,20 +3,28 @@ class Filter < ActiveRecord::Base
   belongs_to :studio
 
   validates_uniqueness_of :class_name, scope: [:studio_id, :user_id]
-  
-  def self.create_from_raw(filter_obj, studio_id, user_id)
-    Filter.find_or_create_by({
-      user_id:    user_id,
-      studio_id:  studio_id,
-      class_name: filter_obj['class_name']
-    })
-  end
+
 
   def self.update_user_preferences(params, user)
-    filters = JSON.parse(params[:filters])
+    class_names = JSON.parse(params[:class_names])
+    user_filters = Filter.where(user_id: user.id, studio_id: params[:studio_id])
 
-    filters.each do |filter_obj|
-      Filter.create_from_raw(filter_obj, params[:studio_id], user.id)
+    class_names.each do |class_name|
+      existing_filter = user_filters.detect do |filter|
+        filter.class_name == class_name
+      end
+
+      if existing_filter.blank?
+        Filter.find_or_create_by({
+          user_id:    user.id,
+          studio_id:  params[:studio_id],
+          class_name: class_name
+        })
+      end
+    end
+
+    user_filters.each do |filter|
+      filter.delete if class_names.index(filter.class_name).nil?
     end
   end
 

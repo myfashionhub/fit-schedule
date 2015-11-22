@@ -10,5 +10,7 @@
 </nav>
 
 <% if current_user %>
-  <input type='hidden' id='user' data-id="<%= current_user.id %>" ></input>
+  <input type='hidden' id='user' data-id="<%= current_user.id %>"
+         data-calendar="<%= current_user.calendar_id %>">
+  </input>
 <% end %>

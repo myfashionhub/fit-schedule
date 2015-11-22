@@ -1,7 +1,6 @@
 function Filter() {
 
   var that = this;
-  this.filters = [];
   this.user_id = $('#user').attr('data-id');
 
   this.init = function() {
@@ -32,14 +31,28 @@ function Filter() {
   };
 
   this.updateUserPreferences = function() {
-    var studioId = $('.classes .studio').attr('data-id');
+    var studio_id = $('.classes .studio').attr('data-id');
+    var classNames = [];
+
+    _.each($('.class-types .class'), function(classLi) {
+      var checkbox = $(classLi).find('.checkbox');
+
+      if (checkbox.attr('class').indexOf('selected') > -1) {
+        var className = $(classLi).find('.name').html();
+        classNames.push(className);
+      }
+    });
 
     $.ajax({
       url: '/filters',
       type: 'POST',
-      data: { filters: JSON.stringify(that.filters), studio_id: studioId },
+      data: {
+        class_names: JSON.stringify(classNames),
+        studio_id: studio_id
+      },
       success: function(data) {
-        console.log(data);
+        var studioName = $('.classes .studio .name a').html();
+        console.log('Successfully saved your preferences for '+studioName);
       },
       error: function(data) {
         console.log(data);
@@ -48,39 +61,17 @@ function Filter() {
   };
 
   this.select = function() {
-    // toggle selected class names & modify filter array
+    // toggle selected class names
 
     $('.class .checkbox').click(function(e) {
-      var classLi   = $(e.target).parent().parent();
-      var className = classLi.find('.name').html();
-      var checkbox  = classLi.find('.checkbox');
-
-      if (classLi.attr('class').indexOf('selected') > 0) {
-        classLi.removeClass('selected');
+      var checkbox  = $(e.target).parent();
+      console.log(checkbox)
+      if (checkbox.attr('class').indexOf('selected') > 0) {
+        checkbox.removeClass('selected');
         checkbox.empty().html("<i class='fa fa-square-o'></i>");
-
-        _.each(that.filters, function(filter) {
-          if (filter.class_name == className) {
-            var i = that.filters.indexOf(filter);
-            that.filters.splice(i, 1);
-            return;
-          }
-        });
       } else {
-        classLi.addClass('selected');
+        checkbox.addClass('selected');
         checkbox.empty().html("<i class='fa fa-check-square-o'></i>");
-
-        var exist = false;
-        _.each(that.filters, function(filter) {
-          if (filter.class_name == className) {
-            exist = true; return;
-          }
-        });
-
-        if (!exist) {
-          var filter = { class_name: className };
-          that.filters.push(filter);
-        }
       }
     });
 
