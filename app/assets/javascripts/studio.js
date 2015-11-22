@@ -17,9 +17,9 @@ function Studio() {
         data: { url: url },
         success: function(data) {
           console.log(data);
-          that.populateStudio(data);
+          that.populateStudio(data.studio);
           // that.populateClasses(data.classes);
-          that.suggestClasses(data.classes);
+          that.suggestClasses(data.studio.id);
         },
         error: function(err) {
           console.log(err);
@@ -29,8 +29,7 @@ function Studio() {
     });
   };
 
-  this.populateStudio = function(data) {
-    var studio = data.studio;
+  this.populateStudio = function(studio) {
     var name   = $('<a>').attr('src', studio.schedule_url).
                    attr('target','_blank').wrapInner(studio.name);
     $('.studio').attr('data-id', studio.id);
@@ -75,23 +74,34 @@ function Studio() {
     }
   };
 
-  this.suggestClasses = function(classes) {
-    var classTypes = _.uniq(_.pluck(classes, 'name'));
-    classTypes = _.sortBy(classTypes, function(self) { return self; });
+  this.suggestClasses = function(studio_id) {
+    $.ajax({
+      url: '/studios/'+studio_id,
+      type: 'GET',
+      success: function(data) {
+        console.log(data);
+        populateClassTypes(data.unique_classes);
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
 
-    $('.class-types').empty();
+    var populateClassTypes = function(classTypes) {
+      $('.class-types').empty();
 
-    for (var i=0; i < classTypes.length; i++) {
-      var classLi = $('<li>').addClass('class');
-      var name = $('<span>').addClass('name').html(classTypes[i]);
-      var checkbox = $('<span>').addClass('checkbox').
-                       html('<i class="fa fa-square-o"></i>');
-      classLi.append(name).append(checkbox);
-      $('.class-types').append(classLi)
+      for (var i=0; i < classTypes.length; i++) {
+        var classLi = $('<li>').addClass('class');
+        var name = $('<span>').addClass('name').html(classTypes[i]);
+        var checkbox = $('<span>').addClass('checkbox').
+                         html('<i class="fa fa-square-o"></i>');
+        classLi.append(name).append(checkbox);
+        $('.class-types').append(classLi)
+      }
+
+      var filter = new Filter();
+      // Event listeners for saving suggested classes as filters
     }
-
-    var filter = new Filter();
-    // Event listeners for saving suggested classes as filters
   };
 
   var convertDate = function(dateObj) {
@@ -118,7 +128,9 @@ function Studio() {
 
     for (var i=0; i < studios.length; i++) {
       var studioLi = $('<li>').addClass('studio');
-      var studioName = $('<h4>').html(studios[i].studio.name);
+      var studioName = $('<h4>').html(studios[i].studio.name).
+                         attr('data-id', studios[i].studio.id);
+      var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit')
 
       var filters = studios[i].filters;
       var filterUl = $('<ul>');
@@ -127,9 +139,16 @@ function Studio() {
         filterUl.append(filterLi)
       }
 
+      studioName.append(editButton)
       studioLi.append(studioName).append(filterUl);
       studioUl.append(studioLi);
+
+      editButton.click(function(e) { that.editStudioFilters(e); });
     }
+  };
+
+  this.editStudioFilters = function(e) {
+    var studioId = $(e.target).parent().attr('data-id');
   };
 
   this.init();

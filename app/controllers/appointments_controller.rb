@@ -1,7 +1,7 @@
 class AppointmentsController < ApplicationController
 
   def index
-    classes = User.find(current_user.id).klasses
+    classes = User.find(current_user.id).klasses.where('date >= ?', Date.today)
     render json: { classes: classes }
   end
 
