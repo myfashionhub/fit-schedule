@@ -8,7 +8,7 @@ function Calendar() {
 
   };
 
-  this.get = function() {
+  this.getAllCalendars = function() {
     $.ajax({
       url: '/calendars',
       type: 'GET',
@@ -56,8 +56,13 @@ function Calendar() {
     });
   };
 
-  this.getCurrentCalendar = function() {
-    // if null then prompt to select
+  this.getUserCalendar = function() {
+    var calendar_id = $('#user').attr('data-calendar');
+    if (calendar_id == undefined) {
+      // prompt to select
+      this.getAllCalendars();
+    }
+
   };
 
   this.init();
