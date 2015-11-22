@@ -1,6 +1,7 @@
 function Studio() {
 
   var that = this;
+  this.user_id = $('#user').attr('data-id');
 
   this.init = function() {
 
@@ -80,27 +81,46 @@ function Studio() {
       type: 'GET',
       success: function(data) {
         console.log(data);
-        populateClassTypes(data.unique_classes);
+        populateClassTypes(data.unique_classes, studio_id);
       },
       error: function(err) {
         console.log(err);
       }
     });
 
-    var populateClassTypes = function(classTypes) {
-      $('.class-types').empty();
-
-      for (var i=0; i < classTypes.length; i++) {
-        var classLi = $('<li>').addClass('class');
-        var name = $('<span>').addClass('name').html(classTypes[i]);
-        var checkbox = $('<span>').addClass('checkbox').
-                         html('<i class="fa fa-square-o"></i>');
-        classLi.append(name).append(checkbox);
-        $('.class-types').append(classLi)
-      }
-
+    var populateClassTypes = function(classTypes, studio_id) {
       var filter = new Filter();
-      // Event listeners for saving suggested classes as filters
+      var userFilters;
+
+      Promise.all([ filter.showUserPreferences(studio_id) ]).then(
+        function(data) { buildFilters(data[0]); }
+      )
+
+      var buildFilters = function(userFilters) {
+        $('.class-types').empty();
+
+        for (var i=0; i < classTypes.length; i++) {
+          var classLi = $('<li>').addClass('class');
+          var name = $('<span>').addClass('name').html(classTypes[i]);
+
+          var selectedFilter = _.detect(userFilters, function(filter) {
+            return filter.class_name == classTypes[i];
+          });
+
+          var checkbox = $('<span>').addClass('checkbox');
+          if (selectedFilter != undefined) {
+            checkbox.addClass('selected').
+              html("<i class='fa fa-check-square-o'></i>");
+          } else {
+            checkbox.html('<i class="fa fa-square-o"></i>');
+          }
+
+          classLi.append(name).append(checkbox);
+          $('.class-types').append(classLi)
+        }
+
+        filter.select(); // event listener for checking boxes
+      };
     }
   };
 
@@ -111,7 +131,7 @@ function Studio() {
 
   this.showFavorites = function() {
     $.ajax({
-      url: '/users/studios',
+      url: '/users/'+that.user_id+'/studios',
       type: 'GET',
       success: function(data) {
         console.log(data.studios);

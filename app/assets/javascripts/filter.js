@@ -1,20 +1,34 @@
 function Filter() {
+
   var that = this;
   this.filters = [];
+  this.user_id = $('#user').attr('data-id');
 
   this.init = function() {
-    this.select();
-    this.show();
 
-    $('.save-filters').click(function() { that.updateUserPreferences(); });
   };
 
   this.updateUserAvailability = function() {
     // Save user availability as json string
   };
   
-  this.showUserPreferences = function() {
+  this.showUserPreferences = function(studio_id) {
     // Pre-check filters saved for user
+    var filtersPromise = new Promise(function(resolve, reject) {
+      $.ajax({
+        url: '/users/'+that.user_id+'/filters?studio_id='+studio_id,
+        type: 'GET',
+        success: function(data) {
+          resolve(data.filters);
+        },
+        error: function(err) {
+          reject(err);
+          console.log(err);
+        }
+      });
+    });
+
+    return filtersPromise;
   };
 
   this.updateUserPreferences = function() {
@@ -69,30 +83,8 @@ function Filter() {
         }
       }
     });
-  };
 
-  // Show unique classes from a studio
-  this.show = function() {
-    $('.customize-wrapper .suggested-classes').click(function(e) {
-      e.preventDefault();
-      var studioId = $('.studio').attr('data-id');
-
-      $.ajax({
-        url: '/filters/show?studio_id='+studioId,
-        type: 'GET',
-        success: function(data) {
-          console.log(data);
-          if (data.classes.error !== undefined) {
-            window.alert(data.classes.error);
-            var session = new session('/welcome');
-            session.destroy();
-          }          
-        },
-        error: function(data) {
-          console.log(data);
-        }
-      });
-    });
+    $('.save-filters').click(function() { that.updateUserPreferences(); });
   };
 
   // see calendar events: '/calendars/events?id=v.nessa.nguyen@gmail.com'
