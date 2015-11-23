@@ -55,7 +55,18 @@ function Schedule() {
     var class_ids = _.map($('.schedule .appointments li'), function(classLi) { 
       return $(classLi).attr('data-id');
     });
-    console.log(class_ids)
+
+    $.ajax({
+      url: '/appointments',
+      type: 'POST',
+      data: { class_ids: class_ids },
+      success: function(response) {
+        console.log(response);
+      },
+      error: function(err) {
+        console.log(err)
+      }
+    });
     // save or remove + update Google calendar
   };
 

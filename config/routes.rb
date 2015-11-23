@@ -22,10 +22,9 @@ Rails.application.routes.draw do
   get '/classes' => 'klasses#index'
   post '/classes' => 'klasses#create'
 
-  resources :filters, only: [:index]
+  resources :filters, only: [:index, :create]
   get '/filters/show' => 'filters#show'
   get '/filters/apply' => 'filters#apply'
-  post '/filters' => 'filters#update'
 
-  resources :appointments, only: [:index, :update, :destroy]
+  resources :appointments, only: [:index, :create]
 end

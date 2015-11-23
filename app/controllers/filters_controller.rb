@@ -5,7 +5,7 @@ class FiltersController < ApplicationController
     render json: { filters: filters }
   end
 
-  def update
+  def create
     Filter.update_user_preferences(params, current_user)
     filters = Filter.where(
       user_id: current_user.id,
