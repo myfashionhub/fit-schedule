@@ -2,16 +2,18 @@ function Schedule() {
   var that = this;
 
   this.init = function() {
-
+    $('.schedule .save-appointments').click(function() {
+      that.saveAppointments();
+    });
   };
 
-  this.getClasses = function() {
+  this.getAppointments = function() {
     $.ajax({
       url: '/appointments',
       type: 'GET',
       success: function(data) {
         console.log(data);
-        that.populateClasses(data.classes, $('.current-schedule'));
+        that.populateClasses(data.classes, $('.schedule .appointments'), 'added');
       },
       error: function(data) {
         console.log(data);
@@ -19,9 +21,9 @@ function Schedule() {
     });
   };
 
-  this.populateClasses = function(classes, el) {
+  this.populateClasses = function(classes, el, classState) {
     for (var i=0; i < classes.length; i++) {
-      var classLi = $('<li>').addClass('class'),
+      var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
           
           name = $('<span>').addClass('title').html(classes[i].name),
 
@@ -31,15 +33,56 @@ function Schedule() {
           date = $('<span>').addClass('date').html(formatDate(classes[i].date)),
                    
           instructor = $('<span>').addClass('instructor').
-                         html(classes[i].instructor);
+                         html(classes[i].instructor),
+          action = $('<span>').addClass('action');
 
-      classLi.append(date).append(name).append(time).append(instructor);
+      if (classState == 'added') {
+        action.addClass('remove').
+          html("<i class='fa fa-times'></i> Remove class");
+      } else {
+        action.addClass('add').html("<i class='fa fa-plus'></i> Add class");
+      }
+
+      classLi.append(date).append(name).append(time)
+        .append(instructor).append(action);
       el.append(classLi);
+
+      action.click(function(e) { that.selectClass(e) });
     }
   };
 
   this.saveAppointments = function() {
+    var class_ids = _.map($('.schedule .appointments li'), function(classLi) { 
+      return $(classLi).attr('data-id');
+    });
+    console.log(class_ids)
+    // save or remove + update Google calendar
+  };
 
+  this.selectClass = function(e) {
+    var action = $(e.target).parent();
+    var classLi = action.parent();
+
+    if (action.attr('class').indexOf('add') > -1) {
+      var existingClass = _.detect(
+        $('.schedule .appointments li'),
+        function(bookedClass) {
+          return $(bookedClass).attr('data-id') == classLi.attr('data-id');
+        }
+      );
+
+      if (existingClass == undefined) {
+        var clonedLi = classLi.clone(true, true);
+        clonedLi.find('.action').removeClass('add').addClass('remove').
+          html("<i class='fa fa-times'></i> Remove class");
+
+        clonedLi.appendTo($('.schedule .appointments'));
+      } else {
+        window.alert('The class is already in your schedule.');
+      }
+    } else if (action.attr('class').indexOf('remove') > -1) {
+      classLi.remove();
+    }
   };
 
   this.suggestClasses = function() {
@@ -55,7 +98,7 @@ function Schedule() {
         } else {
           console.log(data.classes)
           that.populateClasses(
-            data.classes, $('.schedule-wrapper .suggested-classes')
+            data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
           );
         }
       },

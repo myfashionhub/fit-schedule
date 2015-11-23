@@ -1,18 +1,29 @@
 <% body_class('schedule-wrapper') %>
 
-<h2>Booked classes</h2>
-<ul class="current-schedule"></ul>
+<section class="schedule">
+  <h2>Booked classes</h2>
+  <ul class="appointments"></ul>
 
-<h2>Your studios</h2>
-<a href="/customize"><i class="fa fa-pencil-square-o"></i> Add/Edit</a>
-<ul class="favorite-studios"></ul>
+  <button class="save-appointments disabled">Update schedule</button>
+</section>
 
-<h2>Available classes</h2>
-<ul class='suggested-classes'></ul>
+
+<section class="suggested-classes">
+  <h2>Available classes</h2>
+  <ul class='classes'></ul>
+</section>
+
+
+<section class="favorite-studios">
+  <h2>Your studios</h2>
+  <a href="/customize"><i class="fa fa-pencil-square-o"></i> Add/Edit</a>
+  <ul class="studios"></ul>
+</section>
+
 
 <script type="text/javascript">
   var schedule = new Schedule();
-  schedule.getClasses();
+  schedule.getAppointments();
   schedule.suggestClasses();
 
   var studio = new Studio();

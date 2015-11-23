@@ -19,8 +19,8 @@ function Studio() {
         success: function(data) {
           console.log(data);
           that.populateStudio(data.studio);
-          // that.populateClasses(data.classes);
-          that.suggestClasses(data.studio.id);
+          // that.populateClasses(data.classes); all classes of a studio
+          that.getStudioClassTypes(data.studio.id);
         },
         error: function(err) {
           console.log(err);
@@ -75,7 +75,7 @@ function Studio() {
     }
   };
 
-  this.suggestClasses = function(studio_id) {
+  this.getStudioClassTypes = function(studio_id) {
     $.ajax({
       url: '/studios/'+studio_id,
       type: 'GET',
@@ -144,7 +144,7 @@ function Studio() {
   };
 
   this.populateStudiosAndFilters = function(studios) {
-    var studioUl = $('.schedule-wrapper .favorite-studios');
+    var studioUl = $('.schedule-wrapper .favorite-studios .studios');
 
     for (var i=0; i < studios.length; i++) {
       var studioLi = $('<li>').addClass('studio');
