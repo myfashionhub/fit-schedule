@@ -65,7 +65,7 @@ function Filter() {
 
     $('.class .checkbox').click(function(e) {
       var checkbox  = $(e.target).parent();
-      console.log(checkbox)
+
       if (checkbox.attr('class').indexOf('selected') > 0) {
         checkbox.removeClass('selected');
         checkbox.empty().html("<i class='fa fa-square-o'></i>");

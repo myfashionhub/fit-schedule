@@ -12,16 +12,17 @@ function Schedule() {
       url: '/appointments',
       type: 'GET',
       success: function(data) {
-        console.log(data);
-        that.populateClasses(data.classes, $('.schedule .appointments'), 'added');
+        that.populateClasses(data.classes, $('.schedule .classes'), 'added');
       },
-      error: function(data) {
-        console.log(data);
+      error: function(err) {
+        console.log(err);
       }
     });
   };
 
   this.populateClasses = function(classes, el, classState) {
+    var dates = [];
+
     for (var i=0; i < classes.length; i++) {
       var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
           
@@ -43,7 +44,16 @@ function Schedule() {
         action.addClass('add').html("<i class='fa fa-plus'></i> Add class");
       }
 
-      classLi.append(date).append(name).append(time)
+      var existingDate = _.detect(dates, function(date) {
+        return date == classes[i].date;
+      });
+
+      if (existingDate == undefined) {
+        dates.push(classes[i].date);
+        classLi.append(date);
+      }
+
+      classLi.append(name).append(time)
         .append(instructor).append(action);
       el.append(classLi);
 
@@ -52,7 +62,7 @@ function Schedule() {
   };
 
   this.saveAppointments = function() {
-    var class_ids = _.map($('.schedule .appointments li'), function(classLi) { 
+    var class_ids = _.map($('.schedule .classes li'), function(classLi) {
       return $(classLi).attr('data-id');
     });
 
@@ -76,7 +86,7 @@ function Schedule() {
 
     if (action.attr('class').indexOf('add') > -1) {
       var existingClass = _.detect(
-        $('.schedule .appointments li'),
+        $('.schedule .classes li'),
         function(bookedClass) {
           return $(bookedClass).attr('data-id') == classLi.attr('data-id');
         }
@@ -87,7 +97,7 @@ function Schedule() {
         clonedLi.find('.action').removeClass('add').addClass('remove').
           html("<i class='fa fa-times'></i> Remove class");
 
-        clonedLi.appendTo($('.schedule .appointments'));
+        clonedLi.appendTo($('.schedule .classes'));
       } else {
         window.alert('The class is already in your schedule.');
       }
@@ -107,14 +117,13 @@ function Schedule() {
           var session = new Session('/');
           session.destroy();
         } else {
-          console.log(data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
           );
         }
       },
-      error: function(data) {
-        console.log(data);
+      error: function(err) {
+        console.log(err);
       }
     });
   };
