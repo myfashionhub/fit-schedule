@@ -34,7 +34,8 @@ function Schedule() {
                      .attr('target', '_blank').html(classes[i].studio_name),
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor),
-          action = $('<span>').addClass('action');
+          actionSpan = $('<span>').addClass('action-span'),
+          action = $('<div>').addClass('action');
 
       if (classState == 'added') {
         action.addClass('remove').
@@ -62,9 +63,10 @@ function Schedule() {
         classLi.append(date).append(labelLi);
       }
 
+      actionSpan.append(action);
       studioEl.wrapInner(studio);
       classLi.append(name).append(time).append(studioEl).
-        append(instructor).append(action);
+        append(instructor).append(actionSpan);
       el.append(classLi);
 
       action.click(function(e) { that.selectClass(e) });
@@ -92,7 +94,7 @@ function Schedule() {
 
   this.selectClass = function(e) {
     var action = $(e.target).parent();
-    var classLi = action.parent();
+    var classLi = action.parent().parent();
 
     if (action.attr('class').indexOf('add') > -1) {
       var existingClass = _.detect(

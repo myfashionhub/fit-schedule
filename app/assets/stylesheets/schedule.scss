@@ -1,3 +1,51 @@
-span {
-  margin-right: 2em;
+section.schedule, section.suggested-classes {
+  width: 80%;
+  min-width: 700px;
+  margin: 0 auto;
+}
+
+.schedule .classes,
+.suggested-classes .classes {
+  list-style-type: none;
+  padding-left: 0;
+  color: #333;
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  span {
+    width: 15%;
+    margin-right: 2%;
+    display: inline-block;
+    vertical-align: top;
+
+    &.title {
+      width: 23%;
+    }
+
+    &.time {
+      width: 20%;
+    }
+  }
+
+  .date {
+    font-size: 1.7em;
+    font-weight: 300;
+    display: block;
+  }
+
+  div.label {
+    padding-bottom: .3em;
+    margin-bottom: .5em;
+    border-bottom: 2px solid #ebebeb;
+    color: #888;
+    font-weight: 500;
+  }
+
+}
+
+a {
+  color: #ff0032;
+  &:hover { text-decoration: underline; }
 }
