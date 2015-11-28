@@ -32,11 +32,18 @@ class Filter < ActiveRecord::Base
     if user.calendar_id.present?
       calendar = Calendar.new(user.google_token)
       events = calendar.list_events(user.calendar_id)
+      studio = Studio.find(studio_id)
       classes = Filter.match_classes(user.id, studio_id)
 
       return { error: 'Google token expired' } if !events
 
-      classes.select { |klass| no_conflict(klass, user, events) }
+      classes = classes.select { |klass| no_conflict(klass, user, events) }
+      classes.map { |klass|
+        klass.attributes.merge({
+          'studio_name' => studio.name,
+          'studio_url' => studio.schedule_url
+        })
+      }
     else
       { error: "User has not specified a Google calendar." }
     end
