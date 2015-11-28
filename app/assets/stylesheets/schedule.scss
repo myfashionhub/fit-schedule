@@ -1,4 +1,6 @@
-section.schedule, section.suggested-classes {
+section.schedule,
+section.suggested-classes,
+section.favorite-studios {
   width: 80%;
   min-width: 700px;
   margin: 0 auto;
@@ -6,8 +8,6 @@ section.schedule, section.suggested-classes {
 
 .schedule .classes,
 .suggested-classes .classes {
-  list-style-type: none;
-  padding-left: 0;
   color: #333;
 
   li {
@@ -19,6 +19,7 @@ section.schedule, section.suggested-classes {
     margin-right: 2%;
     display: inline-block;
     vertical-align: top;
+    font-weight: 300;
 
     &.title {
       width: 23%;
@@ -26,6 +27,10 @@ section.schedule, section.suggested-classes {
 
     &.time {
       width: 20%;
+    }
+
+    .action, &.title {
+      font-weight: 400;
     }
   }
 
@@ -48,4 +53,39 @@ section.schedule, section.suggested-classes {
 a {
   color: #ff0032;
   &:hover { text-decoration: underline; }
+}
+
+
+section.favorite-studios {
+  margin: 2em auto 3em auto;
+
+  h2, a.edit {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  a.edit {
+    margin-left: 2em;
+  }
+
+  .studios .studio h4 {
+    i {
+      margin-left: .5em;
+      cursor: pointer;
+    }
+  }
+
+  .studios .studio {
+    ul {
+      display: none;
+    }
+
+    &.active {
+      ul { display: block; }
+    }
+  }
 }
