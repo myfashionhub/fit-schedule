@@ -25,14 +25,13 @@ function Schedule() {
 
     for (var i=0; i < classes.length; i++) {
       var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
-          
+          date = $('<p>').addClass('date').html(formatDate(classes[i].date)),
           name = $('<span>').addClass('title').html(classes[i].name),
-
           time = $('<span>').addClass('time').
                    html(classes[i].start_time+' - '+classes[i].end_time),
-
-          date = $('<span>').addClass('date').html(formatDate(classes[i].date)),
-                   
+          studioEl = $('<span>').addClass('studio'),
+          studio = $('<a>').attr('href', classes[i].studio_url)
+                     .attr('target', '_blank').html(classes[i].studio_name),
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor),
           action = $('<span>').addClass('action');
@@ -50,11 +49,22 @@ function Schedule() {
 
       if (existingDate == undefined) {
         dates.push(classes[i].date);
-        classLi.append(date);
+
+        var labelLi = $('<div>').addClass('label'),
+            nameLabel = $('<span>').addClass('title').html('Class'),
+            timeLabel = $('<span>').addClass('time').html('Time'),
+            studioLabel = $('<span>').addClass('studio').html('Studio'),
+            instructorLabel = $('<span>').addClass('instructor').html('Instructor');
+
+        labelLi.append(nameLabel).append(timeLabel).
+          append(studioLabel).append(instructorLabel);
+
+        classLi.append(date).append(labelLi);
       }
 
-      classLi.append(name).append(time)
-        .append(instructor).append(action);
+      studioEl.wrapInner(studio);
+      classLi.append(name).append(time).append(studioEl).
+        append(instructor).append(action);
       el.append(classLi);
 
       action.click(function(e) { that.selectClass(e) });
@@ -117,6 +127,7 @@ function Schedule() {
           var session = new Session('/');
           session.destroy();
         } else {
+          // console.log('Suggested classes ', data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
           );
