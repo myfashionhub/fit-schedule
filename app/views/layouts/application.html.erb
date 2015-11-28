@@ -13,10 +13,12 @@
 <body class="<%= yield (:body_class) %>">
 
 <% if self.controller.class != SessionsController %>
-<%= render 'layouts/nav' %>
+  <%= render 'layouts/nav' %>
 <% end %>
 
 <%= yield %>
+
+<%= render 'layouts/footer' %>
 
 </body>
 </html>

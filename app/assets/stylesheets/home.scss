@@ -7,11 +7,19 @@ nav {
   a {
     color: #fff;
     margin-right: .7em;
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   h1 {
     display: inline-block;
     margin: .6em 1em;
+    text-transform: uppercase;
+    font-weight: 300;
+    b {
+      font-weight: 700;
+    }
   }
 
   .options {
@@ -61,4 +69,14 @@ nav {
   bottom: 0;
   background: rgba(0,0,0,.7);
   color: #fff;
+}
+
+/* FOOTER */
+footer {
+  overflow: hidden;
+  background-color: #1a2121;
+  color: #fff;
+  text-align: center;
+
+  a { color: #fff; }
 }
