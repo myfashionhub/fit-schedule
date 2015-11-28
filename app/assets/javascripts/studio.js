@@ -33,10 +33,10 @@ function Studio() {
   this.populateStudio = function(studio) {
     var name   = $('<a>').attr('src', studio.schedule_url).
                    attr('target','_blank').wrapInner(studio.name);
-    $('.studio').attr('data-id', studio.id);
-    $('.studio .name').html(name);
-    $('.studio .address').html(studio.address);
-    //window.location.hash = studio.id;
+    var studioEl = $('.studio-show .studio');
+    studioEl.attr('data-id', studio.id);
+    studioEl.find('.name').html(name);
+    studioEl.find('.address').html(studio.address);
   };
 
   this.populateClasses = function(classes) {
@@ -75,12 +75,14 @@ function Studio() {
     }
   };
 
-  this.getStudioClassTypes = function(studio_id) {
+  this.getStudioClassTypes = function(studio_id, populateStudio) {
     $.ajax({
       url: '/studios/'+studio_id,
       type: 'GET',
       success: function(data) {
-        console.log(data);
+        if (populateStudio) {
+          that.populateStudio(data.studio);
+        }
         populateClassTypes(data.unique_classes, studio_id);
       },
       error: function(err) {
@@ -134,8 +136,7 @@ function Studio() {
       url: '/users/'+that.user_id+'/studios',
       type: 'GET',
       success: function(data) {
-        console.log(data.studios);
-        that.populateStudiosAndFilters(data.studios);
+        that.populateStudios(data.studios);
       },
       error: function(err) {
         console.log(err);
@@ -143,7 +144,7 @@ function Studio() {
     });
   };
 
-  this.populateStudiosAndFilters = function(studios) {
+  this.populateStudios = function(studios) {
     var studioUl = $('.schedule-wrapper .favorite-studios .studios');
 
     for (var i=0; i < studios.length; i++) {
@@ -152,23 +153,26 @@ function Studio() {
                          attr('data-id', studios[i].studio.id);
       var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit')
 
-      var filters = studios[i].filters;
-      var filterUl = $('<ul>');
-      for (var j=0; j < filters.length; j++) {
-        var filterLi = $('<li>').html(filters[j].class_name);
-        filterUl.append(filterLi)
-      }
+      // var filters = studios[i].filters;
+      // var filterUl = $('<ul>');
+      // for (var j=0; j < filters.length; j++) {
+      //   var filterLi = $('<li>').html(filters[j].class_name);
+      //   filterUl.append(filterLi)
+      // }
 
-      studioName.append(editButton)
-      studioLi.append(studioName).append(filterUl);
+      studioName.append(editButton);
+      studioLi.append(studioName);
       studioUl.append(studioLi);
 
-      editButton.click(function(e) { that.editStudioFilters(e); });
+      editButton.click(function(e) { that.toggleEditStudio(e); });
     }
   };
 
-  this.editStudioFilters = function(e) {
-    var studioId = $(e.target).parent().attr('data-id');
+  this.toggleEditStudio = function(e) {
+    var studio_id = $(e.target).parent().attr('data-id');
+
+    var modal = new Modal($('.studio-show'));
+    modal.el().addClass('big');
   };
 
   this.init();

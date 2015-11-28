@@ -9,6 +9,11 @@ body {
   min-height: 90vh; /* needs to fix its height */
   position: relative;
   margin: 0;
+
+  &.no-scroll {
+    position: fixed;
+    overflow: hidden;
+  }
 }
 
 div, section {
@@ -22,4 +27,12 @@ a {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+i {
+  cursor: pointer;
+}
+
+div, section {
+  box-sizing: border-box;
 }

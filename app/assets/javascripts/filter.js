@@ -31,7 +31,7 @@ function Filter() {
   };
 
   this.updateUserPreferences = function() {
-    var studio_id = $('.classes .studio').attr('data-id');
+    var studio_id = $('.show-studio .studio').attr('data-id');
     var classNames = [];
 
     _.each($('.class-types .class'), function(classLi) {
@@ -51,7 +51,7 @@ function Filter() {
         studio_id: studio_id
       },
       success: function(data) {
-        var studioName = $('.classes .studio .name a').html();
+        var studioName = $('.show-studio .studio .name a').html();
         console.log('Successfully saved your preferences for '+studioName);
       },
       error: function(data) {
@@ -77,8 +77,6 @@ function Filter() {
 
     $('.save-filters').click(function() { that.updateUserPreferences(); });
   };
-
-  // see calendar events: '/calendars/events?id=v.nessa.nguyen@gmail.com'
 
   this.init();
 
