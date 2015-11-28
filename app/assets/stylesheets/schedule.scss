@@ -38,6 +38,7 @@ section.favorite-studios {
     font-size: 1.7em;
     font-weight: 300;
     display: block;
+    margin-bottom: 5px;
   }
 
   div.label {
@@ -55,6 +56,14 @@ a {
   &:hover { text-decoration: underline; }
 }
 
+section.favorite-studios {
+  .studio-show {
+    display: none;
+    &.active {
+      display: block;
+    }
+  }
+}
 
 section.favorite-studios {
   margin: 2em auto 3em auto;
@@ -75,17 +84,6 @@ section.favorite-studios {
   .studios .studio h4 {
     i {
       margin-left: .5em;
-      cursor: pointer;
-    }
-  }
-
-  .studios .studio {
-    ul {
-      display: none;
-    }
-
-    &.active {
-      ul { display: block; }
     }
   }
 }

@@ -27,27 +27,9 @@
   </p>
 </section>
 
+<%= render 'studios/show' %>
 
-<section class="classes">
-  <div class='studio' data-id=''>
-    <h2 class="name"></h2>  
-    <p class="address"></p>
-
-    <ul class="schedule"></ul>
-  </div>
-  
-  <h3>Specify your class preference</h3>
-  <ul class="class-types"></ul>
-
-  <button class="save-filters">Save preferences</button>
-</section>
-
-
-<section class="availability">
-  <h3>Choose your time preference</h3>
-  <p>Click, hold Shift and drag to mark weekly work hours.</p>
-  <ul class="calendar"></ul>
-</section>
+<%= render 'users/availability' %>
 
 <button class="suggested-classes">View matches</button>
 
