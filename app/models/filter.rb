@@ -2,12 +2,17 @@ class Filter < ActiveRecord::Base
   belongs_to :user,   inverse_of: :filters
   belongs_to :studio
 
+  validates      :studio_id, presence: true
+  validates      :user_id, presence: true
   validates_uniqueness_of :class_name, scope: [:studio_id, :user_id]
 
 
   def self.update_user_preferences(params, user)
     class_names = JSON.parse(params[:class_names])
-    user_filters = Filter.where(user_id: user.id, studio_id: params[:studio_id])
+    user_filters = Filter.where(
+                     user_id: user.id,
+                     studio_id: params[:studio_id]
+                   )
 
     class_names.each do |class_name|
       existing_filter = user_filters.detect do |filter|
