@@ -31,10 +31,17 @@ function Filter() {
   };
 
   this.updateUserPreferences = function() {
-    var studio_id = $('.show-studio .studio').attr('data-id');
-    var classNames = [];
+    var studio_id = $('.studio-show .studio').attr('data-id');
+    var classNames = [],
+        classLis;
 
-    _.each($('.class-types .class'), function(classLi) {
+    if ($('.modal-dialog').hasClass('active')) {
+      classLis = $('.modal-dialog .class-types .class');
+    } else {
+      classLis = $('.customize-wrapper .class-types .class')
+    }
+
+    _.each(classLis, function(classLi) {
       var checkbox = $(classLi).find('.checkbox');
 
       if (checkbox.attr('class').indexOf('selected') > -1) {
@@ -51,7 +58,7 @@ function Filter() {
         studio_id: studio_id
       },
       success: function(data) {
-        var studioName = $('.show-studio .studio .name a').html();
+        var studioName = $('.studio-show .studio .name').html();
         console.log('Successfully saved your preferences for '+studioName);
       },
       error: function(data) {

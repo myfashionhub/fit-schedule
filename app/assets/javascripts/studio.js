@@ -31,11 +31,11 @@ function Studio() {
   };
 
   this.populateStudio = function(studio) {
-    var name   = $('<a>').attr('src', studio.schedule_url).
-                   attr('target','_blank').wrapInner(studio.name);
+    $('a.name').attr('href', studio.schedule_url).
+      attr('target','_blank').wrapInner(studio.name);
+
     var studioEl = $('.studio-show .studio');
     studioEl.attr('data-id', studio.id);
-    studioEl.find('.name').html(name);
     studioEl.find('.address').html(studio.address);
   };
 
@@ -117,7 +117,7 @@ function Studio() {
             checkbox.html('<i class="fa fa-square-o"></i>');
           }
 
-          classLi.append(name).append(checkbox);
+          classLi.append(checkbox).append(name);
           $('.class-types').append(classLi)
         }
 
@@ -170,6 +170,7 @@ function Studio() {
 
   this.toggleEditStudio = function(e) {
     var studio_id = $(e.target).parent().attr('data-id');
+    this.getStudioClassTypes(studio_id, true);
 
     var modal = new Modal($('.studio-show'));
     modal.el().addClass('big');
