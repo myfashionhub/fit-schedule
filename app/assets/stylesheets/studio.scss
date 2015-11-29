@@ -1,0 +1,28 @@
+/* STUDIOS & FILTERS */
+
+.studio-show {
+  .studio {
+    .name {
+      font-size: 1.5em;
+    }
+
+    .address {
+      color: #888;
+      margin: .4em 0;
+    }
+  }
+
+  ul.class-types {
+    overflow: hidden;
+    /* TABLE STYLE? */
+    .class {
+      display: inline-block;
+      width: 50%;
+      padding-right: .5em;
+
+      i {
+        margin-right: .3em;
+      }
+    }
+  }
+}

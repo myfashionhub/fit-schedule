@@ -9,11 +9,6 @@ body {
   min-height: 90vh; /* needs to fix its height */
   position: relative;
   margin: 0;
-
-  &.no-scroll {
-    position: fixed;
-    overflow: hidden;
-  }
 }
 
 div, section {
@@ -33,6 +28,6 @@ i {
   cursor: pointer;
 }
 
-div, section {
+div, section, ul, li {
   box-sizing: border-box;
 }
