@@ -1,8 +1,9 @@
+@import 'mixins';
+
 section.schedule,
 section.suggested-classes,
 section.favorite-studios,
-.customize-wrapper section
- {
+.customize-wrapper section {
   width: 80%;
   min-width: 700px;
   margin: 0 auto;
@@ -94,6 +95,27 @@ h2, h3, h4 {
 }
 
 .customize-wrapper {
+  .container {
+    width: 80%;
+    min-width: 700px;
+    margin: 0 auto;
+  }
+
+  .customize-nav {
+    li {
+      display: inline-block;
+      margin-right: 10px;
+      @include button-style;
+    }
+  }
+
+  section {
+    display: none;
+    &.active {
+      display: block;
+    }
+  }
+
   .studio-show {
     width: 100%;
     margin: 0;

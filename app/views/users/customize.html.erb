@@ -1,7 +1,15 @@
 <% body_class('customize-wrapper') %>
 <input type='hidden' data-user="<%= current_user.id if current_user %>">
 
+<div class="container">
+
 <h2>Customize Your Schedule</h2>
+
+<ul class="customize-nav">
+  <li>Add studio</li>
+  <li>Edit availability</li>
+  <li>Choose calendar</li>
+</ul>
 
 <section class="studio-form">
   <h3>Add a Studio</h3>
@@ -31,6 +39,7 @@
   <ul class='all-calendars'></ul>
 </section>
 
+</div> <!-- end container-->
 
 <script type="text/javascript">
   var calendar = new Calendar();
@@ -39,4 +48,5 @@
   studio.getClasses();
 
   var filter = new Filter();
+  var nav = new Navigation($('.customize-nav'), '.customize-wrapper section');
 </script>
