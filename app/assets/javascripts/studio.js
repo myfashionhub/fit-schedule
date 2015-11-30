@@ -17,10 +17,10 @@ function Studio() {
         type: 'POST',
         data: { url: url },
         success: function(data) {
-          console.log(data);
           that.populateStudio(data.studio);
-          // that.populateClasses(data.classes); all classes of a studio
           that.getStudioClassTypes(data.studio.id);
+          $('.studio-show').addClass('active');
+          // that.populateClasses(data.classes); all classes of a studio
         },
         error: function(err) {
           console.log(err);

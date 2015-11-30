@@ -3,35 +3,34 @@
 
 <h2>Customize Your Schedule</h2>
 
+<section class="studio-form">
+  <h3>Add a Studio</h3>
+
+  <form id='studio-schedule'>
+    <input class="url" placeholder='Paste studio schedule'></input>
+    <button class="submit">View classes</button>
+  </form>
+
+  <p class="faint">
+    * We currently support mindbodyonline.com and fitreserve.com.<br/>
+    Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
+  </p>
+
+  <%= render 'studios/show' %>
+
+  <button class="suggested-classes">View matches</button>
+</section>
+
+
+<%= render 'users/availability' %>
+
+
 <section class="calendars">
   <h3>Choose a Calendar</h3>
 
   <ul class='all-calendars'></ul>
 </section>
 
-
-<section class="studio-form">
-  <h3>Paste a studio's schedule</h3>  
-
-  <form id='studio-schedule'>
-    <input class="url"></input>
-    <button class="submit">View classes</button>
-  </form>
-
-  <p>
-    Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
-  </p>
-
-  <p>
-  * We currently support mindbodyonline.com and fitreserve.com
-  </p>
-</section>
-
-<%= render 'studios/show' %>
-
-<%= render 'users/availability' %>
-
-<button class="suggested-classes">View matches</button>
 
 <script type="text/javascript">
   var calendar = new Calendar();
