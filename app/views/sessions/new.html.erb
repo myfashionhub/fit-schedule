@@ -1,5 +1,7 @@
 <% body_class('home-wrapper') %>
 
+<div class="container">
+
 <section class="new-session">
   
   <header>
@@ -8,13 +10,15 @@
   </header>
 
   <div class="sign-in">
-    <img src="" alt-text="Google logo">
     <%= link_to 'Connect Google Calendar', '/auth/google_oauth2' %>
+    <i class="fa fa-google"></i>
   </div>
 
 </section>
 
 
-<section class="about">
+<div class="tooltip about">
   <p>Fit Schedule maintains an updated listing of your favorite classes and let them know when they're available for booking. The app syncs with Google Calendars to remind you of the appointments.</p>
-</section>
+</div>
+
+</div> <!-- end container -->
