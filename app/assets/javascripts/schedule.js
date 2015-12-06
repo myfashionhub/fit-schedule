@@ -2,7 +2,7 @@ function Schedule() {
   var that = this;
 
   this.init = function() {
-    $('.schedule .save-appointments').click(function() {
+    $('.upcoming .save-appointments').click(function() {
       that.saveAppointments();
     });
   };
@@ -12,7 +12,7 @@ function Schedule() {
       url: '/appointments',
       type: 'GET',
       success: function(data) {
-        that.populateClasses(data.classes, $('.schedule .classes'), 'added');
+        that.populateClasses(data.classes, $('.upcoming .classes'), 'added');
       },
       error: function(err) {
         console.log(err);
@@ -74,7 +74,7 @@ function Schedule() {
   };
 
   this.saveAppointments = function() {
-    var class_ids = _.map($('.schedule .classes li'), function(classLi) {
+    var class_ids = _.map($('.upcoming .classes li'), function(classLi) {
       return $(classLi).attr('data-id');
     });
 
@@ -98,7 +98,7 @@ function Schedule() {
 
     if (action.attr('class').indexOf('add') > -1) {
       var existingClass = _.detect(
-        $('.schedule .classes li'),
+        $('.upcoming .classes li'),
         function(bookedClass) {
           return $(bookedClass).attr('data-id') == classLi.attr('data-id');
         }
@@ -109,7 +109,7 @@ function Schedule() {
         clonedLi.find('.action').removeClass('add').addClass('remove').
           html("<i class='fa fa-times'></i> Remove class");
 
-        clonedLi.appendTo($('.schedule .classes'));
+        clonedLi.appendTo($('.upcoming .classes'));
       } else {
         window.alert('The class is already in your schedule.');
       }

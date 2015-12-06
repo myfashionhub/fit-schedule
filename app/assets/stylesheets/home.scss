@@ -8,6 +8,10 @@
   .container {
     min-height: 100%;
   }
+
+  footer {
+    margin-top: -86px;
+  }
 }
 
 .new-session {
@@ -32,7 +36,7 @@
 
     img {
       width: 40px;
-      margin-top: 10px;
+      margin-bottom: -10px;
     }
   }
 }

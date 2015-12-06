@@ -1,7 +1,6 @@
 @import 'mixins';
 
 section.schedule,
-section.suggested-classes,
 section.favorite-studios,
 .customize-wrapper section {
   width: 80%;
@@ -9,7 +8,7 @@ section.favorite-studios,
   margin: 0 auto;
 }
 
-.schedule .classes,
+.upcoming .classes,
 .suggested-classes .classes {
   color: #333;
 
@@ -94,18 +93,11 @@ h2, h3, h4 {
   font-weight: 400;
 }
 
-.customize-wrapper {
+.customize-wrapper,
+.schedule-wrapper {
   .container {
     width: 80%;
     min-width: 700px;
-  }
-
-  .customize-nav {
-    li {
-      display: inline-block;
-      margin-right: 10px;
-      @include button-style;
-    }
   }
 
   section {
@@ -123,4 +115,15 @@ h2, h3, h4 {
 
 i {
   margin-right: .5em;
+}
+
+
+/* SUB NAV*/
+.customize-nav,
+.schedule-nav {
+  li {
+    display: inline-block;
+    margin-right: 10px;
+    @include button-style;
+  }
 }
