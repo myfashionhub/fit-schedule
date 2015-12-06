@@ -34,10 +34,11 @@ module Scraper
               end_time:   time[:end_time],
               name:       format_class(row.css('.name').text),
               instructor: row.css('.instructor').text,
-              duration:   time[:duration]
-            }  
+              duration:   time[:duration],
+              studio_id:  studio.id
+            }
 
-            classes.push(klass)
+            Klass.create_from_raw(klass)
           end
         end       
       end
