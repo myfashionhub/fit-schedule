@@ -13,7 +13,6 @@ function Calendar() {
       url: '/calendars',
       type: 'GET',
       success: function(data) {
-        console.log(data);
         if ('error' in data) {
           window.alert(data.error);
           var session = new Session('/');
@@ -31,10 +30,21 @@ function Calendar() {
 
   this.populateCalendars = function(calendars) {  
     var list = $('.all-calendars');
+    var userCal = $('#user').attr('data-calendar');
 
     for (var i = 0; i < calendars.length; i++) {
       var cal = calendars[i];
-      var item = $('<li>').html(cal.summary).attr('data-id', cal.id);
+      var item = $('<li>').attr('data-id', cal.id);
+      var calName = $('<span>').addClass('name').html(cal.summary);
+      var checkbox;
+
+      if (cal.summary === userCal) {
+        checkbox = $('<i class="fa fa-check-square-o"></i>');
+      } else {
+        checkbox = $('<i class="fa fa-square-o"></i>');
+      }
+
+      item.append(checkbox).append(calName);
       list.append(item);
     }
   };
