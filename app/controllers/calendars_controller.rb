@@ -4,7 +4,12 @@ class CalendarsController < ApplicationController
 
   def index
     begin
-      calendars = @calendar.list
+      calendars = Rails.cache.fetch(
+        "calendars/#{current_user.id}", expires_in: 2.hours
+      ) do
+        @calendar.list
+      end
+
       render json: { calendars: calendars }
     rescue => error
       reset_session
