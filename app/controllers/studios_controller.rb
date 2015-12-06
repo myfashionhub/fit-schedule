@@ -9,7 +9,7 @@ class StudiosController < ApplicationController
     end
 
     unique_classes = Rails.cache.fetch(
-      "#{studio_id}/unique_classes", expires_in: 24.hours
+      "#{studio_id}/unique_classes", expires_in: 2.hours
     ) do
       Klass.where(studio_id: studio_id).pluck(:name).uniq
     end

@@ -44,8 +44,9 @@ module Scraper
             if !row.text.downcase.include?('start time')
               cols = row.css('td')
 
-              next if cols[1].blank? || cols[1].text.empty? ||
-                      cols[1].text.downcase.include?('0 open')
+              next if cols[1].blank?
+                      #|| cols[1].text.empty? ||
+                      #cols[1].text.downcase.include?('0 open')
               start_time = cols[0].text.gsub("\u00A0", " ").strip.upcase
               duration   = cols[5].text.gsub("\u00A0", " ").strip
               times      = get_times(start_time, duration)
