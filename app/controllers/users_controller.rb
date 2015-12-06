@@ -7,6 +7,8 @@ class UsersController < ApplicationController
 
   def update
     current_user.update(calendar_id: params[:calendar_id]) if current_user
+    attribute = 'calendar'
+    render json: { msg: "Successfully updated #{attribute}" }
   end
 
   def schedule

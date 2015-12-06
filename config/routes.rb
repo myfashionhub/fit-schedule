@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
   get '/logout' => 'sessions#destroy'
 
-  #put '/users' => 'users#update'
+  put '/users' => 'users#update'
   get '/schedule' => 'users#schedule'
   get '/customize' => 'users#customize'
 

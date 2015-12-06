@@ -1,10 +1,12 @@
 function Calendar() {
 
   var that = this;
+  var container = $('.customize-wrapper .calendars');
 
   this.init = function() {
-    // when calendar is chosen var calendarId = $('')
-    // this.updateUserCalendar(calendarId);
+    container.find('.update').click(function() {
+      that.updateUserCalendar();
+    });
 
   };
 
@@ -36,27 +38,26 @@ function Calendar() {
       var cal = calendars[i];
       var item = $('<li>').attr('data-id', cal.id);
       var calName = $('<span>').addClass('name').html(cal.summary);
-      var checkbox;
+      var radioButton = $('<input>').attr('type', 'radio').
+                          attr('name', 'calendar');
 
-      if (cal.summary === userCal) {
-        checkbox = $('<i class="fa fa-check-square-o"></i>');
-      } else {
-        checkbox = $('<i class="fa fa-square-o"></i>');
+      if (cal.id === userCal) {
+        radioButton.attr('checked', true);
       }
 
-      item.append(checkbox).append(calName);
+      item.append(radioButton).append(calName);
       list.append(item);
     }
   };
 
-  this.updateUserCalendar = function(calendarId) {
+  this.updateUserCalendar = function() {
+    var calendar_id = $('.all-calendars input[type="radio"]:checked').
+                        parent().attr('data-id');
+
     $.ajax({
       url: '/users',
       type: 'PUT',
-      data: {
-        calendar_id: calendarId,
-        availability: availability
-      },
+      data: { calendar_id: calendar_id },
       success: function(data) {
         console.log(data);
       },
