@@ -8,9 +8,9 @@ function Studio() {
   };
 
   this.getClasses = function() {
-    $('#studio-schedule').submit(function(e) {
+    $('.studio-form form').submit(function(e) {
       e.preventDefault();
-      var url = $('#studio-schedule .url').val();
+      var url = $('.studio-form .url').val();
 
       $.ajax({
         url: '/classes',

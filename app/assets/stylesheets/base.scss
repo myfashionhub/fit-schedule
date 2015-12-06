@@ -1,3 +1,6 @@
+@import 'mixins';
+
+/* LAYOUT */
 body, html {
   min-height: 100%;
   font-size: 16px;
@@ -11,10 +14,18 @@ body {
   margin: 0;
 }
 
-div, section {
+.container {
+  min-height: 95vh;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+div, section, ul, li {
   box-sizing: border-box;
 }
 
+/* STYLES */
 a {
   text-decoration: none;
 }
@@ -28,22 +39,23 @@ i {
   cursor: pointer;
 }
 
-div, section, ul, li {
-  box-sizing: border-box;
-}
-
 .faint {
   color: #777;
   font-weight: 300;
 }
 
-.container {
-  min-height: 95vh;
-  overflow: hidden;
-  position: relative;
-  margin: 0 auto;
-}
-
 .tooltip {
   display: none;
+}
+
+button {
+  @include button-style;
+}
+
+input[type="text"] {
+  padding: 6px;
+}
+
+input, button {
+  outline: none;
 }

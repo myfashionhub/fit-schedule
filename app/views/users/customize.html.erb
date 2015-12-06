@@ -14,19 +14,17 @@
 <section class="studio-form">
   <h3>Add a Studio</h3>
 
-  <form id='studio-schedule'>
-    <input class="url" placeholder='Paste studio schedule'></input>
-    <button class="submit">View classes</button>
-  </form>
-
   <p class="faint">
     * We currently support mindbodyonline.com and fitreserve.com.<br/>
     Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
   </p>
 
-  <%= render 'studios/show' %>
+  <form id='studio-schedule'>
+    <input type='text' class="url" placeholder='Paste studio schedule'></input>
+    <button class="submit">View classes</button>
+  </form>
 
-  <button class="suggested-classes">View matches</button>
+  <%= render 'studios/show' %>
 </section>
 
 

@@ -13,12 +13,11 @@
     background-color: #354443;
     color: #fff;
   }
-
-  &.important {
-    background-color: #354443;
-    color: #fff;
-  }
 }
 
+@mixin button-dark {
+  background-color: #354443;
+  color: #fff;
+}
 
 $teal: #319f91;
