@@ -3,6 +3,8 @@ class UsersController < ApplicationController
   before_filter :authorize
 
   def show
+    user = User.find(params[:id])
+    render json: { user: user }
   end
 
   def update
