@@ -102,3 +102,11 @@ i {
     @include button-style;
   }
 }
+
+/* AVAILABILITY */
+.time-blocks {
+  .days .day {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}

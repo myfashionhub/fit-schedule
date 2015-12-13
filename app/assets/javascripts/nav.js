@@ -2,6 +2,7 @@ function Navigation(ul, sectionSelector) {
 
   var that = this;
   var navLis = ul.find('li');
+  var cal = new Calendar();
 
   this.init = function() {
     $(sectionSelector).first().addClass('active');
@@ -21,9 +22,10 @@ function Navigation(ul, sectionSelector) {
       var targetSection = $($(sectionSelector)[index]);
       targetSection.addClass('active');
 
-      if (targetSection.attr('class').indexOf('calendars') > -1) {
-        var cal = new Calendar();
+      if (targetSection.hasClass('calendars')) {
         cal.getAllCalendars();
+      } else if (targetSection.hasClass('availability')) {
+        cal.getUserAvailability();
       }
     });
   };

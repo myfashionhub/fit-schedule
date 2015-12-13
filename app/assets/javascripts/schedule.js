@@ -154,7 +154,7 @@ function Schedule() {
     }
 
     return dict[num];
-  }
+  };
 
   var monthLookup = function(num) {
     var dict = { 
@@ -164,7 +164,7 @@ function Schedule() {
     };
 
     return dict[num] 
-  }
+  };
 
   this.init();
 }
