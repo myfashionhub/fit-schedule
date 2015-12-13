@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
         image: auth_hash['info']['image'],
         google_uid: auth_hash['uid'],
         google_token: auth_hash['credentials']['token'],
-        default_availability: default_availability
+        availability: default_availability
       )
     else
       user.update(google_token: auth_hash['credentials']['token'])
@@ -27,9 +27,9 @@ class User < ActiveRecord::Base
   end
 
   def default_availability
-    # days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    # ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     busy = (1..5).map do |i|
-      { 'day': i, 'start_time': '9:30', 'end_time': '18:00' }
+      { day: i, start_time: '9:30', end_time: '18:00' }
     end.to_json
   end
 
