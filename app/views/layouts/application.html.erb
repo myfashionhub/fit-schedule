@@ -2,13 +2,26 @@
 <html>
 <head>
   <title>Fit Schedule</title>
+  
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
   <%= csrf_meta_tags %>
 </head>
-<body>
+
+<body class="<%= yield (:body_class) %>">
+
+<%= render 'layouts/modal' %>
+
+<% if self.controller.class != SessionsController %>
+  <%= render 'layouts/nav' %>
+<% end %>
 
 <%= yield %>
+
+<%= render 'layouts/footer' %>
 
 </body>
 </html>

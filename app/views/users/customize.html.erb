@@ -1,0 +1,50 @@
+<% body_class('customize-wrapper') %>
+<input type='hidden' data-user="<%= current_user.id if current_user %>">
+
+<div class="container">
+
+<h2>Customize Your Schedule</h2>
+
+<ul class="customize-nav">
+  <li>Add studio</li>
+  <li>Edit availability</li>
+  <li>Choose calendar</li>
+</ul>
+
+<section class="studio-form">
+  <h3>Add a Studio</h3>
+
+  <p class="faint">
+    * We currently support mindbodyonline.com and fitreserve.com.<br/>
+    Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
+  </p>
+
+  <form id='studio-schedule'>
+    <input type='text' class="url" placeholder='Paste studio schedule'></input>
+    <button class="submit">View classes</button>
+  </form>
+
+  <%= render 'studios/show' %>
+</section>
+
+
+<%= render 'users/availability' %>
+
+
+<section class="calendars">
+  <h3>Choose a Calendar</h3>
+
+  <ul class='all-calendars'></ul>
+
+  <button class='update'>Update calendar</button>
+</section>
+
+</div> <!-- end container-->
+
+<script type="text/javascript">
+  var studio = new Studio();
+  studio.getClasses();
+
+  var filter = new Filter();
+  var nav = new Navigation($('.customize-nav'), '.customize-wrapper section');
+</script>

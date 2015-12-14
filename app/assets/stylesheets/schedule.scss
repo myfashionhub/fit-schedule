@@ -1,0 +1,112 @@
+@import 'mixins';
+
+section.schedule,
+section.favorite-studios,
+.customize-wrapper section {
+  width: 80%;
+  min-width: 700px;
+  margin: 0 auto;
+}
+
+.upcoming .classes,
+.suggested-classes .classes {
+  color: #333;
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  span {
+    width: 15%;
+    margin-right: 2%;
+    display: inline-block;
+    vertical-align: top;
+    font-weight: 300;
+
+    &.title {
+      width: 23%;
+    }
+
+    &.time {
+      width: 20%;
+    }
+
+    .action, &.title {
+      font-weight: 400;
+    }
+  }
+
+  .date {
+    font-size: 1.7em;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  div.label {
+    padding-bottom: .3em;
+    margin-bottom: .5em;
+    border-bottom: 2px solid #ebebeb;
+    color: #888;
+    font-weight: 500;
+  }
+
+}
+
+section.schedule {
+  margin-bottom: 2em;
+}
+
+a {
+  color: #ff0032;
+  &:hover { text-decoration: underline; }
+}
+
+
+
+h2, h3, h4 {
+  font-weight: 400;
+}
+
+.customize-wrapper,
+.schedule-wrapper {
+  .container {
+    width: 80%;
+    min-width: 700px;
+  }
+
+  section {
+    display: none;
+    &.active {
+      display: block;
+    }
+  }
+
+  .studio-show {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+i {
+  margin-right: .5em;
+}
+
+
+/* SUB NAV*/
+.customize-nav,
+.schedule-nav {
+  li {
+    display: inline-block;
+    margin-right: 10px;
+    @include button-style;
+  }
+}
+
+/* AVAILABILITY */
+.time-blocks {
+  .days .day {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}

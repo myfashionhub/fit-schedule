@@ -1,0 +1,71 @@
+@import 'mixins';
+
+.studio-form {
+  form .url {
+    width: 20em;
+  }
+
+  button {
+    @include button-dark;
+  }
+}
+
+/* STUDIO SHOW PARTIAL */
+.studio-show {
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+
+section.favorite-studios {
+  margin: 2em auto 3em auto;
+
+  h2, a.edit {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  a.edit {
+    margin-left: 2em;
+  }
+
+  .studios .studio h4 {
+    i {
+      margin-left: .5em;
+    }
+  }
+}
+
+/* STUDIOS & FILTERS */
+
+.studio-show {
+  .studio {
+    .name {
+      font-size: 1.5em;
+    }
+
+    .address {
+      color: #888;
+      margin: .4em 0;
+    }
+  }
+
+  ul.class-types {
+    overflow: hidden;
+
+    .class {
+      display: inline-block;
+      width: 50%;
+      padding-right: .5em;
+
+      i {
+        margin-right: .3em;
+      }
+    }
+  }
+}

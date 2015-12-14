@@ -1,0 +1,23 @@
+@mixin button-style {
+  padding: 6px 12px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ebebeb;
+  }
+
+  &.active {
+    background-color: #354443;
+    color: #fff;
+  }
+}
+
+@mixin button-dark {
+  background-color: #354443;
+  color: #fff;
+}
+
+$teal: #319f91;

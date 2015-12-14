@@ -8,32 +8,36 @@ class BasicTables < ActiveRecord::Migration
       t.string :google_uid
       t.string :google_token
       t.text   :availability
+      t.string :calendar_id
       t.string :zipcode
       t.timestamps
     end
 
     create_table :filters do |t|
+      t.string   :class_name
       t.string   :class_type
-      t.string   :class_level
-      t.references :users, index: true
+      t.references :studio, index: true
+      t.references :user, index: true
       t.timestamps
     end
 
     create_table :appointments do |t|
       t.integer    :reminder # number of minutes prior to appt
-      t.references :users, index: true
-      t.references :classes, index: true
+      t.references :user, index: true
+      t.references :klass, index: true
       t.timestamps
     end
 
     create_table :classes do |t|
+      t.string   :name
       t.string   :type
       t.string   :level   
-      t.datetime :start_time
-      t.datetime :end_time
+      t.string   :start_time
+      t.string   :end_time
       t.integer  :duration
       t.datetime :date
-      t.references :studios, index: true
+      t.string   :instructor
+      t.references :studio, index: true
       t.timestamps
     end
 

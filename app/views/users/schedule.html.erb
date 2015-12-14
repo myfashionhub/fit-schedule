@@ -1,0 +1,50 @@
+<% body_class('schedule-wrapper') %>
+
+<div class="container">
+
+<h2>Schedule</h2>
+
+<ul class="schedule-nav">
+  <li>Classes</li>
+  <li>Favorite Studios</li>
+</ul>
+
+<section class="schedule">
+
+  <div class="upcoming">
+    <h2>Upcoming classes</h2>
+    <ul class="classes"></ul>
+
+    <button class="save-appointments disabled">Update schedule</button>
+  </div>
+
+  <div class="suggested-classes">
+    <h2>Available classes</h2>
+    <ul class='classes'></ul>
+  </div>
+
+</section>
+
+
+<section class="favorite-studios">
+  <h2>Your studios</h2>
+  <a href="/customize" class="edit">
+    <i class="fa fa-pencil-square-o"></i> Add studio
+  </a>
+
+  <%= render 'studios/show' %>
+  <ul class="studios"></ul>
+</section>
+
+</div> <!-- end container -->
+
+<script type="text/javascript">
+  var schedule = new Schedule();
+  schedule.getAppointments();
+  schedule.suggestClasses();
+
+  var studio = new Studio();
+  studio.showFavorites();
+
+  var nav = new Navigation($('.schedule-nav'), '.schedule-wrapper section');
+</script>
