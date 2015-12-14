@@ -6,6 +6,7 @@ module Scraper
 
     def self.get_classes(url)
       session = Capybara::Session.new(:poltergeist)
+      session.driver.browser.js_errors = false
       session.visit url
       sleep 2
 
