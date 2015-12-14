@@ -46,3 +46,14 @@ $ heroku config:set FS_GOOGLE_ID=[Google id]
 ```
 $ heroku run assets:precompile
 ```
+
+- Add buildpacks for Nodejs and PhantomJS
+```
+heroku buildpacks:add --index 1 heroku/nodejs
+heroku buildpacks:add  https://github.com/stomita/heroku-buildpack-phantomjs
+```
+
+- Add web process for Procfile
+```
+web: bin/rails server -p $PORT -e $RAILS_ENV
+```
