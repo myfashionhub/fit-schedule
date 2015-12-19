@@ -57,3 +57,5 @@ heroku buildpacks:add  https://github.com/stomita/heroku-buildpack-phantomjs
 ```
 web: bin/rails server -p $PORT -e $RAILS_ENV
 ```
+
+- Add package.json to specify Node version
