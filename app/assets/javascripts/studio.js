@@ -2,6 +2,7 @@ function Studio() {
 
   var that = this;
   this.user_id = $('#user').attr('data-id');
+  var notify = new Notify();
 
   this.init = function() {
 
@@ -24,7 +25,7 @@ function Studio() {
         },
         error: function(err) {
           console.log(err);
-          window.alert('Please enter a valid schedule URL.');
+          notify.build('Unable to get classes from schedule URL.', 'error');
         }
       });
     });
@@ -32,7 +33,7 @@ function Studio() {
 
   this.populateStudio = function(studio) {
     $('a.name').attr('href', studio.schedule_url).
-      attr('target','_blank').wrapInner(studio.name);
+      attr('target','_blank').html(studio.name);
 
     var studioEl = $('.studio-show .studio');
     studioEl.attr('data-id', studio.id);
@@ -94,8 +95,10 @@ function Studio() {
       var filter = new Filter();
       var userFilters;
 
-      Promise.all([ filter.showUserPreferences(studio_id) ]).then(
-        function(data) { buildFilters(data[0]); }
+      Promise.all([ filter.show(studio_id) ]).then(
+        function(data) {
+          buildFilters(data[0]);
+        }
       )
 
       var buildFilters = function(userFilters) {

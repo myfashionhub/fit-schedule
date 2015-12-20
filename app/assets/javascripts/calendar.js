@@ -71,11 +71,12 @@ function Calendar() {
       url: '/users/'+user_id,
       type: 'PUT',
       data: data,
-      success: function(data) {
-        notify.build(data.msg, 'success');
+      success: function(response) {
+        notify.build(response.msg, 'success');
       },
       error: function(err) {
-        console.log(err); 
+        console.log(err);
+        notify.build(err, 'error');
       }
     });
   };

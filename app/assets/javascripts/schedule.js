@@ -1,5 +1,6 @@
 function Schedule() {
   var that = this;
+  var notify = new Notify();
 
   this.init = function() {
     $('.upcoming .save-appointments').click(function() {
@@ -83,7 +84,7 @@ function Schedule() {
       type: 'POST',
       data: { class_ids: class_ids },
       success: function(response) {
-        console.log(response);
+        notify.build(response.msg, 'success');
       },
       error: function(err) {
         console.log(err)
@@ -158,9 +159,9 @@ function Schedule() {
 
   var monthLookup = function(num) {
     var dict = { 
-      0: 'January', 1: 'February', 2: 'March', 3: 'April', 4: 'May', 5: 'June',
-      6: 'July', 7: 'August', 8: 'September', 9: 'October', 10: 'November',
-      11: 'December'
+      0: 'January', 1: 'February', 2: 'March', 3: 'April',
+      4: 'May', 5: 'June', 6: 'July', 7: 'August',
+      8: 'September', 9: 'October', 10: 'November', 11: 'December'
     };
 
     return dict[num] 
