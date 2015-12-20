@@ -3,6 +3,7 @@ function Calendar() {
   var that = this;
   var container = $('.customize-wrapper .calendars');
   var user_id = $('#user').attr('data-id');
+  var notify = new Notify();
 
   this.init = function() {
     container.find('.update').click(function() {
@@ -71,7 +72,7 @@ function Calendar() {
       type: 'PUT',
       data: data,
       success: function(data) {
-        console.log(data);
+        notify.build(data.msg, 'success');
       },
       error: function(err) {
         console.log(err); 

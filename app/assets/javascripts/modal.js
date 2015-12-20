@@ -31,3 +31,29 @@ function Modal(element) {
 
   this.init();
 }
+
+
+function Notify(el) {
+  var that = this;
+
+  this.init = function() {
+    this.el = el || $('.notify');
+    this.el.find('.fa-times').click(function() { that.close(); });
+  };
+
+  this.build = function(msg, type) {
+    this.el.find('.content').html(msg);
+    this.el.addClass(type).addClass('active');
+
+    setTimeout(function() {
+      that.close(type);
+    }, 2500);
+  };
+
+  this.close = function(type) {
+    this.el.find('.content').empty();
+    this.el.removeClass(type).removeClass('active');
+  }
+
+  this.init();
+}

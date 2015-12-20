@@ -1,3 +1,5 @@
+@import 'mixins';
+
 /* NAV BAR */
 nav {
   overflow: hidden;
@@ -37,6 +39,7 @@ footer {
 
   a { color: #fff; }
 }
+
 
 /* MODAL & OVERLAY */
 body {
@@ -91,4 +94,54 @@ body {
     overflow-y: auto;
   }
 
+}
+
+/** NOTIFICATION **/
+.notify {
+  width: 550px;
+  position: absolute;
+  top: 60px;
+  right: 1em;
+  z-index: 3;
+
+  display: none;
+  &.active {
+    display: block;
+  }
+  font-weight: 300;
+  padding: 10px 15px;
+  border-radius: 4px;
+
+  &.success {
+    @include linear-gradient(top, #dff0d8, 0, #c8e5bc, 100%);
+    border-color: #b2dba1;
+  }
+
+  &.error {
+    @include linear-gradient(top, #f2dede, 0, #e7c3c3, 100%);
+    border-color: #dca7a7;
+  }
+
+  &.warning {
+    @include linear-gradient(top, #fcf8e3, 0, #f8efc0, 100%);
+    border-color: #f5e79e;
+  }
+
+  &.info {
+    @include linear-gradient(top, #d9edf7, 0, #b9def0, 100%);
+    border-color: #9acfea;
+  }
+}
+
+.notify {
+  .content {
+    margin-right: 10px;
+  }
+
+  i.fa-times {
+    font-size: 1.2em;
+    position: absolute;
+    top: 6px;
+    right: 0;
+  }
 }

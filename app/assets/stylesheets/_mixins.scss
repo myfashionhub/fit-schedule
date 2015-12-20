@@ -21,3 +21,15 @@
 }
 
 $teal: #319f91;
+
+
+@mixin linear-gradient($direction, $start-color, $start-point, $stop-color, $stop-point) {
+  background-image: -webkit-linear-gradient(
+                      $direction, $start-color $start-point, $stop-color $stop-point
+                    );
+  background-image: -o-linear-gradient(
+                      $direction, $start-color $start-point, $stop-color $stop-point
+                    );
+  background-repeat: repeat-x;
+  background-color: $stop-color;
+}
