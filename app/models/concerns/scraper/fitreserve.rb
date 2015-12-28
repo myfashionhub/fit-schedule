@@ -71,7 +71,7 @@ module Scraper
       current_year = Date.today.strftime('%Y')
       current_month = Date.today.strftime('%m')
 
-      if current_month == '12' && month == '1'
+      if current_month == '12' && month == '01'
         year = (current_year.to_i + 1).to_s
       else
         year = current_year
