@@ -13,6 +13,9 @@ function Schedule() {
       url: '/appointments',
       type: 'GET',
       success: function(data) {
+        if ( data.classes.length === 0 ) {
+          $('.schedule-wrapper .upcoming .empty').addClass('active');
+        }
         that.populateClasses(data.classes, $('.upcoming .classes'), 'added');
       },
       error: function(err) {
@@ -122,6 +125,18 @@ function Schedule() {
     } else if (action.attr('class').indexOf('remove') > -1) {
       classLi.remove();
     }
+
+    this.saveButtonState();
+  };
+
+  this.saveButtonState = function() {
+    if ( $('.upcoming .classes li').length > 0 ) {
+      $('.upcoming .empty').removeClass('active');
+      $('.save-appointments').removeClass('disabled');
+    } else {
+      $('.save-appointments').addClass('disabled');
+      $('.upcoming .empty').addClass('active');
+    }
   };
 
   this.suggestClasses = function() {
@@ -135,7 +150,6 @@ function Schedule() {
           var session = new Session('/');
           session.destroy();
         } else {
-          // console.log('Suggested classes ', data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
           );

@@ -139,6 +139,9 @@ function Studio() {
       url: '/users/'+that.user_id+'/studios',
       type: 'GET',
       success: function(data) {
+        if ( data.studios.length === 0 ) {
+          $('.schedule-wrapper .suggested-classes .empty').addClass('active');
+        }
         that.populateStudios(data.studios);
       },
       error: function(err) {

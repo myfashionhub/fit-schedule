@@ -8,6 +8,26 @@ section.favorite-studios,
   margin: 0 auto;
 }
 
+section.schedule {
+  margin-bottom: 2em;
+
+  .upcoming {
+    overflow: hidden;
+  }
+
+  .save-appointments {
+    float: right;
+    margin-right: 3em;
+    display: block;
+    &.disabled { display: none; }
+  }
+
+  .empty {
+    display: none;
+    &.active { display: block; }
+  }
+}
+
 .upcoming .classes,
 .suggested-classes .classes {
   color: #333;
@@ -50,11 +70,6 @@ section.favorite-studios,
     color: #888;
     font-weight: 500;
   }
-
-}
-
-section.schedule {
-  margin-bottom: 2em;
 }
 
 a {
