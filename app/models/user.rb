@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
         email: auth_hash['info']['email'],
         image: auth_hash['info']['image'],
         google_uid: auth_hash['uid'],
-        availability: default_availability,
+        availability: self.default_availability,
         google_token: auth_hash['credentials']['token'],
         refresh_token: auth_hash['credentials']['refresh_token'],
         token_expires: auth_hash['credentials']['expires_at']
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  def default_availability
+  def self.default_availability
     # ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     busy = (1..5).map do |i|
       { day: i, start_time: '9:30', end_time: '18:00' }
