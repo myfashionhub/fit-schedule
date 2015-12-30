@@ -25,18 +25,23 @@ function Schedule() {
     var dates = [];
 
     for (var i=0; i < classes.length; i++) {
+      var studioUrl = classes[i].studio_url;
+      if ( studioUrl.indexOf('fitreserve.com') > -1 ) {
+        studioUrl += '?tab=schedule';
+      }
+
       var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
           date = $('<p>').addClass('date').html(formatDate(classes[i].date)),
           name = $('<span>').addClass('title').html(classes[i].name),
           time = $('<span>').addClass('time').
                    html(classes[i].start_time+' - '+classes[i].end_time),
           studioEl = $('<span>').addClass('studio'),
-          studio = $('<a>').attr('href', classes[i].studio_url)
-                     .attr('target', '_blank').html(classes[i].studio_name),
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor),
           actionSpan = $('<span>').addClass('action-span'),
-          action = $('<div>').addClass('action');
+          action = $('<div>').addClass('action'),
+          studio = $('<a>').attr('href', studioUrl).
+                     attr('target', '_blank').html(classes[i].studio_name);
 
       if (classState == 'added') {
         action.addClass('remove').
