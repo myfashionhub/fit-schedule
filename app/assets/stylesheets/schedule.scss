@@ -111,10 +111,13 @@ i {
 /* SUB NAV*/
 .customize-nav,
 .schedule-nav {
-  li {
+  a {
     display: inline-block;
     margin-right: 10px;
     @include button-style;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 
