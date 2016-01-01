@@ -34,7 +34,6 @@ function Schedule() {
       }
 
       var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
-          date = $('<p>').addClass('date').html(formatDate(classes[i].date)),
           name = $('<span>').addClass('title').html(classes[i].name),
           time = $('<span>').addClass('time').
                    html(classes[i].start_time+' - '+classes[i].end_time),
@@ -53,33 +52,46 @@ function Schedule() {
         action.addClass('add').html("<i class='fa fa-plus'></i> Add class");
       }
 
-      var existingDate = _.detect(dates, function(date) {
-        return date == classes[i].date;
-      });
-
-      if (existingDate == undefined) {
-        dates.push(classes[i].date);
-
-        var labelLi = $('<div>').addClass('label'),
-            nameLabel = $('<span>').addClass('title').html('Class'),
-            timeLabel = $('<span>').addClass('time').html('Time'),
-            studioLabel = $('<span>').addClass('studio').html('Studio'),
-            instructorLabel = $('<span>').addClass('instructor').html('Instructor');
-
-        labelLi.append(nameLabel).append(timeLabel).
-          append(studioLabel).append(instructorLabel);
-
-        classLi.append(date).append(labelLi);
-      }
-
       actionSpan.append(action);
       studioEl.wrapInner(studio);
       classLi.append(name).append(time).append(studioEl).
         append(instructor).append(actionSpan);
-      el.append(classLi);
+
+      // Build date heading & classes container
+      var existingDate = _.detect(dates, function(date) {
+        return date == classes[i].date;
+      });
+
+      if (existingDate === undefined) {
+        dates.push(classes[i].date);
+        var heading = this.buildHeading(classes[i].date);
+        var container = $('<div>').addClass('block');
+        container.append(heading).append(classLi).appendTo(el);
+      } else {
+        var index = dates.indexOf(existingDate);
+        if ( index > -1 ) {
+          $(el.find('.block')[index]).append(classLi);
+        }
+      }
 
       action.click(function(e) { that.selectClass(e) });
     }
+  };
+
+  this.buildHeading = function(dateValue) {
+    var heading = $('<div>').addClass('heading'),
+        date = $('<p>').addClass('date').html(formatDate(dateValue)),
+        labelLi = $('<div>').addClass('label'),
+        nameLabel = $('<span>').addClass('title').html('Class'),
+        timeLabel = $('<span>').addClass('time').html('Time'),
+        studioLabel = $('<span>').addClass('studio').html('Studio'),
+        instructorLabel = $('<span>').addClass('instructor').html('Instructor');
+
+    labelLi.append(nameLabel).append(timeLabel).
+      append(studioLabel).append(instructorLabel);
+
+    heading.append(date).append(labelLi);
+    return heading;
   };
 
   this.saveAppointments = function() {
@@ -113,20 +125,37 @@ function Schedule() {
         }
       );
 
-      if (existingClass == undefined) {
+      if (existingClass === undefined) {
         var clonedLi = classLi.clone(true, true);
         clonedLi.find('.action').removeClass('add').addClass('remove').
           html("<i class='fa fa-times'></i> Remove class");
-
+        this.addOrRemoveHeading(classLi, 'add');
         clonedLi.appendTo($('.upcoming .classes'));
       } else {
-        window.alert('The class is already in your schedule.');
+        notify.build('The class is already in your schedule.', 'info');
       }
     } else if (action.attr('class').indexOf('remove') > -1) {
       classLi.remove();
+      this.addOrRemoveHeading(classLi, 'remove');
     }
 
     this.saveButtonState();
+  };
+
+  this.addOrRemoveHeading = function(classLi, action) {
+    var headingOriginal = classLi.parent().find('.heading');
+    var headingCloned = _.detect(
+      $('.upcoming .heading .date'),
+      function(dateEl) {
+        return $(dateEl).html() === headingOriginal.find('.date').html();
+      }
+    );
+
+    if ( headingCloned === undefined ) {
+      if ( action === 'add' ) {
+        $('.upcoming .classes').append( headingOriginal.clone(true, true) );
+      }
+    }
   };
 
   this.saveButtonState = function() {
