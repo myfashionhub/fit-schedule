@@ -42,6 +42,8 @@ function Notify(el) {
   };
 
   this.build = function(msg, type) {
+    var top = document.body.scrollTop < 60 ? 60 : (document.body.scrollTop + 10);
+    this.el.css('top',  top+'px');
     this.el.find('.content').html(msg);
     this.el.addClass(type).addClass('active');
 

@@ -105,6 +105,7 @@ function Schedule() {
       data: { class_ids: class_ids },
       success: function(response) {
         notify.build(response.msg, 'success');
+        $('.save-appointments').addClass('disabled');
       },
       error: function(err) {
         console.log(err)
