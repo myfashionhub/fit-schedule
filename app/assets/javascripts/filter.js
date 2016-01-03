@@ -7,10 +7,6 @@ function Filter() {
   this.init = function() {
 
   };
-
-  this.updateUserAvailability = function() {
-    // Save user availability as json string
-  };
   
   this.show = function(studio_id) {
     // Pre-check filters saved for user

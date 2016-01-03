@@ -21,9 +21,11 @@ function Calendar() {
       type: 'GET',
       success: function(data) {
         if ('error' in data) {
-          window.alert(data.error);
-          var session = new Session('/');
-          session.destroy();
+          notify.build(data.error, 'error');
+          setTimeout(function() {
+            var session = new Session('/');
+            session.destroy();
+          }, 1500);
         } else {
           that.populateCalendars(data.calendars);
         }

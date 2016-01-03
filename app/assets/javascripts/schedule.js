@@ -196,9 +196,11 @@ function Schedule() {
       type: 'GET',
       success: function(data) {
         if (data.error != undefined) {
-          window.alert(data.error);
-          var session = new Session('/');
-          session.destroy();
+          notify.build(data.error, 'error');
+          setTimeout(function() {
+            var session = new Session('/');
+            session.destroy();
+          }, 1000);
         } else {
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
