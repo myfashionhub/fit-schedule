@@ -62,24 +62,28 @@ function Schedule() {
         studioEl = $('<span>').addClass('studio'),
         instructor = $('<span>').addClass('instructor').
                        html(classObj.instructor),
-        actionSpan = $('<span>').addClass('action-span'),
-        action = $('<div>').addClass('action'),
+        action = $('<button>').addClass('action'),
         studio = $('<a>').attr('href', studioUrl).
                    attr('target', '_blank').html(classObj.studio_name);
 
     if (classState == 'added') {
       action.addClass('remove').
-        html("<i class='fa fa-times'></i> Remove class");
+        html("Remove <i class='fa fa-times'></i>");
     } else {
-      action.addClass('add').html("<i class='fa fa-plus'></i> Add class");
+      action.addClass('add').html("Add class");
     }
 
-    actionSpan.append(action);
     studioEl.wrapInner(studio);
     classLi.append(name).append(time).append(studioEl).
-      append(instructor).append(actionSpan);
+      append(instructor).append(action);
 
-    action.click(function(e) { that.selectClass(e) });
+    action.click(function(e) { 
+      var action = $(this);
+      if (e.target !== this) {
+        action = $(e.target).parent();
+      }
+      that.selectClass(action); 
+    });
     return classLi;
   };
 
@@ -119,9 +123,8 @@ function Schedule() {
     // save or remove + update Google calendar
   };
 
-  this.selectClass = function(e) {
-    var action = $(e.target).parent();
-    var classLi = action.parent().parent();
+  this.selectClass = function(action) {
+    var classLi = action.parent();
 
     if (action.attr('class').indexOf('add') > -1) {
       this.cloneClass(classLi, action);
@@ -151,7 +154,7 @@ function Schedule() {
     if (existingClass === undefined) {
       clonedClass = classLi.clone(true, true);
       clonedClass.find('.action').removeClass('add').addClass('remove').
-        html("<i class='fa fa-times'></i> Remove class");
+        html("Remove <i class='fa fa-times'></i>");
     } else {
       notify.build('The class is already in your schedule.', 'info');
       return;

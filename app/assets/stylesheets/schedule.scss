@@ -19,6 +19,7 @@ section.schedule {
     float: right;
     margin-right: 3em;
     display: block;
+    @include button-dark;
     &.disabled { display: none; }
   }
 
@@ -32,8 +33,9 @@ section.schedule {
 .suggested-classes .classes {
   color: #333;
 
-  li {
+  li.class {
     margin-bottom: 8px;
+    overflow: hidden;
   }
 
   span {
@@ -45,14 +47,30 @@ section.schedule {
 
     &.title {
       width: 23%;
+      font-weight: 400;
     }
 
     &.time {
       width: 20%;
     }
+  }
 
-    .action, &.title {
-      font-weight: 400;
+  .action { /* button */
+    float: right;
+    clear: right;
+    text-transform: uppercase;
+    font-size: .7em;
+    &.remove {
+      i {
+        font-size: 1.5em;
+        margin-left: 5px;
+        margin-right: 0;
+      }
+    }
+    &.add {
+      background-color: $hotpink;
+      color: #fff;
+      border: none;
     }
   }
 
@@ -71,13 +89,6 @@ section.schedule {
     font-weight: 500;
   }
 }
-
-a {
-  color: #ff0032;
-  &:hover { text-decoration: underline; }
-}
-
-
 
 h2, h3, h4 {
   font-weight: 400;

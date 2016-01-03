@@ -1,5 +1,5 @@
 @mixin button-style {
-  padding: 6px 12px;
+  padding: 8px 15px;
   color: #333;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -8,7 +8,6 @@
   &:hover {
     background-color: #ebebeb;
   }
-
   &.active {
     background-color: #354443;
     color: #fff;
@@ -18,10 +17,14 @@
 @mixin button-dark {
   background-color: #354443;
   color: #fff;
+  border: none;
+  &:hover {
+    background-color: #405251;
+  }
 }
 
 $teal: #319f91;
-
+$hotpink: #ff0032;
 
 @mixin linear-gradient($direction, $start-color, $start-point, $stop-color, $stop-point) {
   background-image: -webkit-linear-gradient(
