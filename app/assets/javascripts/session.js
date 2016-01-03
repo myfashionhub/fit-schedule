@@ -5,7 +5,6 @@ function Session(redirect_path) {
       url: '/logout',
       type: 'GET',
       success: function(data) {
-        console.log(data);
         window.location = redirect_path;
       },
       error: function(err) {
