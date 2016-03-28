@@ -7,9 +7,14 @@ namespace :worker do
         scraper_class = "Scraper::#{provider}".constantize
         puts "Updating schedule for #{studio.name}"
 
-        result = scraper_class.get_classes(studio.schedule_url)
-        classes = Klass.create_from_raw(result)
-        studio.update(updated_at: Time.now)
+        begin
+          result = scraper_class.get_classes(studio.schedule_url)
+          classes = Klass.create_from_raw(result)
+          studio.update(updated_at: Time.now)
+        rescue => error
+          puts error
+          next
+        end
       end
     end
   end
