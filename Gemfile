@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 gem 'pg'
 
@@ -17,8 +15,6 @@ gem 'clockwork'
 group :development, :test do
   gem 'byebug'
   gem 'pry'
-  # gem 'web-console', '~> 2.0'
-  # gem 'spring'
   gem 'dotenv-rails'
 end
 

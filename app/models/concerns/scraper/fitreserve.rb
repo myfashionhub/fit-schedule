@@ -96,27 +96,3 @@ module Scraper
   end
 
 end
-
-=begin
- # parse class level   
-      level = ''; type  = ''
-      array = class_string.split(' - ')
-
-      [ 
-        'intro to',  'open level', 'open', /levels?\s\d(.+||)/
-      ].each do |level_regex|
-        match = array.last.downcase.match(level_regex)
-        if match
-          level = match[0]
-          break
-        end
-      end
-
-      if array.length > 1
-        type = array.first.downcase
-      else
-        type = array.first.downcase.gsub(level, '').strip
-      end
-
-      { type: type.capitalize, level: sanitize_level(level) }
-=end

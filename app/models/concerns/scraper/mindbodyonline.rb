@@ -17,7 +17,6 @@ module Scraper
       )
 
       #navigate(url, session)
-
       page = session.within_frame 'mainFrame' do
         Nokogiri::HTML(session.html)
       end
