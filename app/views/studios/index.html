@@ -1,0 +1,18 @@
+<div class="container">
+
+<section class="favorite-studios">
+  <h2>Your studios</h2>
+  <a href="/customize" class="edit">
+    <i class="fa fa-plus"></i> Add studio
+  </a>
+
+  <ul class="studios"></ul>
+  <%= render 'studios/show' %>
+</section>
+
+</div>
+
+<script type="text/javascript">
+  var studio = new Studio();
+  studio.showFavorites();
+</script>

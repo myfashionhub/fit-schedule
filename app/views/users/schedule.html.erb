@@ -6,7 +6,6 @@
 
 <ul class="schedule-nav">
   <a href='#classes'>Classes</a>
-  <a href='#studios'>Favorite Studios</a>
 </ul>
 
 <section class="schedule">
@@ -15,7 +14,8 @@
     <h2>Upcoming classes</h2>
     <ul class="classes"></ul>
     <p class="empty">
-      You have no upcoming classes. <a href="#studios">Add class filters</a>
+      You have no upcoming classes. 
+      <a href="#studios">Add class filters</a>
     </p>
 
     <button class="save-appointments disabled">Save schedule</button>
@@ -31,24 +31,10 @@
 
 </section>
 
-
-<section class="favorite-studios">
-  <h2>Your studios</h2>
-  <a href="/customize" class="edit">
-    <i class="fa fa-plus"></i> Add studio
-  </a>
-
-  <%= render 'studios/show' %>
-  <ul class="studios"></ul>
-</section>
-
 </div> <!-- end container -->
 
 <script type="text/javascript">
   var schedule = new Schedule();
   schedule.getAppointments();
   schedule.suggestClasses();
-
-  var studio = new Studio();
-  studio.showFavorites();
 </script>
