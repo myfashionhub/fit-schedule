@@ -8,12 +8,34 @@ section.favorite-studios,
   margin: 0 auto;
 }
 
+section.schedule {
+  margin-bottom: 2em;
+
+  .upcoming {
+    overflow: hidden;
+  }
+
+  .save-appointments {
+    float: right;
+    margin-right: 3em;
+    display: block;
+    @include button-dark;
+    &.disabled { display: none; }
+  }
+
+  .empty {
+    display: none;
+    &.active { display: block; }
+  }
+}
+
 .upcoming .classes,
 .suggested-classes .classes {
   color: #333;
 
-  li {
+  li.class {
     margin-bottom: 8px;
+    overflow: hidden;
   }
 
   span {
@@ -25,14 +47,30 @@ section.favorite-studios,
 
     &.title {
       width: 23%;
+      font-weight: 400;
     }
 
     &.time {
       width: 20%;
     }
+  }
 
-    .action, &.title {
-      font-weight: 400;
+  .action { /* button */
+    float: right;
+    clear: right;
+    text-transform: uppercase;
+    font-size: .7em;
+    &.remove {
+      i {
+        font-size: 1.5em;
+        margin-left: 5px;
+        margin-right: 0;
+      }
+    }
+    &.add {
+      background-color: $hotpink;
+      color: #fff;
+      border: none;
     }
   }
 
@@ -50,19 +88,7 @@ section.favorite-studios,
     color: #888;
     font-weight: 500;
   }
-
 }
-
-section.schedule {
-  margin-bottom: 2em;
-}
-
-a {
-  color: #ff0032;
-  &:hover { text-decoration: underline; }
-}
-
-
 
 h2, h3, h4 {
   font-weight: 400;
@@ -96,10 +122,13 @@ i {
 /* SUB NAV*/
 .customize-nav,
 .schedule-nav {
-  li {
+  a {
     display: inline-block;
     margin-right: 10px;
     @include button-style;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

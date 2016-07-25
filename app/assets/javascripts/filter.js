@@ -2,16 +2,13 @@ function Filter() {
 
   var that = this;
   this.user_id = $('#user').attr('data-id');
+  var notify = new Notify();
 
   this.init = function() {
 
   };
-
-  this.updateUserAvailability = function() {
-    // Save user availability as json string
-  };
   
-  this.showUserPreferences = function(studio_id) {
+  this.show = function(studio_id) {
     // Pre-check filters saved for user
     var filtersPromise = new Promise(function(resolve, reject) {
       $.ajax({
@@ -30,7 +27,7 @@ function Filter() {
     return filtersPromise;
   };
 
-  this.updateUserPreferences = function() {
+  this.update = function() {
     var studio_id = $('.studio-show .studio').attr('data-id');
     var classNames = [],
         classLis;
@@ -59,10 +56,11 @@ function Filter() {
       },
       success: function(data) {
         var studioName = $('.studio-show .studio .name').html();
-        console.log('Successfully saved your preferences for '+studioName);
+        var msg = 'Successfully saved your preferences for ' + studioName;
+        notify.build(msg, 'success');
       },
-      error: function(data) {
-        console.log(data);
+      error: function(err) {
+        console.log(err);
       }
     });
   };
@@ -82,7 +80,7 @@ function Filter() {
       }
     });
 
-    $('.save-filters').click(function() { that.updateUserPreferences(); });
+    $('.save-filters').click(function() { that.update(); });
   };
 
   this.init();

@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    render json: { msg: 'Successfully reset session.' }
+    redirect_to '/welcome'
   end
 
 end

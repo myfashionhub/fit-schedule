@@ -1,5 +1,6 @@
 function Schedule() {
   var that = this;
+  var notify = new Notify();
 
   this.init = function() {
     $('.upcoming .save-appointments').click(function() {
@@ -12,6 +13,9 @@ function Schedule() {
       url: '/appointments',
       type: 'GET',
       success: function(data) {
+        if ( data.classes.length === 0 ) {
+          $('.schedule-wrapper .upcoming .empty').addClass('active');
+        }
         that.populateClasses(data.classes, $('.upcoming .classes'), 'added');
       },
       error: function(err) {
@@ -24,53 +28,79 @@ function Schedule() {
     var dates = [];
 
     for (var i=0; i < classes.length; i++) {
-      var classLi = $('<li>').addClass('class').attr('data-id', classes[i].id),
-          date = $('<p>').addClass('date').html(formatDate(classes[i].date)),
-          name = $('<span>').addClass('title').html(classes[i].name),
-          time = $('<span>').addClass('time').
-                   html(classes[i].start_time+' - '+classes[i].end_time),
-          studioEl = $('<span>').addClass('studio'),
-          studio = $('<a>').attr('href', classes[i].studio_url)
-                     .attr('target', '_blank').html(classes[i].studio_name),
-          instructor = $('<span>').addClass('instructor').
-                         html(classes[i].instructor),
-          actionSpan = $('<span>').addClass('action-span'),
-          action = $('<div>').addClass('action');
+      var classLi = this.buildClass(classes[i], classState);
 
-      if (classState == 'added') {
-        action.addClass('remove').
-          html("<i class='fa fa-times'></i> Remove class");
-      } else {
-        action.addClass('add').html("<i class='fa fa-plus'></i> Add class");
-      }
-
+      // Build date heading & classes container
       var existingDate = _.detect(dates, function(date) {
         return date == classes[i].date;
       });
 
-      if (existingDate == undefined) {
+      if (existingDate === undefined) {
         dates.push(classes[i].date);
-
-        var labelLi = $('<div>').addClass('label'),
-            nameLabel = $('<span>').addClass('title').html('Class'),
-            timeLabel = $('<span>').addClass('time').html('Time'),
-            studioLabel = $('<span>').addClass('studio').html('Studio'),
-            instructorLabel = $('<span>').addClass('instructor').html('Instructor');
-
-        labelLi.append(nameLabel).append(timeLabel).
-          append(studioLabel).append(instructorLabel);
-
-        classLi.append(date).append(labelLi);
+        var heading = this.buildHeading(classes[i].date);
+        var container = $('<div>').addClass('block');
+        container.append(heading).append(classLi).appendTo(el);
+      } else {
+        var index = dates.indexOf(existingDate);
+        if ( index > -1 ) {
+          $(el.find('.block')[index]).append(classLi);
+        }
       }
-
-      actionSpan.append(action);
-      studioEl.wrapInner(studio);
-      classLi.append(name).append(time).append(studioEl).
-        append(instructor).append(actionSpan);
-      el.append(classLi);
-
-      action.click(function(e) { that.selectClass(e) });
     }
+  };
+
+  this.buildClass = function(classObj, classState) {
+    var studioUrl = classObj.studio_url;
+    if ( studioUrl.indexOf('fitreserve.com') > -1 ) {
+      studioUrl += '?tab=schedule';
+    }
+
+    var classLi = $('<li>').addClass('class').attr('data-id', classObj.id),
+        name = $('<span>').addClass('title').html(classObj.name),
+        time = $('<span>').addClass('time').
+                 html(classObj.start_time+' - '+classObj.end_time),
+        studioEl = $('<span>').addClass('studio'),
+        instructor = $('<span>').addClass('instructor').
+                       html(classObj.instructor),
+        action = $('<button>').addClass('action'),
+        studio = $('<a>').attr('href', studioUrl).
+                   attr('target', '_blank').html(classObj.studio_name);
+
+    if (classState == 'added') {
+      action.addClass('remove').
+        html("Remove <i class='fa fa-times'></i>");
+    } else {
+      action.addClass('add').html("Add class");
+    }
+
+    studioEl.wrapInner(studio);
+    classLi.append(name).append(time).append(studioEl).
+      append(instructor).append(action);
+
+    action.click(function(e) { 
+      var action = $(this);
+      if (e.target !== this) {
+        action = $(e.target).parent();
+      }
+      that.selectClass(action); 
+    });
+    return classLi;
+  };
+
+  this.buildHeading = function(dateValue) {
+    var heading = $('<div>').addClass('heading'),
+        date = $('<p>').addClass('date').html(formatDate(dateValue)),
+        labelLi = $('<div>').addClass('label'),
+        nameLabel = $('<span>').addClass('title').html('Class'),
+        timeLabel = $('<span>').addClass('time').html('Time'),
+        studioLabel = $('<span>').addClass('studio').html('Studio'),
+        instructorLabel = $('<span>').addClass('instructor').html('Instructor');
+
+    labelLi.append(nameLabel).append(timeLabel).
+      append(studioLabel).append(instructorLabel);
+
+    heading.append(date).append(labelLi);
+    return heading;
   };
 
   this.saveAppointments = function() {
@@ -83,7 +113,8 @@ function Schedule() {
       type: 'POST',
       data: { class_ids: class_ids },
       success: function(response) {
-        console.log(response);
+        notify.build(response.msg, 'success');
+        $('.save-appointments').addClass('disabled');
       },
       error: function(err) {
         console.log(err)
@@ -92,29 +123,69 @@ function Schedule() {
     // save or remove + update Google calendar
   };
 
-  this.selectClass = function(e) {
-    var action = $(e.target).parent();
-    var classLi = action.parent().parent();
+  this.selectClass = function(action) {
+    var classLi = action.parent();
 
     if (action.attr('class').indexOf('add') > -1) {
-      var existingClass = _.detect(
-        $('.upcoming .classes li'),
-        function(bookedClass) {
-          return $(bookedClass).attr('data-id') == classLi.attr('data-id');
-        }
-      );
-
-      if (existingClass == undefined) {
-        var clonedLi = classLi.clone(true, true);
-        clonedLi.find('.action').removeClass('add').addClass('remove').
-          html("<i class='fa fa-times'></i> Remove class");
-
-        clonedLi.appendTo($('.upcoming .classes'));
-      } else {
-        window.alert('The class is already in your schedule.');
-      }
-    } else if (action.attr('class').indexOf('remove') > -1) {
+      this.cloneClass(classLi, action);
+    }
+    else if (action.attr('class').indexOf('remove') > -1) {
+      var classBlock = classLi.parent();
       classLi.remove();
+      if ( classBlock.find('.class').length === 0 ) {
+        classBlock.remove();
+      }
+    }
+
+    this.saveButtonState();
+  };
+
+  this.cloneClass = function(classLi, action) {
+    var classBlock = classLi.parent();
+    var clonedBlock, clonedClass;
+
+    var existingClass = _.detect(
+      $('.upcoming .classes li'),
+      function(bookedClass) {
+        return $(bookedClass).attr('data-id') == classLi.attr('data-id');
+      }
+    );
+
+    if (existingClass === undefined) {
+      clonedClass = classLi.clone(true, true);
+      clonedClass.find('.action').removeClass('add').addClass('remove').
+        html("Remove <i class='fa fa-times'></i>");
+    } else {
+      notify.build('The class is already in your schedule.', 'info');
+      return;
+    }
+
+    var originalHeading = classLi.parent().find('.heading');
+    var clonedHeading = _.detect(
+      $('.upcoming .heading .date'),
+      function(dateEl) {
+        return $(dateEl).html() === originalHeading.find('.date').html();
+      }
+    );
+
+    if ( clonedHeading === undefined ) {
+      clonedBlock = $('<div>').addClass('block');
+      clonedHeading = originalHeading.clone(true, true);
+      clonedBlock.append(clonedHeading).append(clonedClass).
+        appendTo($('.upcoming .classes'));
+    } else {
+      clonedBlock = $(clonedHeading).parent().parent();
+      clonedBlock.append(clonedClass);
+    }
+  };
+
+  this.saveButtonState = function() {
+    if ( $('.upcoming .classes li').length > 0 ) {
+      $('.upcoming .empty').removeClass('active');
+      $('.save-appointments').removeClass('disabled');
+    } else {
+      $('.save-appointments').addClass('disabled');
+      $('.upcoming .empty').addClass('active');
     }
   };
 
@@ -125,11 +196,12 @@ function Schedule() {
       type: 'GET',
       success: function(data) {
         if (data.error != undefined) {
-          window.alert(data.error);
-          var session = new Session('/');
-          session.destroy();
+          notify.build(data.error, 'error');
+          setTimeout(function() {
+            var session = new Session('/');
+            session.destroy();
+          }, 1000);
         } else {
-          // console.log('Suggested classes ', data.classes)
           that.populateClasses(
             data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
           );
@@ -158,9 +230,9 @@ function Schedule() {
 
   var monthLookup = function(num) {
     var dict = { 
-      0: 'January', 1: 'February', 2: 'March', 3: 'April', 4: 'May', 5: 'June',
-      6: 'July', 7: 'August', 8: 'September', 9: 'October', 10: 'November',
-      11: 'December'
+      0: 'January', 1: 'February', 2: 'March', 3: 'April',
+      4: 'May', 5: 'June', 6: 'July', 7: 'August',
+      8: 'September', 9: 'October', 10: 'November', 11: 'December'
     };
 
     return dict[num] 

@@ -3,6 +3,7 @@ function Calendar() {
   var that = this;
   var container = $('.customize-wrapper .calendars');
   var user_id = $('#user').attr('data-id');
+  var notify = new Notify();
 
   this.init = function() {
     container.find('.update').click(function() {
@@ -20,9 +21,11 @@ function Calendar() {
       type: 'GET',
       success: function(data) {
         if ('error' in data) {
-          window.alert(data.error);
-          var session = new Session('/');
-          session.destroy();
+          notify.build(data.error, 'error');
+          setTimeout(function() {
+            var session = new Session('/');
+            session.destroy();
+          }, 1500);
         } else {
           that.populateCalendars(data.calendars);
         }
@@ -70,11 +73,12 @@ function Calendar() {
       url: '/users/'+user_id,
       type: 'PUT',
       data: data,
-      success: function(data) {
-        console.log(data);
+      success: function(response) {
+        notify.build(response.msg, 'success');
       },
       error: function(err) {
-        console.log(err); 
+        console.log(err);
+        notify.build(err, 'error');
       }
     });
   };

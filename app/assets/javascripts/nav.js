@@ -1,33 +1,49 @@
-function Navigation(ul, sectionSelector) {
+function Navigation(tabs, ul, sectionSelector) {
 
   var that = this;
-  var navLis = ul.find('li');
+  var navLinks = ul.find('a');
   var cal = new Calendar();
 
   this.init = function() {
-    $(sectionSelector).first().addClass('active');
-    navLis.first().addClass('active');
+    this.toggleByHash();
 
-    this.toggle();
+    navLinks.click(function(e) {
+      var index = navLinks.index(e.target);
+      that.toggle(index);
+    });
   };
 
-  this.toggle = function() {
-    navLis.click(function(e) {
-      var index = navLis.index(e.target);
+  this.toggleByHash = function() {
+    if ( window.location.pathname !== '/customize' &&
+         window.location.pathname !== '/schedule' ) {
+      return;
+    }
 
-      $(sectionSelector+'.active').removeClass('active');
-      ul.find('li.active').removeClass('active');
-
-      $(e.target).addClass('active');
-      var targetSection = $($(sectionSelector)[index]);
-      targetSection.addClass('active');
-
-      if (targetSection.hasClass('calendars')) {
-        cal.getAllCalendars();
-      } else if (targetSection.hasClass('availability')) {
-        cal.getUserAvailability();
+    if ( window.location.hash !== '' ) {
+      var index = tabs.indexOf( window.location.hash.replace('#','') );
+      if ( index > -1 ) {
+        that.toggle(index);
+        return;
       }
-    });
+    }
+    this.toggle(0);
+  };
+
+  this.toggle = function(index) {
+    window.location.hash = '#' + tabs[index];
+
+    $(sectionSelector+'.active').removeClass('active');
+    ul.find('a.active').removeClass('active');
+
+    $(navLinks[index]).addClass('active');
+    var targetSection = $($(sectionSelector)[index]);
+    targetSection.addClass('active');
+
+    if (targetSection.hasClass('calendars')) {
+      cal.getAllCalendars();
+    } else if (targetSection.hasClass('availability')) {
+      cal.getUserAvailability();
+    }
   };
 
   this.init();
