@@ -8,20 +8,19 @@ function Studio() {
 
   };
 
-  this.getClasses = function() {
+  this.findOrCreate = function() {
     $('.studio-form form').submit(function(e) {
       e.preventDefault();
       var url = $('.studio-form .url').val();
 
       $.ajax({
-        url: '/classes',
+        url: '/studios',
         type: 'POST',
         data: { url: url },
         success: function(data) {
           that.populateStudio(data.studio);
           that.getStudioClassTypes(data.studio.id);
           $('.studio-show').addClass('active');
-          // that.populateClasses(data.classes); all classes of a studio
         },
         error: function(err) {
           console.log(err);
@@ -40,7 +39,22 @@ function Studio() {
     studioEl.find('.address').html(studio.address);
   };
 
-  this.populateClasses = function(classes) {
+  this.allClasses = function(studio_id, studioContainer) {
+    $.ajax({
+      url: '/classes',
+      type: 'GET',
+      data: { studio_id: studio_id },
+      success: function(data) {
+        that.populateClasses(data.classes, studioContainer);
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+  };
+
+  this.populateClasses = function(classes, container) {
+    container.empty();
     _.sortBy(classes, function(klass) {
       return klass.date || klass.start_time;
     });
@@ -48,9 +62,9 @@ function Studio() {
     var dates = _.pluck(classes, 'date'),
         currentDate = dates[0],
         dateCounter = 0;
-    
+
     var firstDate = $('<li>').addClass('date').html(convertDate(currentDate));
-        $('.classes .schedule').append(firstDate);
+        container.append(firstDate);
 
     for (var i=0; i < classes.length; i++) {
       if (classes[i].date !== currentDate) {
@@ -61,18 +75,19 @@ function Studio() {
       }
 
       if (dateCounter === 0) {
-        var dateLi = $('<li>').addClass('date').html(convertDate(currentDate));
-        $('.classes .schedule').append(dateLi);
+        var dateLi = $('<li>').addClass('date').
+                     html(convertDate(currentDate));
+        container.append(dateLi);
       }
 
       var classLi = $('<li>').addClass('class'),
-          name = $('<span>').addClass('title').html(classes[i].name),
-          time = $('<span>').addClass('time').
-                   html(classes[i].start_time+' - '+classes[i].end_time)
+          name    = $('<span>').addClass('title').html(classes[i].name),
+          time    = $('<span>').addClass('time').
+                    html(classes[i].start_time+' - '+classes[i].end_time)
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor);
       classLi.append(name).append(time).append(instructor);
-      $('.classes .schedule').append(classLi);
+      container.append(classLi);
     }
   };
 
@@ -99,7 +114,7 @@ function Studio() {
         function(data) {
           buildFilters(data[0]);
         }
-      )
+      );
 
       var buildFilters = function(userFilters) {
         $('.class-types').empty();
@@ -139,9 +154,6 @@ function Studio() {
       url: '/users/'+that.user_id+'/studios',
       type: 'GET',
       success: function(data) {
-        if ( data.studios.length === 0 ) {
-          $('.schedule-wrapper .suggested-classes .empty').addClass('active');
-        }
         that.populateStudios(data.studios);
       },
       error: function(err) {
@@ -151,32 +163,34 @@ function Studio() {
   };
 
   this.populateStudios = function(studios) {
-    var studioUl = $('.schedule-wrapper .favorite-studios .studios');
+    var studioUl = $('.favorite-studios .studios');
 
     for (var i=0; i < studios.length; i++) {
-      var studioLi = $('<li>').addClass('studio');
+      var studioLi   = $('<li>').addClass('studio');
       var studioName = $('<h4>').html(studios[i].studio.name).
                          attr('data-id', studios[i].studio.id);
-      var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit')
+      var classes    = $('<div>').addClass('classes');
+      var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit');
+      var showButton = $("<i class='fa fa-list'></i>").addClass('show');
 
-      // var filters = studios[i].filters;
-      // var filterUl = $('<ul>');
-      // for (var j=0; j < filters.length; j++) {
-      //   var filterLi = $('<li>').html(filters[j].class_name);
-      //   filterUl.append(filterLi)
-      // }
-
-      studioName.append(editButton);
       studioLi.append(studioName);
+      studioLi.append(editButton);
+      studioLi.append(showButton);
+      studioLi.append(classes);
       studioUl.append(studioLi);
 
-      editButton.click(function(e) { that.toggleEditStudio(e); });
+      editButton.click(that.toggleEditStudio);
+      showButton.click(function(e) {
+        var studio_id = $(e.target).parent().find('h4').attr('data-id');
+        var studioContainer = $(e.target).parent().find('.classes');
+        that.allClasses(studio_id, studioContainer);
+      });
     }
   };
 
   this.toggleEditStudio = function(e) {
-    var studio_id = $(e.target).parent().attr('data-id');
-    this.getStudioClassTypes(studio_id, true);
+    var studio_id = $(e.target).parent().find('h4').attr('data-id');
+    that.getStudioClassTypes(studio_id, true);
 
     var modal = new Modal($('.studio-show'));
     modal.el().addClass('big');
