@@ -1,6 +1,6 @@
-namespace :worker do
+namespace :schedule do
 
-  task update_schedules: :environment do |task|
+  task update_studios: :environment do |task|
     Studio.all.each do |studio|
       if studio.updated_at.nil? || studio.updated_at < Time.now - 21600
         provider = studio.schedule_url.split('.')[1].downcase.capitalize
@@ -19,7 +19,7 @@ namespace :worker do
     end
   end
 
-  task :update_schedule, [:studio_id] => :environment do |task, args|
+  task :update_studio, [:studio_id] => :environment do |task, args|
     studio = Studio.find(args[:studio_id])
     provider = studio.schedule_url.split('.')[1].downcase.capitalize
     scraper_class = "Scraper::#{provider}".constantize
