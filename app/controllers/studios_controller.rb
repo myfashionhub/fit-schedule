@@ -19,4 +19,26 @@ class StudiosController < ApplicationController
                  }
   end
 
+  def create
+    new_studio = false
+    provider = params[:url].split('.')[1].downcase.capitalize
+    scraper_class = "Scraper::#{provider}"
+
+    studio = Studio.find_by(schedule_url: params[:url].strip)
+
+    if !studio
+      result = scraper_class.constantize.get_classes(params[:url])
+      studio = result[:studio]
+      new_studio = true
+    end
+
+    if new_studio || studio.updated_at.nil? ||
+       studio.updated_at < Time.now - 21600
+      scraper_class.constantize.get_classes(params[:url]) if result.nil?
+      studio.update(updated_at: Time.now)
+    end
+
+    render json: { studio: studio }
+  end
+
 end

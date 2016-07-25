@@ -16,10 +16,9 @@ Rails.application.routes.draw do
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'
 
-  resources :studios, only: [:show]
+  resources :studios, only: [:index, :show, :create]
 
   get '/classes' => 'klasses#index'
-  post '/classes' => 'klasses#create'
 
   resources :filters, only: [:index, :create]
   get '/filters/show' => 'filters#show'
