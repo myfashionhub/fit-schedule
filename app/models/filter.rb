@@ -90,7 +90,8 @@ class Filter < ActiveRecord::Base
            klass.date.to_date == event[:end_time].to_date ) &&
          i < events.length
         return false if start_time < event[:end_time] ||
-                        end_time > events[i+1][:start_time]
+                        (events[i+1].present? &&
+                         end_time > events[i+1][:start_time])
       end
     end
 
