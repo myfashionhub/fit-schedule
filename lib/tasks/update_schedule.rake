@@ -17,6 +17,7 @@ namespace :schedule do
         end
       end
     end
+    invalidate_user_cache
   end
 
   task :update_studio, [:studio_id] => :environment do |task, args|
@@ -28,5 +29,11 @@ namespace :schedule do
     result = scraper_class.get_classes(studio.schedule_url)
     classes = Klass.create_from_raw(result)
     studio.update(updated_at: Time.now)
+  end
+
+  def invalidate_user_cache
+    User.all.each do |user|
+      Rails.cache.delete("users/#{user.id}/suggested_classes")
+    end
   end
 end

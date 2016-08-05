@@ -25,7 +25,8 @@ class FiltersController < ApplicationController
     # suggested classes for all user's studios
 
     classes = Rails.cache.fetch(
-      "users/#{current_user.id}", expires_in: 2.hours
+      "users/#{current_user.id}/suggested_classes",
+      expires_in: 2.hours
     ) do
       studio_ids = current_user.filters.pluck(:studio_id).uniq
 
