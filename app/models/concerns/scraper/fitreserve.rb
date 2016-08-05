@@ -10,12 +10,15 @@ module Scraper
       studio_name = page.css('.details .name').text
       logo = page.css('.details .logo').last.attributes['src'].value
       address = page.css('.details .address').text.strip.gsub("\n",' ')
-      studio = Studio.find_or_create_by({
-        name:         studio_name,
-        schedule_url: url,
-        address:      address,
-        logo:         logo
-      })
+      studio = Studio.find_by( schedule_url: url )
+      if !studio
+        studio = Studio.create(
+          name:         studio_name,
+          schedule_url: url,
+          address:      address,
+          logo:         logo
+        )
+      end
 
       classes = []
       page.css('.row.schedule').each do |day|
