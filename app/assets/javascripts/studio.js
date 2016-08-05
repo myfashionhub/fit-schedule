@@ -80,13 +80,19 @@ function Studio() {
         container.append(dateLi);
       }
 
+      var start_time = classes[i].start_time,
+          end_time   = classes[i].end_time;
+      if (start_time.split(' ')[1] === end_time.split(' ')[1]) {
+        start_time = start_time.split(' ')[0];
+      }
+
       var classLi = $('<li>').addClass('class'),
           name    = $('<span>').addClass('title').html(classes[i].name),
           time    = $('<span>').addClass('time').
-                    html(classes[i].start_time+' - '+classes[i].end_time)
+                    html(start_time + ' - ' + end_time)
           instructor = $('<span>').addClass('instructor').
                          html(classes[i].instructor);
-      classLi.append(name).append(time).append(instructor);
+      classLi.append(time).append(name).append(instructor);
       container.append(classLi);
     }
   };
@@ -169,7 +175,7 @@ function Studio() {
       var studioLi   = $('<li>').addClass('studio');
       var studioName = $('<h4>').html(studios[i].studio.name).
                          attr('data-id', studios[i].studio.id);
-      var classes    = $('<div>').addClass('classes');
+      var classes    = $('<ul>').addClass('class-list');
       var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit');
       var showButton = $("<i class='fa fa-list'></i>").addClass('show');
 
@@ -182,7 +188,8 @@ function Studio() {
       editButton.click(that.toggleEditStudio);
       showButton.click(function(e) {
         var studio_id = $(e.target).parent().find('h4').attr('data-id');
-        var studioContainer = $(e.target).parent().find('.classes');
+        var studioContainer = $(e.target).parent().find('.class-list');
+        studioContainer.toggleClass('show');
         that.allClasses(studio_id, studioContainer);
       });
     }

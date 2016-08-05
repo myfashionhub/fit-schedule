@@ -79,3 +79,22 @@ section.favorite-studios {
     margin: .3em 5px .3em 0;
   }
 }
+
+/* Studio all classes */
+.studios .class-list {
+  display: none;
+  &.show {
+    display: table;
+  }
+  li.date {
+    margin: .7em 0 .5em 0;
+    font-weight: bold;
+  }
+  li.class {
+    display: table-row;
+    span {
+      display: table-cell;
+      padding-right: 8px;
+    }
+  }
+}
