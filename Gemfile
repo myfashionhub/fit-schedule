@@ -15,6 +15,7 @@ gem 'clockwork'
 group :development, :test do
   gem 'byebug'
   gem 'pry'
+  gem 'pry-nav'  
   gem 'dotenv-rails'
 end
 
