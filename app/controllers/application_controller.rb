@@ -6,14 +6,11 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :not_signed_in
 
   def current_user
-    User.find(session[:user_id]) if session[:user_id] \
-      rescue session[:user_id] = nil
+    session[:user_id].present? ? User.find(session[:user_id]) : nil
   end
 
   def authorize
-    if !current_user || !session[:user_id]
-      redirect_to root_path
-    end
+    redirect_to root_path if !current_user
   end
 
 end

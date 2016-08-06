@@ -48,8 +48,6 @@ class Calendar
     )
   end
 
-  # even reference https://developers.google.com/google-apps/calendar/v3/reference/events/insert
-
   def update
     params = {
       calendarId: params[:id],
@@ -107,6 +105,7 @@ class Calendar
     end.compact
 
     rescue => error
+    Rails.logger.error(error)
     return false
   end
 

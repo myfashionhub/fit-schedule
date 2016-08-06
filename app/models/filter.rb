@@ -33,14 +33,12 @@ class Filter < ActiveRecord::Base
     end
   end
 
-  def self.suggest_classes(user, studio_id)
+  def self.suggest_classes(user, events, studio_id)
     if user.calendar_id.present?
-      calendar = Calendar.new(user.google_token)
-      events = calendar.list_events(user.calendar_id)
       studio = Studio.find(studio_id)
       classes = Filter.match_classes(user.id, studio_id)
 
-      return { error: 'Google token expired' } if !events
+      return { error: 'Error retrieving calendar events' } if !events
 
       classes = classes.select { |klass| no_conflict(klass, user, events) }
       classes.map { |klass|

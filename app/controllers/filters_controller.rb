@@ -23,21 +23,22 @@ class FiltersController < ApplicationController
 
   def apply
     # suggested classes for all user's studios
+    cache_key = "users/#{current_user.id}/suggested_classes"
+    calendar = Calendar.new(current_user.google_token)
+    events = calendar.list_events(current_user.calendar_id)
 
     classes = Rails.cache.fetch(
-      "users/#{current_user.id}/suggested_classes",
-      expires_in: 2.hours
+      cache_key, expires_in: 2.hours
     ) do
       studio_ids = current_user.filters.pluck(:studio_id).uniq
-
       studio_ids.map do |studio_id|
-        Filter.suggest_classes(current_user, studio_id)
+        Filter.suggest_classes(current_user, events, studio_id)
       end.flatten
     end
 
     error = classes.first.has_key?(:error) rescue nil
     if error
-      Rails.cache.delete("users/#{current_user.id}")
+      Rails.cache.delete(cache_key)
       session[:user_id] = nil
 
       msg = "Your Google session has expired. Please re-authenticate."

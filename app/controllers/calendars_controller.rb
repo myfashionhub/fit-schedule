@@ -13,6 +13,7 @@ class CalendarsController < ApplicationController
       render json: { calendars: calendars }
     rescue => error
       reset_session
+      Rails.logger.error(error)
       msg = "Your Google session has expired. Please re-authenticate."
       render json: { error: msg }
     end    
