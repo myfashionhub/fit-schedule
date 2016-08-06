@@ -38,8 +38,6 @@ class Filter < ActiveRecord::Base
       studio = Studio.find(studio_id)
       classes = Filter.match_classes(user.id, studio_id)
 
-      return { error: 'Error retrieving calendar events' } if !events
-
       classes = classes.select { |klass| no_conflict(klass, user, events) }
       classes.map { |klass|
         klass.attributes.merge({

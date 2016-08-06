@@ -27,23 +27,21 @@ class FiltersController < ApplicationController
     calendar = Calendar.new(current_user.google_token)
     events = calendar.list_events(current_user.calendar_id)
 
-    classes = Rails.cache.fetch(
-      cache_key, expires_in: 2.hours
-    ) do
-      studio_ids = current_user.filters.pluck(:studio_id).uniq
-      studio_ids.map do |studio_id|
-        Filter.suggest_classes(current_user, events, studio_id)
-      end.flatten
-    end
-
-    error = classes.first.has_key?(:error) rescue nil
-    if error
-      Rails.cache.delete(cache_key)
+    error_code = events.is_a?(Hash) ? events[:code] : nil
+    if error_code.present? && error_code === 401
       session[:user_id] = nil
-
+      session[:google_token] = nil
       msg = "Your Google session has expired. Please re-authenticate."
       render json: { error: msg }
     else
+      classes = Rails.cache.fetch(
+        cache_key, expires_in: 2.hours
+      ) do
+        studio_ids = current_user.filters.pluck(:studio_id).uniq
+        studio_ids.map do |studio_id|
+          Filter.suggest_classes(current_user, events, studio_id)
+        end.flatten
+      end
       render json: { classes: classes }
     end
   end

@@ -85,9 +85,15 @@ class Calendar
       :headers => {'Content-Type' => 'application/json'}
     )
 
-    events = JSON.parse(result.response.body)['items']
+    response = JSON.parse(result.response.body)
+    if response['error'] && response['error']['code'] == 401
+      return {
+        code: response['error']['code'],
+        message: response['error']['message']
+      }
+    end
 
-    events.map do |event|
+    response['items'].map do |event|
       start_time = Time.parse(event['start']['dateTime'])
 
       if event['kind'] == 'calendar#event' &&
@@ -103,10 +109,6 @@ class Calendar
         }
       end
     end.compact
-
-    rescue => error
-    Rails.logger.error(error)
-    return false
   end
 
 end
