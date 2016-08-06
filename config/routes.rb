@@ -2,8 +2,9 @@ Rails.application.routes.draw do
 
   root 'sessions#new'
   get 'welcome' => 'sessions#welcome'
-  get "/auth/:provider/callback" => "sessions#create"
+  get '/login'  => 'sessions#find_or_create_session'
   get '/logout' => 'sessions#destroy'
+  get "/auth/:provider/callback" => "sessions#create"
 
   get '/schedule' => 'users#schedule'
   get '/customize' => 'users#customize'
