@@ -3,13 +3,6 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.1'
 gem 'pg'
 
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
-gem 'underscore-rails'
-
-gem 'jbuilder', '~> 2.0'
-
 gem 'clockwork'
 
 group :development, :test do
@@ -23,11 +16,21 @@ group :production do
   gem 'rails_12factor'
 end
 
+# Frontend
+gem 'sass-rails', '~> 5.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'jquery-rails'
+gem 'underscore-rails'
 
-gem 'google-api-client', :require => 'google/api_client'
+# Authentication
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
+
+# Google Calendar
+gem 'google-api-client', :require => 'google/api_client'
+
+# Scraping
+gem 'nokogiri'
 gem 'capybara'
 gem 'poltergeist'
 gem 'phantomjs'
-gem 'nokogiri'
