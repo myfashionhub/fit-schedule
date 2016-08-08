@@ -23,26 +23,40 @@ class FiltersController < ApplicationController
 
   def apply
     # suggested classes for all user's studios
-    cache_key = "users/#{current_user.id}/suggested_classes"
     calendar = Calendar.new(current_user.google_token)
     events = calendar.list_events(current_user.calendar_id)
 
     error_code = events.is_a?(Hash) ? events[:code] : nil
+
     if error_code.present? && error_code === 401
-      session[:user_id] = nil
-      session[:google_token] = nil
-      msg = "Your Google session has expired. Please re-authenticate."
-      render json: { error: msg }
-    else
-      classes = Rails.cache.fetch(
-        cache_key, expires_in: 2.hours
-      ) do
-        studio_ids = current_user.filters.pluck(:studio_id).uniq
-        studio_ids.map do |studio_id|
-          Filter.suggest_classes(current_user, events, studio_id)
-        end.flatten
+      current_user.refresh_google_token
+      new_expiry = Time.at(current_user.token_expires).to_datetime
+
+      if !(new_expiry > Time.now)
+        session[:user_id] = nil
+        session[:google_token] = nil
+        msg = "Your Google session has expired. Please re-authenticate."
+        render json: { error: msg }
+        return
+      else
+        session[:google_token] = current_user.google_token
+        events = calendar.list_events(current_user.calendar_id)
       end
-      render json: { classes: classes }
+    end
+
+    classes = suggest_classes(current_user, events)
+    render json: { classes: classes }
+  end
+
+  def suggest_classes(user, events)
+    Rails.cache.fetch(
+      "users/#{current_user.id}/suggested_classes",
+      expires_in: 2.hours
+    ) do
+      studio_ids = user.filters.pluck(:studio_id).uniq
+      studio_ids.map do |studio_id|
+        Filter.suggest_classes(user, events, studio_id)
+      end.flatten
     end
   end
 

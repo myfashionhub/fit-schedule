@@ -31,6 +31,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
+    session[:google_token] = nil
     redirect_to '/welcome'
   end
 
