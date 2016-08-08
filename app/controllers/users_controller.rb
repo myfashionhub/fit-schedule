@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_filter :authorize
 
   def show
+    binding.pry
     user = User.find(params[:id])
     render json: { user: user }
   end
@@ -35,18 +36,7 @@ class UsersController < ApplicationController
     render json: { studios: result }
   end
 
-  def filters
-    # All filters for one studio
-    filters = Filter.where(
-      user_id: params[:user_id].to_i,
-      studio_id: params[:studio_id].to_i
-    )
-
-    render json: { filters: filters }
-  end
-
   def classes
-    # suggested classes for all user's studios
     calendar = Calendar.new(current_user.google_token)
     events = calendar.list_events(current_user.calendar_id)
 
@@ -68,19 +58,28 @@ class UsersController < ApplicationController
       end
     end
 
-    classes = suggest_classes(current_user, events)
+    classes = suggest_classes(current_user, events, params[:studio_id])
     render json: { classes: classes }
   end
 
-  def suggest_classes(user, events)
-    Rails.cache.fetch(
-      "users/#{current_user.id}/suggested_classes",
-      expires_in: 2.hours
-    ) do
-      studio_ids = user.filters.pluck(:studio_id).uniq
-      studio_ids.map do |studio_id|
+  def suggest_classes(user, events, studio_id)
+    if studio_id.present?
+      Rails.cache.fetch(
+        "users/#{current_user.id}/suggested_classes/#{studio_id}",
+        expires_in: 2.hours
+      ) do
         Filter.suggest_classes(user, events, studio_id)
-      end.flatten
+      end
+    else
+      Rails.cache.fetch(
+        "users/#{current_user.id}/suggested_classes",
+        expires_in: 2.hours
+      ) do
+        studio_ids = user.filters.pluck(:studio_id).uniq
+        studio_ids.map do |id|
+          Filter.suggest_classes(user, events, id)
+        end.flatten
+      end
     end
   end
 end

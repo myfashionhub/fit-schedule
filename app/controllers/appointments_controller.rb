@@ -1,7 +1,7 @@
 class AppointmentsController < ApplicationController
 
   def index
-    classes = User.find(current_user.id).klasses.where('date >= ?', Date.today)
+    classes = User.find(user.id).klasses.where('date >= ?', Date.today)
 
     classes.to_a.map! do |klass|
       studio = Studio.find(klass.studio_id)
@@ -15,8 +15,12 @@ class AppointmentsController < ApplicationController
   end
 
   def create
-    Appointment.update_or_create(params, current_user.id)
+    Appointment.update_or_create(params, user.id)
     render json: { msg: 'Successfully updated your class schedule.' }
+  end
+
+  def user
+    User.find(params[:user_id])
   end
 
 end

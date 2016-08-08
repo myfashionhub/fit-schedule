@@ -11,7 +11,7 @@ function Schedule() {
 
   this.getAppointments = function() {
     $.ajax({
-      url: '/appointments',
+      url: '/users/'+ that.user_id +'/appointments',
       type: 'GET',
       success: function(data) {
         if ( data.classes.length === 0 ) {
@@ -110,7 +110,7 @@ function Schedule() {
     });
 
     $.ajax({
-      url: '/appointments',
+      url: '/users/'+ that.user_id +'/appointments',
       type: 'POST',
       data: { class_ids: class_ids },
       success: function(response) {

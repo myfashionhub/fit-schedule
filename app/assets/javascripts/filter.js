@@ -48,7 +48,7 @@ function Filter() {
     });
 
     $.ajax({
-      url: '/filters',
+      url: '/users/'+that.user_id+'/filters',
       type: 'POST',
       data: {
         class_names: JSON.stringify(classNames),
