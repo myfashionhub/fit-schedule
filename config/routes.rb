@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :update] do
     get '/studios' => 'users#studios'
     get '/filters' => 'users#filters'
+    get '/classes' => 'users#classes'
   end
 
   resources :calendars, only: [:index, :update]
@@ -23,7 +24,6 @@ Rails.application.routes.draw do
 
   resources :filters, only: [:index, :create]
   get '/filters/show' => 'filters#show'
-  get '/filters/apply' => 'filters#apply'
 
   resources :appointments, only: [:index, :create]
 end

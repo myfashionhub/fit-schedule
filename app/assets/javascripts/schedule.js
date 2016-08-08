@@ -1,6 +1,7 @@
 function Schedule() {
   var that = this;
   var notify = new Notify();
+  this.user_id = $('#user').attr('data-id');
 
   this.init = function() {
     $('.upcoming .save-appointments').click(function() {
@@ -192,7 +193,7 @@ function Schedule() {
   this.suggestClasses = function() {
     // Suggest all classes from user's favorite studios
     $.ajax({
-      url: '/filters/apply',
+      url: '/users/'+ that.user_id +'/classes',
       type: 'GET',
       success: function(data) {
         if (data.error != undefined) {
