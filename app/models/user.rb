@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
     else
       user.update(
         google_token: auth_hash['credentials']['token'],
-        refresh_token: auth_hash['credentials']['refresh_token'],
         token_expires: auth_hash['credentials']['expires_at']
       )
     end
@@ -37,6 +36,29 @@ class User < ActiveRecord::Base
     busy = (1..5).map do |i|
       { day: i, start_time: '9:30', end_time: '18:00' }
     end.to_json
+  end
+
+  def refresh_google_token
+    uri = URI.parse('https://www.googleapis.com')
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    request = Net::HTTP::Post.new("/oauth2/v4/token")
+    request.body = "client_id=#{ENV['FS_GOOGLE_ID']}&" +
+                   "client_secret=#{ENV['FS_GOOGLE_SECRET']}&" +
+                   "grant_type=refresh_token&" +
+                   "refresh_token=#{self.refresh_token}"
+    request.add_field('Content-Type', 'application/x-www-form-urlencoded')
+    response = http.request(request)
+
+    if response.code == '200'
+      result = JSON.parse(response.body)
+      self.update(
+        google_token: result['access_token'],
+        token_expires: Time.now + result['expires_in']
+      )
+    end
   end
 
 end
