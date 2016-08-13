@@ -37,11 +37,9 @@ class UsersController < ApplicationController
   end
 
   def classes
-    calendar = Calendar.new(current_user.google_token)
-    events = calendar.list_events(current_user.calendar_id)
+    events = current_user.events
 
     error_code = events.is_a?(Hash) ? events[:code] : nil
-
     if error_code.present? && error_code === 401
       current_user.refresh_google_token
       new_expiry = Time.at(current_user.token_expires).to_datetime
@@ -54,7 +52,7 @@ class UsersController < ApplicationController
         return
       else
         session[:google_token] = current_user.google_token
-        events = calendar.list_events(current_user.calendar_id)
+        events = current_user.events
       end
     end
 
@@ -75,10 +73,7 @@ class UsersController < ApplicationController
         "users/#{current_user.id}/suggested_classes",
         expires_in: 2.hours
       ) do
-        studio_ids = user.filters.pluck(:studio_id).uniq
-        studio_ids.map do |id|
-          Filter.suggest_classes(user, events, id)
-        end.flatten
+        Filter.suggest_classes(user, events)
       end
     end
   end

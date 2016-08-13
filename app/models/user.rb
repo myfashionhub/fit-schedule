@@ -7,6 +7,11 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   validates :google_uid, presence: true
 
+  def events
+    calendar = Calendar.new(self.google_token)
+    calendar.list_events(self.calendar_id)
+  end
+
   def self.find_or_create(auth_hash)
     user = User.find_by(google_uid: auth_hash['uid'])
 

@@ -33,39 +33,46 @@ class Filter < ActiveRecord::Base
     end
   end
 
-  def self.suggest_classes(user, events, studio_id)
+  def self.suggest_classes(user, events, studio_id=nil)
     if user.calendar_id.present?
-      studio = Studio.find(studio_id)
-      classes = Filter.match_classes(user.id, studio_id)
-
-      classes = classes.select { |klass| no_conflict(klass, user, events) }
-      classes.map { |klass|
-        klass.attributes.merge({
-          'studio_name' => studio.name,
-          'studio_url' => studio.schedule_url
-        })
-      }
+      if studio_id.present?
+        classes = self.match_classes(user, studio_id, events)
+      else
+        studio_ids = user.filters.pluck(:studio_id).uniq
+        classes = studio_ids.map do |studio_id|
+          self.match_classes(user, studio_id, events)
+        end.flatten
+      end
     else
       { error: "User has not specified a Google calendar." }
     end
   end
 
-  def self.match_classes(user_id, studio_id)
-    class_names = Filter.where(user_id: user_id, studio_id: studio_id).
-                    pluck(:class_name).uniq
+
+  # Helper
+  def self.match_classes(user, studio_id, events)
+    studio = Studio.find(studio_id)
+    class_names = Filter.where(
+                    user_id: user.id, studio_id: studio_id
+                  ).pluck(:class_name).uniq
 
     classes = []
-    Klass.where(studio_id: studio_id).each do |klass|
+    studio.klasses.each do |klass|
       class_names.each do |name|
-        classes.push(klass) if klass.name == name && klass.date >= Time.now
+        if klass.name == name && klass.date >= Time.now
+          classes.push(klass)
+        end
       end
     end
 
-    classes
+    classes.select! { |klass| no_conflict(klass, user, events) }
+    classes.map do |klass|
+      klass.attributes.merge( {
+        'studio_name' => studio.name,
+        'studio_url' => studio.schedule_url
+      } )
+    end
   end
-
-
-  # Helper
 
   def self.no_conflict(klass, user, events)
     date_str   = klass.date.to_date.to_s
