@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   before_filter :authorize
 
   def show
-    binding.pry
     user = User.find(params[:id])
     render json: { user: user }
   end
