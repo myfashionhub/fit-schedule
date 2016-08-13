@@ -94,7 +94,8 @@ class Calendar
     end
 
     response['items'].map do |event|
-      start_time = Time.parse(event['start']['dateTime'])
+      start_time = parse_time(event['start'])
+      end_time   = parse_time(event['end'])
 
       if event['kind'] == 'calendar#event' &&
          event['status'] == 'confirmed' &&
@@ -104,11 +105,16 @@ class Calendar
         {
           name: event['summary'],
           start_time: start_time,
-          end_time: Time.parse(event['end']['dateTime']),
+          end_time: end_time,
           link: event['htmlLink']
         }
       end
     end.compact
+  end
+
+  def parse_time(hash)
+    timestamp = hash['dateTime'] || hash['date']
+    Time.parse(timestamp)
   end
 
 end
