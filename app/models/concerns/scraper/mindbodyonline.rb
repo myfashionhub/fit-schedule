@@ -1,34 +1,27 @@
 require 'capybara/poltergeist'
 
 module Scraper
-
   class Mindbodyonline
+    attr_reader    :url, :session, :page,
+                   :studio, :classes
 
-    def self.get_classes(url)
-      session = Capybara::Session.new(:poltergeist)
-      session.driver.browser.js_errors = false
-      session.visit url
+    def initialize(url, studio=nil)
+      @url     = url
+      @session = Capybara::Session.new(:poltergeist)
+      @session.driver.browser.js_errors = false
+      @session.visit url
       sleep 2
 
-      studio_name = session.title.sub(" Online","")
-      @studio = Studio.find_or_create_by(
-        name: studio_name,
-        schedule_url: url
-      )
-
-      #navigate(url, session)
-      page = session.within_frame 'mainFrame' do
-        Nokogiri::HTML(session.html)
+      @page = @session.within_frame 'mainFrame' do
+        Nokogiri::HTML(@session.html)
       end
-
-      rows = page.css('#classSchedule-mainTable').css('tr')
-      classes = parse(rows)
-
-      { studio: @studio, classes: classes }
+      @studio  = studio
+      @classes = []
     end
 
-    def self.parse(rows)
-      classes = []
+    def parse_classes
+      studio = studio || Studio.find_by(schedule_url: url)
+      page.css('#classSchedule-mainTable').css('tr')
       date = nil
 
       rows.each do |row|
@@ -69,17 +62,24 @@ module Scraper
           Rails.logger.error("#{error}, row '#{row.text}'")
         end
       end
-
       classes
     end
 
-    def self.navigate(url, session)
+    def parse_studio
+      studio_name = session.title.sub(" Online","")
+      Studio.find_or_create_by(
+        name: studio_name,
+        schedule_url: url
+      )
+    end
+
+    def navigate(url, session)
       # if no monday, saturday, click week toggle
       #session.find('#week-tog-c').click
       session.click_link('#week-arrow-r')
     end
 
-    def self.get_times(start_time, duration)
+    def get_times(start_time, duration)
       start_hour = start_time.split(' ')[0].split(':')[0].to_i
       start_mins = start_time.split(' ')[0].split(':')[1].to_i
       duration_hour = duration.scan(/\d\shour/)[0].split(' ')[0].to_i
