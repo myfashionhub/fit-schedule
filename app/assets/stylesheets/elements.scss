@@ -9,7 +9,7 @@ nav {
   a {
     color: #fff;
     margin-right: .7em;
-    &:hover {
+    &:hover, &.active {
       color: $hotpink;
     }
   }

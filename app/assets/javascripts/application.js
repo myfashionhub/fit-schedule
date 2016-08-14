@@ -6,6 +6,7 @@
 $(document).ready(function() {
   var customizeTabs = [ 'studio', 'availability', 'calendar' ];
   var scheduleTabs = [ 'classes', 'studios' ];
+
   window.customizeNav = new Navigation(
     customizeTabs, $('.customize-nav'), '.customize-wrapper section'
   );

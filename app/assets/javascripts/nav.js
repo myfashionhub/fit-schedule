@@ -5,6 +5,7 @@ function Navigation(tabs, ul, sectionSelector) {
   var cal = new Calendar();
 
   this.init = function() {
+    this.toggleByPath();
     this.toggleByHash();
 
     navLinks.click(function(e) {
@@ -44,6 +45,11 @@ function Navigation(tabs, ul, sectionSelector) {
     } else if (targetSection.hasClass('availability')) {
       cal.getUserAvailability();
     }
+  };
+
+  this.toggleByPath = function() {
+    var path = window.location.pathname.replace('/','');
+    $('nav .options a.'+path).addClass('active');
   };
 
   this.init();
