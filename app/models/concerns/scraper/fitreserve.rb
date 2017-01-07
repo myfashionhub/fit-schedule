@@ -3,24 +3,16 @@ require 'open-uri'
 module Scraper
 
   class Fitreserve
+    attr_reader   :url, :page, :studio, :classes
 
-    def self.get_classes(url)
-      page = Nokogiri::HTML(open(url))
+    def initialize(url, studio=nil)
+      @url  = url
+      @page = Nokogiri::HTML(open(url))
+      @studio  = studio
+      @classes = []
+    end
 
-      studio_name = page.css('.details .name').text
-      logo = page.css('.details .logo').last.attributes['src'].value
-      address = page.css('.details .address').text.strip.gsub("\n",' ')
-      studio = Studio.find_by( schedule_url: url )
-      if !studio
-        studio = Studio.create(
-          name:         studio_name,
-          schedule_url: url,
-          address:      address,
-          logo:         logo
-        )
-      end
-
-      classes = []
+    def parse_classes
       page.css('.row.schedule').each do |day|
         date = parse_date(day.css('.date').text)
 
@@ -41,15 +33,32 @@ module Scraper
               studio_id:  studio.id
             }
 
-            Klass.create_from_raw(klass)
+            classes.push(Klass.create_from_raw(klass))
           end
         end       
       end
-
-      { studio: studio, classes: classes }
+      classes
     end
 
-    def self.parse_time(str)
+    def parse_studio
+      studio = Studio.find_by(schedule_url: url)
+
+      if !studio
+        name = page.css('.details .name').text
+        logo = page.css('.details .logo').last.attributes['src'].value
+        address = page.css('.details .address').text.strip.gsub("\n",' ')
+
+        studio = Studio.create(
+          name:         name,
+          schedule_url: url,
+          address:      address,
+          logo:         logo
+        )
+      end
+      studio
+    end
+
+    def parse_time(str)
       end_modifier = str.last.split(' ').last
       end_time     = Time.parse(str.last)
       start_time   = Time.parse(str.first + ' ' + end_modifier)
@@ -68,7 +77,7 @@ module Scraper
       }
     end
 
-    def self.parse_date(date_string)
+    def parse_date(date_string)
       date = date_string.split(', ').last
       month = Date.parse(date).strftime('%m')
       current_year = Date.today.strftime('%Y')
@@ -83,7 +92,7 @@ module Scraper
       Date.parse(date + ' ' + year)
     end
 
-    def self.format_class(class_string)
+    def format_class(class_string)
       matches = class_string.downcase!.capitalize!.scan(/\W[a-z]/)
       matches.each do |letter|
         class_string.gsub!(letter, letter.upcase)

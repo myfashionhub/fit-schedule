@@ -8,8 +8,8 @@ namespace :schedule do
         puts "Updating schedule for #{studio.name}"
 
         begin
-          result = scraper_class.get_classes(studio.schedule_url)
-          classes = Klass.create_from_raw(result)
+          scraper = scraper_class.new(studio.schedule_url, studio)
+          scraper.parse_classes
           studio.update(updated_at: Time.now)
         rescue => error
           puts error
@@ -26,8 +26,8 @@ namespace :schedule do
     scraper_class = "Scraper::#{provider}".constantize
     puts "Updating schedule for #{studio.name}"
 
-    result = scraper_class.get_classes(studio.schedule_url)
-    classes = Klass.create_from_raw(result)
+    scraper = scraper_class.new(studio.schedule_url, studio)
+    scraper.parse_classes
     studio.update(updated_at: Time.now)
   end
 
