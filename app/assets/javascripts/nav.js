@@ -1,8 +1,10 @@
-function Navigation(tabs, ul, sectionSelector) {
+function Navigation(pathname, tabs, ul, sectionSelector) {
 
   var that = this;
   var navLinks = ul.find('a');
   var cal = new Calendar();
+
+  this.pathname = pathname;
 
   this.init = function() {
     this.toggleByPath();
@@ -12,14 +14,15 @@ function Navigation(tabs, ul, sectionSelector) {
       var index = navLinks.index(e.target);
       that.toggle(index);
     });
+
+    $(window).on('hashchange', function() {
+      if (window.location.pathname === that.pathname) {
+        that.toggleByHash();
+      }
+    });
   };
 
   this.toggleByHash = function() {
-    if ( window.location.pathname !== '/customize' &&
-         window.location.pathname !== '/schedule' ) {
-      return;
-    }
-
     if ( window.location.hash !== '' ) {
       var index = tabs.indexOf( window.location.hash.replace('#','') );
       if ( index > -1 ) {
