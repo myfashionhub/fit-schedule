@@ -6,27 +6,13 @@
 <h2>Customize Your Schedule</h2>
 
 <ul class="customize-nav">
-  <a href='#studio'>Add studio</a>
+  <a href='#studio'>Favorite studios</a>
   <a href='#availability'>Edit availability</a>
   <a href='#calendar'>Choose calendar</a>
 </ul>
 
-<section class="studio-form">
-  <h3>Add a Studio</h3>
 
-  <p class="faint">
-    * We currently support mindbodyonline.com and fitreserve.com.<br/>
-    Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
-  </p>
-
-  <form id='studio-schedule'>
-    <input type='text' class="url" placeholder='Paste studio schedule'></input>
-    <button class="submit">View classes</button>
-  </form>
-
-  <%= render 'studios/show' %>
-</section>
-
+<%= render 'users/studios' %>
 
 <%= render 'users/availability' %>
 
@@ -42,8 +28,5 @@
 </div> <!-- end container-->
 
 <script type="text/javascript">
-  var studio = new Studio();
-  studio.findOrCreate();
-
   var filter = new Filter();
 </script>

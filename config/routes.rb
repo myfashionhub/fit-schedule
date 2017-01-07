@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'
 
-  resources :studios, only: [:index, :show, :create]
+  resources :studios, only: [:show, :create]
 
   get '/classes' => 'klasses#index'
 end
