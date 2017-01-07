@@ -21,7 +21,7 @@ function Modal(element) {
   };
 
   this.close = function() {
-    $('.modal-dialog i.fa-times').click(function() {
+    $('.modal-dialog .close').click(function() {
       $('.overlay').removeClass('active');
       $('.modal-dialog').removeClass('active');
       $('body').removeClass('no-scroll');
@@ -38,7 +38,7 @@ function Notify(el) {
 
   this.init = function() {
     this.el = el || $('.notify');
-    this.el.find('.fa-times').click(function() { that.close(); });
+    this.el.find('.close').click(function() { that.close(); });
   };
 
   this.build = function(msg, type) {
