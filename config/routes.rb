@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     get '/classes' => 'users#classes'
 
     resources :filters, only: [:index, :create]
+    delete '/filters' => 'filters#destroy'
+
     resources :appointments, only: [:index, :create]
   end
 
