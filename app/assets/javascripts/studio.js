@@ -12,16 +12,26 @@ function Studio() {
   };
 
   this.findOrCreate = function() {
-    var url = $('.studio-form .url').val();
+    var val = $('.studio-form input').val();
+    var data;
+    if (val.indexOf('http') > -1) {
+      data = {url: val};
+    } else {
+      data = {term: val};
+    }
 
     $.ajax({
       url: '/studios',
       type: 'POST',
-      data: { url: url },
+      data: data,
       success: function(data) {
-        that.populateStudio(data.studio);
-        that.getStudioClassTypes(data.studio.id);
-        $('.studio-show').addClass('active');
+        if (data.msg) {
+          notify.build(data.msg, 'error');
+        } else {
+          that.populateStudio(data.studio);
+          that.getStudioClassTypes(data.studio.id);
+          $('.studio-show').addClass('active');
+        }
       },
       error: function(err) {
         console.log(err);

@@ -14,4 +14,16 @@ class Studio < ActiveRecord::Base
     Klass.where(studio_id: self.id).where('date < ?', Date.today)
   end
 
+  def self.match(term)
+    studio = Studio.where('name iLIKE ?', "%#{term}%").first
+    return studio if studio.present?
+
+    Studio.all.each do |studio|
+      if studio.name.downcase.include?(term) ||
+         studio.schedule_url.include?(term.gsub(' ', ''))
+        return studio
+      end
+    end
+    nil
+  end
 end
