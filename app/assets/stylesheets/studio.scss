@@ -10,7 +10,36 @@
   }
 }
 
-/* STUDIO CLASS TYPES */
+/* FAVORITE STUDIO LIST */
+.favorite-studios {
+  margin: 2em auto 3em auto;
+
+  h2, a.edit { /* Section heading */
+    display: inline-block;
+    vertical-align: baseline;
+  }
+  h2 {
+    margin: 0;
+  }
+  a.edit {
+    margin-left: 2em;
+  }
+
+  .studio {
+    h4 { /* Studio name */
+      width: 30%;
+      display: inline-block;
+      margin: .3em 5px .3em 0;
+      font-size: 1.1em;
+    }
+    .fa { /* Edit icons */
+      margin-left: .5em;
+      font-size: 1.2em;
+    }
+  }
+}
+
+/* Studio Partials */
 .studio-show, .studio-remove {
   display: none;
   &.active {
@@ -18,7 +47,7 @@
   }
 }
 
-/* STUDIOS & FILTERS */
+/* FILTERS */
 .studio-show {
   .studio {
     .name {
@@ -54,36 +83,6 @@
   }
 }
 
-
-/* FAVORITE STUDIO LIST */
-.favorite-studios {
-  margin: 2em auto 3em auto;
-
-  h2, a.edit { /* Section heading */
-    display: inline-block;
-    vertical-align: baseline;
-  }
-  h2 {
-    margin: 0;
-  }
-  a.edit {
-    margin-left: 2em;
-  }
-
-  .studio {
-    h4 { /* Studio name */
-      width: 30%;
-      display: inline-block;
-      margin: .3em 5px .3em 0;
-      font-size: 1.1em;
-    }
-    .fa { /* Edit icons */
-      margin-left: .5em;
-      font-size: 1.2em;
-    }
-  }
-}
-
 /* Studio all classes */
 .studios .class-list {
   display: none;
@@ -99,6 +98,16 @@
     span {
       display: table-cell;
       padding-right: 8px;
+    }
+  }
+}
+
+/* Confirm delete modal */
+.studio-remove {
+  .actions {
+    text-align: center;
+    button {
+      margin-right: 1em;
     }
   }
 }

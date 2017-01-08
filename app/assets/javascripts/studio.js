@@ -222,7 +222,7 @@ function Studio() {
   this.confirmRemoval = function(studio_id) {
     var modal = new Modal($('.studio-remove'));
 
-    $('.studio-remove button').click(function(e) {
+    $('.studio-remove .actions').children().click(function(e) {
       modal.close();
 
       var btnClass = $(e.target).attr('class');
