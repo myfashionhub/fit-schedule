@@ -1,8 +1,8 @@
 <section class="favorite-studios">
   <h2>Your studios</h2>
-  <a href="/customize" class="edit">
-    <i class="fa fa-plus"></i> Add studio
-  </a>
+  <a href="" class="add-new"><i class="fa fa-plus"></i> Add studio</a>
+
+  <%= render 'studios/new' %>
 
   <ul class="studios"></ul>
 
@@ -13,4 +13,9 @@
 <script type="text/javascript">
   var studio = new Studio();
   studio.showFavorites();
+
+  $('.favorite-studios .add-new').click(function(e) {
+    e.preventDefault();
+    $('section.studio-form').addClass('active');
+  });
 </script>

@@ -1,20 +1,14 @@
 <section class="studio-form">
-  <h3>Add a Studio</h3>
-
+  <p>Type studio name or paste schedule URL</p>
   <p class="faint">
     * We currently support mindbodyonline.com and fitreserve.com.<br/>
     Example: https://www.fitreserve.com/nyc/studios/1019-body-pole
   </p>
 
   <form id='studio-schedule'>
-    <input type='text' class="url" placeholder='Paste studio schedule'></input>
+    <input type='text' class="url" placeholder='Studio name or schedule URL'></input>
     <button class="submit">View classes</button>
   </form>
 
   <%= render 'studios/show' %>
 </section>
-
-<script type="text/javascript">
-  var studio = new Studio();
-  studio.findOrCreate();
-</script>

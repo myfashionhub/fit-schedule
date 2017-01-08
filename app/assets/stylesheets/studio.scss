@@ -4,7 +4,6 @@
   form .url {
     width: 20em;
   }
-
   button {
     @include button-dark;
   }
@@ -14,14 +13,14 @@
 .favorite-studios {
   margin: 2em auto 3em auto;
 
-  h2, a.edit { /* Section heading */
+  h2, .add-new { /* Section heading */
     display: inline-block;
     vertical-align: baseline;
   }
   h2 {
     margin: 0;
   }
-  a.edit {
+  .add-new {
     margin-left: 2em;
   }
 

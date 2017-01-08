@@ -5,28 +5,28 @@ function Studio() {
   var notify = new Notify();
 
   this.init = function() {
-
+    $('.studio-form form').submit(function(e) {
+      e.preventDefault();
+      that.findOrCreate();
+    });
   };
 
   this.findOrCreate = function() {
-    $('.studio-form form').submit(function(e) {
-      e.preventDefault();
-      var url = $('.studio-form .url').val();
+    var url = $('.studio-form .url').val();
 
-      $.ajax({
-        url: '/studios',
-        type: 'POST',
-        data: { url: url },
-        success: function(data) {
-          that.populateStudio(data.studio);
-          that.getStudioClassTypes(data.studio.id);
-          $('.studio-show').addClass('active');
-        },
-        error: function(err) {
-          console.log(err);
-          notify.build('Unable to get classes from schedule URL.', 'error');
-        }
-      });
+    $.ajax({
+      url: '/studios',
+      type: 'POST',
+      data: { url: url },
+      success: function(data) {
+        that.populateStudio(data.studio);
+        that.getStudioClassTypes(data.studio.id);
+        $('.studio-show').addClass('active');
+      },
+      error: function(err) {
+        console.log(err);
+        notify.build('Unable to get classes from schedule URL.', 'error');
+      }
     });
   };
 
