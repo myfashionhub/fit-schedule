@@ -65,6 +65,24 @@ function Filter() {
     });
   };
 
+  this.deleteStudioFilters = function(studio_id) {
+    var deferred = $.Deferred();
+
+    $.ajax({
+      url: '/users/'+that.user_id+'/filters',
+      type: 'DELETE',
+      data: { studio_id: studio_id },
+      success: function(data) {
+        deferred.resolve(data.msg, 'success');
+      },
+      error: function(err) {
+        deferred.resolve(err, 'error');
+      }
+    });
+
+    return deferred.promise();
+  };
+
   this.select = function() {
     // toggle selected class names
 

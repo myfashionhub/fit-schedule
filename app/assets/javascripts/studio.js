@@ -170,6 +170,7 @@ function Studio() {
 
   this.populateStudios = function(studios) {
     var studioUl = $('.favorite-studios .studios');
+    studioUl.empty();
 
     for (var i=0; i < studios.length; i++) {
       var studioLi   = $('<li>').addClass('studio');
@@ -206,7 +207,7 @@ function Studio() {
         studioContainer.toggleClass('show');
         that.allClasses(studio_id, studioContainer);
       } else if (btnClass.indexOf('remove') > -1) {
-        that.removeStudio(studio_id);
+        that.confirmRemoval(studio_id);
       }
     });
   };
@@ -218,8 +219,27 @@ function Studio() {
     modal.el().addClass('big');
   };
 
-  this.removeStudio = function(studio_id) {
+  this.confirmRemoval = function(studio_id) {
     var modal = new Modal($('.studio-remove'));
+
+    $('.studio-remove button').click(function(e) {
+      modal.close();
+
+      var btnClass = $(e.target).attr('class');
+      if (btnClass.indexOf('confirm') > -1) {
+        that.removeStudio(studio_id);
+      }
+    });
+  };
+
+  this.removeStudio = function(studio_id) {
+    var filter = new Filter();
+    filter.deleteStudioFilters(studio_id).then(function(msg, status) {
+      var notify = new Notify();
+      notify.build(msg, status);
+
+      that.showFavorites();
+    });
   };
 
   this.init();

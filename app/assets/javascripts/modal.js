@@ -8,7 +8,9 @@ function Modal(element) {
   this.init = function() {
     this.contentEl = element.clone(true, true);
     this.open();
-    this.close();
+    $('.modal-dialog .close').click(function() {
+      that.close();
+    });
   };
 
   this.open = function() {
@@ -21,12 +23,10 @@ function Modal(element) {
   };
 
   this.close = function() {
-    $('.modal-dialog .close').click(function() {
-      $('.overlay').removeClass('active');
-      $('.modal-dialog').removeClass('active');
-      $('body').removeClass('no-scroll');
-      $('.modal-dialog .content').empty();
-    });
+    $('.overlay').removeClass('active');
+    $('.modal-dialog').removeClass('active');
+    $('body').removeClass('no-scroll');
+    $('.modal-dialog .content').empty();
   };
 
   this.init();
