@@ -189,28 +189,37 @@ function Studio() {
       studioLi.append(removeBtn);
       studioLi.append(classes);
       studioUl.append(studioLi);
+    }
 
-      editBtn.click(that.toggleEditStudio);
-      showBtn.click(function(e) {
-        var studio_id = $(e.target).parent().find('h4').attr('data-id');
+    this.listenForButtonClick();
+  };
+
+  this.listenForButtonClick = function() {
+    $('.studio i').click(function(e) {
+      var studio_id = $(e.target).parent().find('h4').attr('data-id');
+      var btnClass = $(e.target).attr('class');
+
+      if (btnClass.indexOf('edit') > -1) {
+        that.toggleEditStudio(studio_id);
+      } else if (btnClass.indexOf('show') > -1) {
         var studioContainer = $(e.target).parent().find('.class-list');
         studioContainer.toggleClass('show');
         that.allClasses(studio_id, studioContainer);
-      });
-      removeBtn.click(that.removeStudio);
-    }
+      } else if (btnClass.indexOf('remove') > -1) {
+        that.removeStudio(studio_id);
+      }
+    });
   };
 
-  this.toggleEditStudio = function(e) {
-    var studio_id = $(e.target).parent().find('h4').attr('data-id');
+  this.toggleEditStudio = function(studio_id) {
     that.getStudioClassTypes(studio_id, true);
 
     var modal = new Modal($('.studio-show'));
     modal.el().addClass('big');
   };
 
-  this.removeStudio = function(e) {
-
+  this.removeStudio = function(studio_id) {
+    var modal = new Modal($('.studio-remove'));
   };
 
   this.init();

@@ -11,7 +11,7 @@
 }
 
 /* STUDIO CLASS TYPES */
-.studio-show {
+.studio-show, .studio-remove {
   display: none;
   &.active {
     display: block;
@@ -19,7 +19,6 @@
 }
 
 /* STUDIOS & FILTERS */
-
 .studio-show {
   .studio {
     .name {
