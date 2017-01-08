@@ -24,6 +24,9 @@
     margin-left: 2em;
   }
 
+  ul.studios {
+    margin-top: 2em;
+  }
   .studio {
     h4 { /* Studio name */
       width: 30%;
@@ -48,11 +51,12 @@
 
 /* FILTERS */
 .studio-show {
+  height: 100%;
+  overflow: hidden;
   .studio {
     .name {
       font-size: 1.5em;
     }
-
     .address {
       color: #888;
       margin: .4em 0;
@@ -60,25 +64,25 @@
   }
 
   ul.class-types {
-    overflow: hidden;
-
+    overflow-y: auto;
+    /* Dynamic height */
+    margin: 15px 0;
     .class {
       display: inline-block;
       width: 50%;
       padding-right: .5em;
-
       i {
         margin-right: .3em;
       }
     }
   }
-
   .remove {
     margin-top: 0;
     display: inline-block;
   }
   .save-filters {
     float: right;
+    margin-right: 1.5em;
   }
 }
 

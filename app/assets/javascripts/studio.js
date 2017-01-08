@@ -126,12 +126,6 @@ function Studio() {
       var filter = new Filter();
       var userFilters;
 
-      Promise.all([ filter.show(studio_id) ]).then(
-        function(data) {
-          buildFilters(data[0]);
-        }
-      );
-
       var buildFilters = function(userFilters) {
         $('.class-types').empty();
 
@@ -157,6 +151,22 @@ function Studio() {
 
         filter.select(); // event listener for checking boxes
       };
+
+      var resizeClassList = function() {
+        // Dynamically resize class-types list
+        var total = $('.studio-show').height();
+        var header = $('.studio-show .studio').outerHeight();
+        var button = $('.studio-show button').outerHeight();
+        var classTypes = total - header - button - 32 /* list margins */;
+        $('.studio-show .class-types').css('height', classTypes);
+      };
+
+      Promise.all([ filter.show(studio_id) ]).then(
+        function(data) {
+          buildFilters(data[0]);
+          resizeClassList();
+        }
+      );
     }
   };
 
