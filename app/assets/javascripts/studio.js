@@ -176,22 +176,28 @@ function Studio() {
       var studioName = $('<h4>').html(studios[i].studio.name).
                          attr('data-id', studios[i].studio.id);
       var classes    = $('<ul>').addClass('class-list');
-      var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit');
-      var showButton = $("<i class='fa fa-list'></i>").addClass('show');
+      var editBtn = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit').
+                      attr('title', 'Edit classes');
+      var showBtn = $("<i class='fa fa-list'></i>").addClass('show').
+                      attr('title', 'Show all classes');
+      var removeBtn = $("<i class='fa fa-times'></i>").addClass('remove').
+                        attr('title', 'Remove from favorites');
 
       studioLi.append(studioName);
-      studioLi.append(editButton);
-      studioLi.append(showButton);
+      studioLi.append(editBtn);
+      studioLi.append(showBtn);
+      studioLi.append(removeBtn);
       studioLi.append(classes);
       studioUl.append(studioLi);
 
-      editButton.click(that.toggleEditStudio);
-      showButton.click(function(e) {
+      editBtn.click(that.toggleEditStudio);
+      showBtn.click(function(e) {
         var studio_id = $(e.target).parent().find('h4').attr('data-id');
         var studioContainer = $(e.target).parent().find('.class-list');
         studioContainer.toggleClass('show');
         that.allClasses(studio_id, studioContainer);
       });
+      removeBtn.click(that.removeStudio);
     }
   };
 
@@ -201,6 +207,10 @@ function Studio() {
 
     var modal = new Modal($('.studio-show'));
     modal.el().addClass('big');
+  };
+
+  this.removeStudio = function(e) {
+
   };
 
   this.init();

@@ -10,34 +10,11 @@
   }
 }
 
-/* STUDIO SHOW PARTIAL */
+/* STUDIO CLASS TYPES */
 .studio-show {
   display: none;
   &.active {
     display: block;
-  }
-}
-
-section.favorite-studios {
-  margin: 2em auto 3em auto;
-
-  h2, a.edit {
-    display: inline-block;
-    vertical-align: baseline;
-  }
-
-  h2 {
-    margin: 0;
-  }
-
-  a.edit {
-    margin-left: 2em;
-  }
-
-  .studios .studio h4 {
-    i {
-      margin-left: .5em;
-    }
   }
 }
 
@@ -79,12 +56,32 @@ section.favorite-studios {
 }
 
 
-/* FAVORITE STUDIOS */
-.favorite-studios .studios {
-  .studio h4 {
-    width: 30%;
+/* FAVORITE STUDIO LIST */
+.favorite-studios {
+  margin: 2em auto 3em auto;
+
+  h2, a.edit { /* Section heading */
     display: inline-block;
-    margin: .3em 5px .3em 0;
+    vertical-align: baseline;
+  }
+  h2 {
+    margin: 0;
+  }
+  a.edit {
+    margin-left: 2em;
+  }
+
+  .studio {
+    h4 { /* Studio name */
+      width: 30%;
+      display: inline-block;
+      margin: .3em 5px .3em 0;
+      font-size: 1.1em;
+    }
+    .fa { /* Edit icons */
+      margin-left: .5em;
+      font-size: 1.2em;
+    }
   }
 }
 
