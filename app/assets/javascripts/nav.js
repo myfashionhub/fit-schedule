@@ -10,11 +10,6 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
     this.toggleByPath();
     this.toggleByHash();
 
-    navLinks.click(function(e) {
-      var index = navLinks.index(e.target);
-      that.toggle(index);
-    });
-
     $(window).on('hashchange', function() {
       if (window.location.pathname === that.pathname) {
         that.toggleByHash();
@@ -23,9 +18,9 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
   };
 
   this.toggleByHash = function() {
-    if ( window.location.hash !== '' ) {
+    if (window.location.hash !== '') {
       var index = tabs.indexOf( window.location.hash.replace('#','') );
-      if ( index > -1 ) {
+      if (index > -1) {
         that.toggle(index);
         return;
       }
@@ -34,8 +29,6 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
   };
 
   this.toggle = function(index) {
-    window.location.hash = '#' + tabs[index];
-
     $(sectionSelector+'.active').removeClass('active');
     ul.find('a.active').removeClass('active');
 

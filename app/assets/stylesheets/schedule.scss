@@ -101,7 +101,7 @@ h2, h3, h4 {
     min-width: 700px;
   }
 
-  section {
+  section, .studio-form {
     display: none;
     &.active {
       display: block;

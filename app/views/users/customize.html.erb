@@ -9,17 +9,13 @@
   <a href='#calendar'>Choose calendar</a>
 </ul>
 
-
 <%= render 'users/studios' %>
-
 <%= render 'users/availability' %>
-
 
 <section class="calendars">
   <h3>Choose a Calendar</h3>
 
   <ul class='all-calendars'></ul>
-
   <button class='update'>Update calendar</button>
 </section>
 
@@ -27,4 +23,10 @@
 
 <script type="text/javascript">
   var filter = new Filter();
+
+  var customizeTabs = [ 'studios', 'availability', 'calendar' ];
+  window.customizeNav = new Navigation(
+    '/customize', customizeTabs, $('.customize-nav'),
+    '.customize-wrapper section'
+  );
 </script>
