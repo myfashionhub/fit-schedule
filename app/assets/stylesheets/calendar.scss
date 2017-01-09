@@ -1,0 +1,19 @@
+section.availability {
+  overflow: hidden; /* Clear float children */
+
+  span {
+    margin-right: .5em;
+  }
+
+  .times {
+    input {
+      margin-right: 1em;
+    }
+  }
+  .days {
+    margin-top: 1em;
+  }
+  .add {
+    float: right;
+  }
+}

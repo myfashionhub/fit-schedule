@@ -127,9 +127,8 @@ function Calendar() {
   }
 
   this.buildTimeBlock = function(repeat) {
-    console.log('build time block')
     var repeatBlock = $('<li>').addClass('block');
-    var daysEl = $('<div>').addClass('days').html('Repeat ');
+    var daysEl = $('<div>').addClass('days').html('<span>Repeat</span>');
 
     // Time input
     var timesEl = $('<div>').addClass('times');
