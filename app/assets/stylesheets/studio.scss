@@ -4,7 +4,8 @@
   form {
     margin-bottom: 2em;
     .url {
-      width: 20em;
+      width: 25em;
+      margin-right: .5em;
     }
   }
   button {
@@ -129,8 +130,9 @@
 
 /* Confirm delete modal */
 .studio-remove {
+  text-align: center;
   .actions {
-    text-align: center;
+    margin-top: 3em;
     button {
       margin-right: 1em;
     }

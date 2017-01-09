@@ -3,11 +3,9 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
   var that = this;
   var navLinks = ul.find('a');
   var cal = new Calendar();
-
   this.pathname = pathname;
 
   this.init = function() {
-    this.toggleByPath();
     this.toggleByHash();
 
     $(window).on('hashchange', function() {
@@ -24,8 +22,9 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
         that.toggle(index);
         return;
       }
+    } else {
+      window.location.hash = '#' + tabs[0];
     }
-    this.toggle(0);
   };
 
   this.toggle = function(index) {
@@ -43,10 +42,11 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
     }
   };
 
-  this.toggleByPath = function() {
-    var path = window.location.pathname.replace('/','');
-    $('nav .options a.'+path).addClass('active');
-  };
-
   this.init();
 }
+
+
+function toggleByPath() {
+  var path = window.location.pathname.replace('/','');
+  $('nav .options a.'+path).addClass('active');
+};
