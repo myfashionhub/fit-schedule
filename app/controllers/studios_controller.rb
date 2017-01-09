@@ -46,7 +46,7 @@ class StudiosController < ApplicationController
     end
 
     scraper = scraper_class.constantize.new(url, studio)
-    studio = scraper.parse_studio(true)
+    studio = scraper.parse_studio
 
     render json: { studio: studio }
   end
