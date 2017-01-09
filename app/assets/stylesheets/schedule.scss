@@ -1,6 +1,5 @@
 @import 'mixins';
 
-section.schedule,
 section.favorite-studios,
 .customize-wrapper section {
   width: 80%;
@@ -8,16 +7,13 @@ section.favorite-studios,
   margin: 0 auto;
 }
 
-section.schedule {
-  margin-bottom: 2em;
-
+.schedule-wrapper {
   .upcoming {
     overflow: hidden;
   }
 
   .save-appointments {
     float: right;
-    margin-right: 3em;
     display: block;
     @include button-dark;
     &.disabled { display: none; }
