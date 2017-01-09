@@ -7,7 +7,6 @@ function Modal(element) {
 
   this.init = function() {
     this.contentEl = element.clone(true, true);
-    this.open();
     $('.modal-dialog .close').click(function() {
       that.close();
     });

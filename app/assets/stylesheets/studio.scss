@@ -1,8 +1,11 @@
 @import 'mixins';
 
 .studio-form {
-  form .url {
-    width: 20em;
+  form {
+    margin-bottom: 2em;
+    .url {
+      width: 20em;
+    }
   }
   button {
     @include button-dark;
@@ -42,7 +45,7 @@
 }
 
 /* Studio Partials */
-.studio-show, .studio-remove {
+.studio-show, .studio-remove, .studio-new {
   display: none;
   &.active {
     display: block;
@@ -50,10 +53,10 @@
 }
 
 /* FILTERS */
-.studio-show {
+.studio-show, .studio-new {
   height: 100%;
   overflow: hidden;
-  .studio {
+  .studio-info {
     .name {
       font-size: 1.5em;
     }
@@ -80,10 +83,29 @@
     margin-top: 0;
     display: inline-block;
   }
-  .save-filters {
-    float: right;
-    margin-right: 1.5em;
+}
+
+.studio-show, .studio-new {
+  .actions {
+    display: none;
+    text-align: right;
+    .save-filters {
+      margin-right: 1em;
+    }
+    .cancel {
+      margin-right: 2em;
+    }
   }
+  &.active {
+    .actions {
+      display: block;
+    }
+  }
+}
+
+.studio-new .class-types {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 /* Studio all classes */

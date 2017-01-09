@@ -28,7 +28,7 @@ function Filter() {
   };
 
   this.update = function() {
-    var studio_id = $('.studio-show .studio').attr('data-id');
+    var studio_id = $('.studio-show .studio-info').attr('data-id');
     var classNames = [],
         classLis;
 
@@ -55,7 +55,7 @@ function Filter() {
         studio_id: studio_id
       },
       success: function(data) {
-        var studioName = $('.studio-show .studio .name').html();
+        var studioName = $('.studio-show .studio-info .name').html();
         var msg = 'Successfully saved your preferences for ' + studioName;
         notify.build(msg, 'success');
       },
@@ -102,5 +102,4 @@ function Filter() {
   };
 
   this.init();
-
 }

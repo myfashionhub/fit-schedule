@@ -4,10 +4,23 @@ function Studio() {
   this.user_id = $('#user').attr('data-id');
   var notify = new Notify();
 
+  this.showModal = new Modal($('.studio-show'));
+  this.removeModal = new Modal($('.studio-remove'));
+
   this.init = function() {
-    $('.studio-form form').submit(function(e) {
+    this.studioForm();
+  };
+
+  this.studioForm = function() {
+    $('#studio-schedule').submit(function(e) {
       e.preventDefault();
       that.findOrCreate();
+
+      $('.studio-new .cancel').click(function(e) {
+        e.preventDefault();
+        $('.studio-new .class-types').empty();
+        $('.studio-new').removeClass('active');
+      });
     });
   };
 
@@ -30,7 +43,7 @@ function Studio() {
         } else {
           that.populateStudio(data.studio);
           that.getStudioClassTypes(data.studio.id);
-          $('.studio-show').addClass('active');
+          $('.studio-new').addClass('active');
         }
       },
       error: function(err) {
@@ -41,10 +54,10 @@ function Studio() {
   };
 
   this.populateStudio = function(studio) {
-    $('a.name').attr('href', studio.schedule_url).
-      attr('target','_blank').html(studio.name);
+    var studioEl = $('.studio-info');
 
-    var studioEl = $('.studio-show .studio');
+    studioEl.find('.name').attr('href', studio.schedule_url).
+      attr('target','_blank').html(studio.name);
     studioEl.attr('data-id', studio.id);
     studioEl.find('.address').html(studio.address);
   };
@@ -155,7 +168,7 @@ function Studio() {
       var resizeClassList = function() {
         // Dynamically resize class-types list
         var total = $('.studio-show').height();
-        var header = $('.studio-show .studio').outerHeight();
+        var header = $('.studio-show .studio-info').outerHeight();
         var button = $('.studio-show button').outerHeight();
         var classTypes = total - header - button - 32 /* list margins */;
         $('.studio-show .class-types').css('height', classTypes);
@@ -216,7 +229,7 @@ function Studio() {
   };
 
   this.listenForButtonClick = function() {
-    $('.studio i').click(function(e) {
+    $('.favorite-studios .studios .studio i').click(function(e) {
       var studio_id = $(e.target).parent().find('h4').attr('data-id');
       var btnClass = $(e.target).attr('class');
 
@@ -233,17 +246,21 @@ function Studio() {
   };
 
   this.toggleEditStudio = function(studio_id) {
-    that.getStudioClassTypes(studio_id, true);
+    this.getStudioClassTypes(studio_id, true);
+    this.showModal.el().addClass('big');
+    this.showModal.open();
 
-    var modal = new Modal($('.studio-show'));
-    modal.el().addClass('big');
+    $('.studio-show .cancel').click(function(e) {
+      e.preventDefault();
+      that.showModal.close();
+    });
   };
 
   this.confirmRemoval = function(studio_id) {
-    var modal = new Modal($('.studio-remove'));
+    this.removeModal.open();
 
     $('.studio-remove .actions').children().click(function(e) {
-      modal.close();
+      that.removeModal.close();
 
       var btnClass = $(e.target).attr('class');
       if (btnClass.indexOf('confirm') > -1) {
@@ -263,5 +280,4 @@ function Studio() {
   };
 
   this.init();
-
 }
