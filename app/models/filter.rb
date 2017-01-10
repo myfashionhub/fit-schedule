@@ -43,6 +43,10 @@ class Filter < ActiveRecord::Base
           self.match_classes(user, studio_id, events)
         end.flatten
       end
+
+      classes.sort_by do |k| # Sort by start_time
+        [k['date'], time_to_24hrs(k['start_time']).to_i]
+      end
     else
       { error: "User has not specified a Google calendar." }
     end
@@ -66,6 +70,7 @@ class Filter < ActiveRecord::Base
     end
 
     classes.select! { |klass| no_conflict(klass, user, events) }
+
     classes.map do |klass|
       klass.attributes.merge( {
         'studio_name' => studio.name,
@@ -103,6 +108,8 @@ class Filter < ActiveRecord::Base
 
   def self.time_to_datetime(time_str, date_str)
     time_str = time_to_24hrs(time_str)
+    date_str = date_str.class == String ? date_str : date_str.strftime('%Y-%m-%d')
+
     Time.parse(date_str + ' ' + time_str)
   end
 
@@ -119,5 +126,4 @@ class Filter < ActiveRecord::Base
       end
     end
   end
-
 end
