@@ -1,0 +1,21 @@
+<section class="favorite-studios">
+  <h2>Your studios</h2>
+  <a href="" class="add-new"><i class="fa fa-plus"></i> Add studio</a>
+
+  <%= render 'studios/new' %>
+
+  <ul class="studios"></ul>
+
+  <%= render 'studios/show', :studioClass => 'studio-show' %>
+  <%= render 'studios/remove' %>
+</section>
+
+<script type="text/javascript">
+  var studio = new Studio();
+  studio.showFavorites();
+
+  $('.favorite-studios .add-new').click(function(e) {
+    e.preventDefault();
+    $('.studio-form').addClass('active');
+  });
+</script>

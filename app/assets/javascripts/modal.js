@@ -7,8 +7,9 @@ function Modal(element) {
 
   this.init = function() {
     this.contentEl = element.clone(true, true);
-    this.open();
-    this.close();
+    $('.modal-dialog .close').click(function() {
+      that.close();
+    });
   };
 
   this.open = function() {
@@ -21,12 +22,10 @@ function Modal(element) {
   };
 
   this.close = function() {
-    $('.modal-dialog i.fa-times').click(function() {
-      $('.overlay').removeClass('active');
-      $('.modal-dialog').removeClass('active');
-      $('body').removeClass('no-scroll');
-      $('.modal-dialog .content').empty();
-    });
+    $('.overlay').removeClass('active');
+    $('.modal-dialog').removeClass('active');
+    $('body').removeClass('no-scroll');
+    $('.modal-dialog .content').empty();
   };
 
   this.init();
@@ -38,7 +37,7 @@ function Notify(el) {
 
   this.init = function() {
     this.el = el || $('.notify');
-    this.el.find('.fa-times').click(function() { that.close(); });
+    this.el.find('.close').click(function() { that.close(); });
   };
 
   this.build = function(msg, type) {

@@ -82,3 +82,12 @@ web: bin/rails server -p $PORT -e $RAILS_ENV
 ```
 
 - Add package.json to specify Node version
+
+### Tasks
+- `schedule:update_studios` rake task is scheduled to run twice a day to update the class schedule for all the studios.
+
+- `schedule:update_studio[:studio_id]` gives the option to update a single studio's schedule.
+
+```bash
+$ bundle exec rake schedule:update_studios
+```

@@ -79,22 +79,17 @@ body {
     margin: 8% auto;
   }
 
-  i.fa-times {
+  .close {
     font-size: 1.5em;
     position: absolute;
     top: 10px;
     right: 14px;
   }
-}
-
-.modal-dialog {
   .content {
-    height: 94%;
-    margin-top: 1.5em;
-    overflow-y: auto;
+    height: 100%;
   }
-
 }
+
 
 /** NOTIFICATION **/
 .notify {
@@ -138,10 +133,10 @@ body {
     margin-right: 10px;
   }
 
-  i.fa-times {
-    font-size: 1.2em;
+  .close {
     position: absolute;
     top: 6px;
-    right: 0;
+    right: 10px;
+    font-size: 1.2em;
   }
 }

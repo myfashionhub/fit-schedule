@@ -4,37 +4,60 @@ function Studio() {
   this.user_id = $('#user').attr('data-id');
   var notify = new Notify();
 
-  this.init = function() {
+  this.showModal = new Modal($('.studio-show'));
+  this.removeModal = new Modal($('.studio-remove'));
 
+  this.init = function() {
+    this.studioForm();
   };
 
-  this.findOrCreate = function() {
-    $('.studio-form form').submit(function(e) {
+  this.studioForm = function() {
+    $('#studio-schedule').submit(function(e) {
       e.preventDefault();
-      var url = $('.studio-form .url').val();
+      that.findOrCreate();
 
-      $.ajax({
-        url: '/studios',
-        type: 'POST',
-        data: { url: url },
-        success: function(data) {
-          that.populateStudio(data.studio);
-          that.getStudioClassTypes(data.studio.id);
-          $('.studio-show').addClass('active');
-        },
-        error: function(err) {
-          console.log(err);
-          notify.build('Unable to get classes from schedule URL.', 'error');
-        }
+      $('.studio-new .cancel').click(function(e) {
+        e.preventDefault();
+        $('.studio-new .class-types').empty();
+        $('.studio-new').removeClass('active');
       });
     });
   };
 
-  this.populateStudio = function(studio) {
-    $('a.name').attr('href', studio.schedule_url).
-      attr('target','_blank').html(studio.name);
+  this.findOrCreate = function() {
+    var val = $('.studio-form input').val();
+    var data;
+    if (val.indexOf('http') > -1) {
+      data = {url: val};
+    } else {
+      data = {term: val};
+    }
 
-    var studioEl = $('.studio-show .studio');
+    $.ajax({
+      url: '/studios',
+      type: 'POST',
+      data: data,
+      success: function(data) {
+        if (data.msg) {
+          notify.build(data.msg, 'error');
+        } else {
+          that.populateStudio(data.studio);
+          that.getStudioClassTypes(data.studio.id);
+          $('.studio-new').addClass('active');
+        }
+      },
+      error: function(err) {
+        console.log(err);
+        notify.build('Unable to get classes from schedule URL.', 'error');
+      }
+    });
+  };
+
+  this.populateStudio = function(studio) {
+    var studioEl = $('.studio-info');
+
+    studioEl.find('.name').attr('href', studio.schedule_url).
+      attr('target','_blank').html(studio.name);
     studioEl.attr('data-id', studio.id);
     studioEl.find('.address').html(studio.address);
   };
@@ -116,12 +139,6 @@ function Studio() {
       var filter = new Filter();
       var userFilters;
 
-      Promise.all([ filter.show(studio_id) ]).then(
-        function(data) {
-          buildFilters(data[0]);
-        }
-      );
-
       var buildFilters = function(userFilters) {
         $('.class-types').empty();
 
@@ -147,6 +164,22 @@ function Studio() {
 
         filter.select(); // event listener for checking boxes
       };
+
+      var resizeClassList = function() {
+        // Dynamically resize class-types list
+        var total = $('.studio-show').height();
+        var header = $('.studio-show .studio-info').outerHeight();
+        var button = $('.studio-show button').outerHeight();
+        var classTypes = total - header - button - 32 /* list margins */;
+        $('.studio-show .class-types').css('height', classTypes);
+      };
+
+      Promise.all([ filter.show(studio_id) ]).then(
+        function(data) {
+          buildFilters(data[0]);
+          resizeClassList();
+        }
+      );
     }
   };
 
@@ -170,39 +203,81 @@ function Studio() {
 
   this.populateStudios = function(studios) {
     var studioUl = $('.favorite-studios .studios');
+    studioUl.empty();
 
     for (var i=0; i < studios.length; i++) {
       var studioLi   = $('<li>').addClass('studio');
       var studioName = $('<h4>').html(studios[i].studio.name).
                          attr('data-id', studios[i].studio.id);
       var classes    = $('<ul>').addClass('class-list');
-      var editButton = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit');
-      var showButton = $("<i class='fa fa-list'></i>").addClass('show');
+      var editBtn = $("<i class='fa fa-pencil-square-o'></i>").addClass('edit').
+                      attr('title', 'Edit classes');
+      var showBtn = $("<i class='fa fa-list'></i>").addClass('show').
+                      attr('title', 'Show all classes');
+      var removeBtn = $("<i class='fa fa-times'></i>").addClass('remove').
+                        attr('title', 'Remove from favorites');
 
       studioLi.append(studioName);
-      studioLi.append(editButton);
-      studioLi.append(showButton);
+      studioLi.append(editBtn);
+      studioLi.append(showBtn);
+      studioLi.append(removeBtn);
       studioLi.append(classes);
       studioUl.append(studioLi);
+    }
 
-      editButton.click(that.toggleEditStudio);
-      showButton.click(function(e) {
-        var studio_id = $(e.target).parent().find('h4').attr('data-id');
+    this.listenForButtonClick();
+  };
+
+  this.listenForButtonClick = function() {
+    $('.favorite-studios .studios .studio i').click(function(e) {
+      var studio_id = $(e.target).parent().find('h4').attr('data-id');
+      var btnClass = $(e.target).attr('class');
+
+      if (btnClass.indexOf('edit') > -1) {
+        that.toggleEditStudio(studio_id);
+      } else if (btnClass.indexOf('show') > -1) {
         var studioContainer = $(e.target).parent().find('.class-list');
         studioContainer.toggleClass('show');
         that.allClasses(studio_id, studioContainer);
-      });
-    }
+      } else if (btnClass.indexOf('remove') > -1) {
+        that.confirmRemoval(studio_id);
+      }
+    });
   };
 
-  this.toggleEditStudio = function(e) {
-    var studio_id = $(e.target).parent().find('h4').attr('data-id');
-    that.getStudioClassTypes(studio_id, true);
+  this.toggleEditStudio = function(studio_id) {
+    this.getStudioClassTypes(studio_id, true);
+    this.showModal.el().addClass('big');
+    this.showModal.open();
 
-    var modal = new Modal($('.studio-show'));
-    modal.el().addClass('big');
+    $('.studio-show .cancel').click(function(e) {
+      e.preventDefault();
+      that.showModal.close();
+    });
+  };
+
+  this.confirmRemoval = function(studio_id) {
+    this.removeModal.open();
+
+    $('.studio-remove .actions').children().click(function(e) {
+      that.removeModal.close();
+
+      var btnClass = $(e.target).attr('class');
+      if (btnClass.indexOf('confirm') > -1) {
+        that.removeStudio(studio_id);
+      }
+    });
+  };
+
+  this.removeStudio = function(studio_id) {
+    var filter = new Filter();
+    filter.deleteStudioFilters(studio_id).then(function(msg, status) {
+      var notify = new Notify();
+      notify.build(msg, status);
+
+      that.showFavorites();
+    });
   };
 
   this.init();
-
 }

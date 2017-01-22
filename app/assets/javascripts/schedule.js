@@ -169,14 +169,38 @@ function Schedule() {
       }
     );
 
-    if ( clonedHeading === undefined ) {
+    var addToSchedule = function(clonedBlock, clonedClass) {
+      var classTimes = clonedClass.find('.time').html().split(' ');
+      classTimes = [classTimes[0].replace(':', '.'), classTimes[3].replace(':', '.')];
+
+      _.each(clonedBlock.find('.class'), function(classLi) {
+        var times = $(classLi).find('.time').html().split(' ');
+        times = [times[0].replace(':', '.'), times[3].replace(':', '.')];
+
+        // New class ends before or starts after another class
+        if (classTimes[1] < times[0]) {
+          clonedClass.insertBefore($(classLi));
+          return;
+        }
+        else if (classTimes[0] > times[1]) {
+          clonedClass.insertAfter($(classLi));
+          return;
+        }
+        else {
+          notify.build('This class conflicts with another in your schedule', 'error');
+          return
+        }
+      });
+    };
+
+    if (clonedHeading === undefined) {
       clonedBlock = $('<div>').addClass('block');
       clonedHeading = originalHeading.clone(true, true);
       clonedBlock.append(clonedHeading).append(clonedClass).
         appendTo($('.upcoming .classes'));
     } else {
       clonedBlock = $(clonedHeading).parent().parent();
-      clonedBlock.append(clonedClass);
+      addToSchedule(clonedBlock, clonedClass);
     }
   };
 

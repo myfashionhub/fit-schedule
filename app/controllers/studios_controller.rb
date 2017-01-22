@@ -24,32 +24,31 @@ class StudiosController < ApplicationController
 
   def create
     new_studio = false
-    provider = params[:url].split('.')[1].downcase.capitalize
-    scraper_class = "Scraper::#{provider}"
+    provider = nil; scraper_class = nil
 
-    studio = Studio.find_by(schedule_url: params[:url].strip)
-    scraper = scraper_class.constantize.new(params[:url], studio)
-
-    if !studio
-      new_studio = true
-      studio = scraper.parse_studio
+    if params[:url].present?
+      params[:url].strip!
+      studio = Studio.find_by(schedule_url: params[:url])
+      url = params[:url]
+    elsif params[:term].present?
+      studio = Studio.match(params[:term])
+      url = studio.schedule_url if studio.present?
     end
 
-    if new_studio || studio.updated_at.nil? ||
-       studio.updated_at < Time.now - 21600
-      scraper.parse_classes
-      studio.update(updated_at: Time.now)
-      invalidate_studio_cache(studio.id)
+    if url.present?
+      provider = url.split('.')[1].downcase.capitalize
+      scraper_class = "Scraper::#{provider}"
     end
+
+    if studio.blank? && scraper_class.blank?
+      render json: { msg: "Cannot find studio with the name #{params[:term]}" }
+      return
+    end
+
+    scraper = scraper_class.constantize.new(url, studio)
+    studio = scraper.parse_studio
 
     render json: { studio: studio }
-  end
-
-  def invalidate_studio_cache(id)
-    keys = [
-      "studios/#{id}/classes", "studios/#{id}/unique_classes"
-    ]
-    keys.each { |key| Rails.cache.delete(key) }
   end
 
 end

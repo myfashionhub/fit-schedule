@@ -41,19 +41,33 @@ module Scraper
     end
 
     def parse_studio
-      studio = Studio.find_by(schedule_url: url)
+      newly_created = false
+      @studio = Studio.find_by(schedule_url: url)
 
-      if !studio
+      if studio.blank?
         name = page.css('.details .name').text
         logo = page.css('.details .logo').last.attributes['src'].value
         address = page.css('.details .address').text.strip.gsub("\n",' ')
 
-        studio = Studio.create(
+        @studio = Studio.create(
           name:         name,
           schedule_url: url,
           address:      address,
           logo:         logo
         )
+        newly_created = true
+      end
+
+      if newly_created || studio.updated_at.nil? ||
+         studio.updated_at < Time.now - 21600
+        self.parse_classes
+        studio.update(updated_at: Time.now)
+
+        # Invalidate studio cache
+        keys = [
+          "studios/#{studio.id}/classes", "studios/#{studio.id}/unique_classes"
+        ]
+        keys.each { |key| Rails.cache.delete(key) }
       end
       studio
     end

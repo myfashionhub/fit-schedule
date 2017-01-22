@@ -5,15 +5,16 @@
 
   <div class="options">
     <a href="/schedule" class="schedule">My Schedule</a>
-    <a href="/studios" class="studios">
-      Favorite Studios
-    </a>
-    <a href="/customize" class='customize'>Preferences</a>
+    <a href="/customize" class="customize">Preferences</a>
   </div>
 </nav>
 
 <% if current_user %>
-  <input type='hidden' id='user' data-id="<%= current_user.id %>"
+  <input type="hidden" id="user" data-id="<%= current_user.id %>"
          data-calendar="<%= current_user.calendar_id %>">
   </input>
 <% end %>
+
+<script type="text/javascript">
+  toggleByPath();
+</script>

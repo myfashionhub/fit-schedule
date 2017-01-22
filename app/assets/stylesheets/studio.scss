@@ -1,54 +1,67 @@
 @import 'mixins';
 
 .studio-form {
-  form .url {
-    width: 20em;
+  form {
+    margin-bottom: 2em;
+    .url {
+      width: 25em;
+      margin-right: .5em;
+    }
   }
-
   button {
     @include button-dark;
   }
 }
 
-/* STUDIO SHOW PARTIAL */
-.studio-show {
+/* FAVORITE STUDIO LIST */
+.favorite-studios {
+  min-width: 700px;
+  margin: 2em auto 3em auto;
+
+  h2, .add-new { /* Section heading */
+    display: inline-block;
+    vertical-align: baseline;
+  }
+  h2 {
+    margin: 0;
+  }
+  .add-new {
+    margin-left: 2em;
+  }
+
+  ul.studios {
+    margin-top: 2em;
+  }
+  .studio {
+    h4 { /* Studio name */
+      width: 30%;
+      display: inline-block;
+      margin: .3em 5px .3em 0;
+      font-size: 1.1em;
+    }
+    .fa { /* Edit icons */
+      margin-left: .5em;
+      font-size: 1.2em;
+    }
+  }
+}
+
+/* Studio Partials */
+.studio-show, .studio-remove, .studio-new {
   display: none;
   &.active {
     display: block;
   }
 }
 
-section.favorite-studios {
-  margin: 2em auto 3em auto;
-
-  h2, a.edit {
-    display: inline-block;
-    vertical-align: baseline;
-  }
-
-  h2 {
-    margin: 0;
-  }
-
-  a.edit {
-    margin-left: 2em;
-  }
-
-  .studios .studio h4 {
-    i {
-      margin-left: .5em;
-    }
-  }
-}
-
-/* STUDIOS & FILTERS */
-
-.studio-show {
-  .studio {
+/* FILTERS */
+.studio-show, .studio-new {
+  height: 100%;
+  overflow: hidden;
+  .studio-info {
     .name {
       font-size: 1.5em;
     }
-
     .address {
       color: #888;
       margin: .4em 0;
@@ -56,28 +69,45 @@ section.favorite-studios {
   }
 
   ul.class-types {
-    overflow: hidden;
-
+    overflow-y: auto;
+    /* Dynamic height */
+    margin: 15px 0;
     .class {
       display: inline-block;
       width: 50%;
       padding-right: .5em;
-
       i {
         margin-right: .3em;
       }
     }
   }
+  .remove {
+    margin-top: 0;
+    display: inline-block;
+  }
 }
 
-
-/* FAVORITE STUDIOS */
-.favorite-studios .studios {
-  .studio h4 {
-    width: 30%;
-    display: inline-block;
-    margin: .3em 5px .3em 0;
+.studio-show, .studio-new {
+  .actions {
+    display: none;
+    text-align: right;
+    .save-filters {
+      margin-right: 1em;
+    }
+    .cancel {
+      margin-right: 2em;
+    }
   }
+  &.active {
+    .actions {
+      display: block;
+    }
+  }
+}
+
+.studio-new .class-types {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 /* Studio all classes */
@@ -95,6 +125,17 @@ section.favorite-studios {
     span {
       display: table-cell;
       padding-right: 8px;
+    }
+  }
+}
+
+/* Confirm delete modal */
+.studio-remove {
+  text-align: center;
+  .actions {
+    margin-top: 3em;
+    button {
+      margin-right: 1em;
     }
   }
 }

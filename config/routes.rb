@@ -14,13 +14,15 @@ Rails.application.routes.draw do
     get '/classes' => 'users#classes'
 
     resources :filters, only: [:index, :create]
+    delete '/filters' => 'filters#destroy'
+
     resources :appointments, only: [:index, :create]
   end
 
   resources :calendars, only: [:index, :update]
   get '/calendars/events' => 'calendars#show'
 
-  resources :studios, only: [:index, :show, :create]
+  resources :studios, only: [:show, :create]
 
   get '/classes' => 'klasses#index'
 end

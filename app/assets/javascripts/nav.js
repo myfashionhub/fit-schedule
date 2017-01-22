@@ -1,38 +1,33 @@
-function Navigation(tabs, ul, sectionSelector) {
+function Navigation(pathname, tabs, ul, sectionSelector) {
 
   var that = this;
   var navLinks = ul.find('a');
   var cal = new Calendar();
+  this.pathname = pathname;
 
   this.init = function() {
-    this.toggleByPath();
     this.toggleByHash();
 
-    navLinks.click(function(e) {
-      var index = navLinks.index(e.target);
-      that.toggle(index);
+    $(window).on('hashchange', function() {
+      if (window.location.pathname === that.pathname) {
+        that.toggleByHash();
+      }
     });
   };
 
   this.toggleByHash = function() {
-    if ( window.location.pathname !== '/customize' &&
-         window.location.pathname !== '/schedule' ) {
-      return;
-    }
-
-    if ( window.location.hash !== '' ) {
+    if (window.location.hash !== '') {
       var index = tabs.indexOf( window.location.hash.replace('#','') );
-      if ( index > -1 ) {
+      if (index > -1) {
         that.toggle(index);
         return;
       }
+    } else {
+      window.location.hash = '#' + tabs[0];
     }
-    this.toggle(0);
   };
 
   this.toggle = function(index) {
-    window.location.hash = '#' + tabs[index];
-
     $(sectionSelector+'.active').removeClass('active');
     ul.find('a.active').removeClass('active');
 
@@ -47,10 +42,11 @@ function Navigation(tabs, ul, sectionSelector) {
     }
   };
 
-  this.toggleByPath = function() {
-    var path = window.location.pathname.replace('/','');
-    $('nav .options a.'+path).addClass('active');
-  };
-
   this.init();
 }
+
+
+function toggleByPath() {
+  var path = window.location.pathname.replace('/','');
+  $('nav .options a.'+path).addClass('active');
+};
