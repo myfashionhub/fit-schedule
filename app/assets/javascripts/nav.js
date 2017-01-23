@@ -3,6 +3,8 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
   var that = this;
   var navLinks = ul.find('a');
   var cal = new Calendar();
+  var availability = new Availability();
+
   this.pathname = pathname;
 
   this.init = function() {
@@ -38,7 +40,7 @@ function Navigation(pathname, tabs, ul, sectionSelector) {
     if (targetSection.hasClass('calendars')) {
       cal.getAllCalendars();
     } else if (targetSection.hasClass('availability')) {
-      cal.getUserAvailability();
+      availability.getUserAvailability();
     }
   };
 
