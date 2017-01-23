@@ -25,7 +25,8 @@ function Schedule() {
     });
   };
 
-  this.populateClasses = function(classes, el, classState) {
+  this.populateClasses = function(classes, el, classState=undefined) {
+    if (!classState) { el.hide(); } // suggested classes
     var dates = [];
 
     for (var i=0; i < classes.length; i++) {
@@ -48,6 +49,10 @@ function Schedule() {
         }
       }
     }
+
+    // Finish building suggested classes
+    el.show();
+    $('.suggested-classes .loading').removeClass('active');
   };
 
   this.buildClass = function(classObj, classState) {
@@ -215,6 +220,8 @@ function Schedule() {
   };
 
   this.suggestClasses = function() {
+    $('.suggested-classes .loading').addClass('active');
+
     // Suggest all classes from user's favorite studios
     $.ajax({
       url: '/users/'+ that.user_id +'/classes',
@@ -227,9 +234,7 @@ function Schedule() {
             session.destroy();
           }, 1000);
         } else {
-          that.populateClasses(
-            data.classes, $('.schedule-wrapper .suggested-classes .classes'), ''
-          );
+          that.populateClasses(data.classes, $('.schedule-wrapper .suggested-classes .classes'));
         }
       },
       error: function(err) {
