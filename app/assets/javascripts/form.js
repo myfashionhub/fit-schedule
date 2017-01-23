@@ -16,7 +16,7 @@ function Form(selector, options={}) {
   };
 
   this.clearInput = function() {
-    this.el.find('input').val() = '';
+    this.el.find('input').val('');
   };
 
   this.onSubmit = function() {
@@ -27,11 +27,10 @@ function Form(selector, options={}) {
   }
 
   this.onCancel = function() {
-    this.el.find(options.cancelClass).click(function(e) {
-      console.log('Form cancel')
-      e.preventDefault();
-      this.options.cancelCallback();
-    });
+    // this.el.find(options.cancelClass).click(function(e) {
+    //   e.preventDefault();
+    //   this.options.cancelCallback();
+    // });
   };
 
   this.init();

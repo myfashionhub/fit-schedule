@@ -5,7 +5,7 @@ function Filter() {
   var notify = new Notify();
 
   this.init = function() {
-
+    this.studioForm = new Form('#studio-schedule');
   };
   
   this.show = function(studio_id) {
@@ -57,6 +57,9 @@ function Filter() {
       success: function(data) {
         var studioName = $('.studio-show .studio-info .name').html();
         var msg = 'Successfully saved your preferences for ' + studioName;
+
+        that.studioForm.clearInput();
+        $('.studio-new').removeClass('active'); // Hide studio filter info
         notify.build(msg, 'success');
       },
       error: function(err) {

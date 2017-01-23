@@ -8,19 +8,20 @@ function Studio() {
   this.removeModal = new Modal($('.studio-remove'));
 
   this.init = function() {
-    this.studioForm();
+    this.form = new Form('#studio-schedule', {
+      submitCallback: that.findOrCreate
+    });
+
+    this.form.addEventListeners();
+    this.filterActions();
   };
 
-  this.studioForm = function() {
-    $('#studio-schedule').submit(function(e) {
+  this.filterActions = function() {
+    $('.studio-new .cancel').click(function(e) {
       e.preventDefault();
-      that.findOrCreate();
-
-      $('.studio-new .cancel').click(function(e) {
-        e.preventDefault();
-        $('.studio-new .class-types').empty();
-        $('.studio-new').removeClass('active');
-      });
+      $('.studio-new .class-types').empty();
+      $('.studio-new').removeClass('active');
+      that.form.clearInput();
     });
   };
 

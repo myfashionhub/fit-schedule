@@ -17,5 +17,7 @@
   $('.favorite-studios .add-new').click(function(e) {
     e.preventDefault();
     $('.studio-form').addClass('active');
+    var studioForm = new Form('#studio-schedule');
+    studioForm.focusOnInput();
   });
 </script>
