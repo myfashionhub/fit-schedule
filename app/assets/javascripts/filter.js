@@ -27,15 +27,14 @@ function Filter() {
     return filtersPromise;
   };
 
-  this.update = function() {
-    var studio_id = $('.studio-show .studio-info').attr('data-id');
+  var getSelectedFilters = function() {
     var classNames = [],
         classLis;
 
     if ($('.modal-dialog').hasClass('active')) {
       classLis = $('.modal-dialog .class-types .class');
     } else {
-      classLis = $('.customize-wrapper .class-types .class')
+      classLis = $('.customize-wrapper .class-types .class');
     }
 
     _.each(classLis, function(classLi) {
@@ -46,6 +45,13 @@ function Filter() {
         classNames.push(className);
       }
     });
+
+    return classNames;
+  };
+
+  this.update = function() {
+    var studio_id = $('.studio-show .studio-info').attr('data-id');
+    var classNames = getSelectedFilters();
 
     $.ajax({
       url: '/users/'+that.user_id+'/filters',
