@@ -50,6 +50,8 @@ function Availability() {
     for (key in repeats) {
       that.buildTimeBlock(repeats[key]);
     }
+
+    this.changesMade();
   }
 
   this.buildTimeBlock = function(repeat) {
@@ -87,15 +89,31 @@ function Availability() {
 
     repeatBlock.append(timesEl).append(daysEl);
     $('.availability .time-blocks').append(repeatBlock);
-  }
+  };
 
-  var dayLookup = function(num) {
-    var dict = {
-      0: 'Sun', 1: 'Mon', 2: 'Tue', 3: 'Wed',
-      4: 'Thu', 5: 'Fri', 6: 'Sat'
-    }
+  this.changesMade = function() {
+    var changes = 0;
 
-    return dict[num];
+    var formChange = function() {
+      if (changes > 0) {
+        container.find('.save').addClass('active');
+      }
+    };
+
+    container.find('input').keypress(function(e) {
+      changes += 1;
+      formChange();
+    });
+
+    container.find('input').click(function(e) {
+      changes += 1;
+      formChange();
+    });
+  };
+
+  var dayLookup = function(index) {
+    var array = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return array[index];
   };
 
   this.init();
