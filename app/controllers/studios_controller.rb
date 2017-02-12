@@ -23,17 +23,8 @@ class StudiosController < ApplicationController
   end
 
   def create
-    new_studio = false
     provider = nil; scraper_class = nil
-
-    if params[:url].present?
-      params[:url].strip!
-      studio = Studio.find_by(schedule_url: params[:url])
-      url = params[:url]
-    elsif params[:term].present?
-      studio = Studio.match(params[:term])
-      url = studio.schedule_url if studio.present?
-    end
+    url = params[:url]
 
     if url.present?
       provider = url.split('.')[1].downcase.capitalize
@@ -49,6 +40,17 @@ class StudiosController < ApplicationController
     studio = scraper.parse_studio
 
     render json: { studio: studio }
+  end
+
+  def search
+    if params[:url].present?
+      url = params[:url].strip
+      result = [Studio.find_by(schedule_url: url)]
+    elsif params[:term].present?
+      result = Studio.match(params[:term])
+    end
+
+    render json: result
   end
 
 end

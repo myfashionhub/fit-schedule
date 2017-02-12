@@ -15,15 +15,13 @@ class Studio < ActiveRecord::Base
   end
 
   def self.match(term)
-    studio = Studio.where('name iLIKE ?', "%#{term}%").first
-    return studio if studio.present?
+    studios_by_name = Studio.where('name iLIKE ?', "%#{term}%").to_a
+    return studios_by_name if studios_by_name.size > 10
 
-    Studio.all.each do |studio|
-      if studio.name.downcase.include?(term) ||
-         studio.schedule_url.include?(term.gsub(' ', ''))
-        return studio
-      end
+    studios_by_url = Studio.all.select do |studio|
+      studio.schedule_url.include?(term.gsub(' ', ''))
     end
-    nil
+
+    (studios_by_name || []).concat(studios_by_url || []).uniq
   end
 end
