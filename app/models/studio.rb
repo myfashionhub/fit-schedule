@@ -16,10 +16,16 @@ class Studio < ActiveRecord::Base
 
   def self.match(term)
     studios_by_name = Studio.where('name iLIKE ?', "%#{term}%").to_a
-    return studios_by_name if studios_by_name.size > 10
+    if studios_by_name.size > 10
+      if studios_by_name.size < 50
+        return studios_by_name
+      else
+        return studios_by_name[0..49]
+      end
+    end
 
     studios_by_url = Studio.all.select do |studio|
-      studio.schedule_url.include?(term.gsub(' ', ''))
+      studio.schedule_url.gsub('https://www.fitreserve.com/', '').include?(term.gsub(' ', ''))
     end
 
     (studios_by_name || []).concat(studios_by_url || []).uniq

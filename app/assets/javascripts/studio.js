@@ -9,7 +9,7 @@ function Studio() {
 
   this.init = function() {
     this.form = new Form('#studio-schedule', {
-      submitCallback: that.findOrCreate
+      submitCallback: that.search
     });
 
     this.form.addEventListeners();
@@ -25,15 +25,56 @@ function Studio() {
     });
   };
 
-  this.findOrCreate = function() {
+  this.search = function() {
     var val = $('.studio-form input').val();
-    var data;
+    var query;
     if (val.indexOf('http') > -1) {
-      data = {url: val};
+      query = {url: val};
     } else {
-      data = {term: val};
+      query = {term: val};
     }
 
+    $.ajax({
+      url: '/studios/search',
+      type: 'GET',
+      data: query,
+      success: function(data) {
+        that.renderSearchResults(query, data);
+      }
+    });
+  };
+
+  this.renderSearchResults = function(query, studios) {
+    var list = $('.studio-form .search-results');
+    list.empty();
+
+    if (studios.length === 0) {
+      list.html('<h4>No studio matches your search.</h4>');
+    } else {
+      if (query.term) {
+        var noun = studios.length > 1 ? 'results' : 'result';
+        var result = $('<h4>').html(studios.length + ' ' + noun + ' for "' + query.term + '":');
+        list.append(result);
+      }
+    }
+
+    var column1 = $('<ul>');
+    var column2 = $('<ul>');
+    var studiosPerCol = Math.ceil(studios.length / 2);
+
+    for (var i = 0; i < studios.length; i++) {
+      var studioLi = $('<li>').html(studios[i].name);
+      if (i < studiosPerCol) {
+        column1.append(studioLi);
+      } else {
+        column2.append(studioLi);
+      }
+    }
+
+    list.append(column1).append(column2);
+  };
+
+  this.findOrCreate = function() {
     $.ajax({
       url: '/studios',
       type: 'POST',

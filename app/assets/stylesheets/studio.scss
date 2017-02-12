@@ -11,6 +11,17 @@
   button {
     @include button-dark;
   }
+
+  .search-results {
+    overflow: hidden; /* Contain float children */
+    h4 {
+      margin: 0;
+    }
+    ul {
+      width: 50%;
+      float: left;
+    }
+  }
 }
 
 /* FAVORITE STUDIO LIST */
@@ -37,7 +48,7 @@
       width: 30%;
       display: inline-block;
       margin: .3em 5px .3em 0;
-      font-size: 1.1em;
+      font-weight: normal;
     }
     .fa { /* Edit icons */
       margin-left: .5em;
