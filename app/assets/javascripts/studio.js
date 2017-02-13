@@ -84,7 +84,7 @@ function Studio() {
           notify.build(data.msg, 'error');
         } else {
           that.populateStudio(data.studio);
-          that.getStudioClassTypes(data.studio.id, false, '.studio-new');
+          that.getStudioFilters(data.studio.id, false, '.studio-new');
           $('.studio-new').addClass('active');
         }
       },
@@ -120,6 +120,12 @@ function Studio() {
 
   this.populateClasses = function(classes, container) {
     container.empty();
+
+    if (classes.length === 0) {
+      container.append('No class found for this studio.');
+      return;
+    }
+
     _.sortBy(classes, function(klass) {
       return klass.date || klass.start_time;
     });
@@ -162,7 +168,7 @@ function Studio() {
     }
   };
 
-  this.getStudioClassTypes = function(studio_id, populateStudio, classesDiv) {
+  this.getStudioFilters = function(studio_id, populateStudio, classesDiv) {
     $.ajax({
       url: '/studios/'+studio_id,
       type: 'GET',
@@ -170,7 +176,7 @@ function Studio() {
         if (populateStudio) {
           that.populateStudio(data.studio);
         }
-        that.populateClassTypes(data.unique_classes, studio_id, classesDiv);
+        that.populateFilters(data.unique_classes, studio_id, classesDiv);
       },
       error: function(err) {
         console.log(err);
@@ -178,7 +184,7 @@ function Studio() {
     });
   };
 
-  this.populateClassTypes = function(classTypes, studio_id, classesDiv) {
+  this.populateFilters = function(classTypes, studio_id, classesDiv) {
     var filter = new Filter();
     var userFilters;
 
@@ -287,7 +293,7 @@ function Studio() {
   };
 
   this.toggleEditStudio = function(studio_id) {
-    this.getStudioClassTypes(studio_id, true, '.studio-show');
+    this.getStudioFilters(studio_id, true, '.studio-show');
     this.showModal.el().addClass('big');
     this.showModal.open();
 
