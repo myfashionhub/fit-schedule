@@ -5,14 +5,13 @@ module Scraper
   class Fitreserve
     attr_reader   :url, :page, :studio, :classes
 
-    def initialize(url, studio=nil)
-      @url  = url
-      @page = Nokogiri::HTML(open(url))
-      @studio  = studio
+    def initialize(url)
+      @url     = url
+      @page    = Nokogiri::HTML(open(url))
       @classes = []
     end
 
-    def parse_classes
+    def parse_classes(page)
       page.css('.row.schedule').each do |day|
         date = parse_date(day.css('.date').text)
 
@@ -41,34 +40,32 @@ module Scraper
     end
 
     def parse_studio
-      newly_created = false
       @studio = Studio.find_by(schedule_url: url)
 
-      if studio.blank?
-        name = page.css('.details .name').text
-        logo = page.css('.details .logo').last.attributes['src'].value
-        address = page.css('.details .address').text.strip.gsub("\n",' ')
+      name = page.css('.details .name').text
+      logo = page.css('.details .logo').last.attributes['src'].value
+      address = page.css('.details .address').text.strip.gsub("\n",' ')
 
-        @studio = Studio.create(
-          name:         name,
-          schedule_url: url,
-          address:      address,
-          logo:         logo
-        )
-        newly_created = true
+      studio_params = {
+        name:         name,
+        address:      address,
+        logo:         logo
+      }
+
+      if @studio.blank?
+        @studio = Studio.create(studio_params)
+        self.parse_classes(page)
+      elsif studio.updated_at.nil? || studio.updated_at < Time.now - 21600
+        self.parse_classes(page)
+        @studio.update(studio_params)
       end
 
-      if newly_created || studio.updated_at.nil? ||
-         studio.updated_at < Time.now - 21600
-        self.parse_classes
-        studio.update(updated_at: Time.now)
+      # Invalidate studio cache
+      keys = [
+        "studios/#{studio.id}/classes", "studios/#{studio.id}/unique_classes"
+      ]
+      keys.each { |key| Rails.cache.delete(key) }
 
-        # Invalidate studio cache
-        keys = [
-          "studios/#{studio.id}/classes", "studios/#{studio.id}/unique_classes"
-        ]
-        keys.each { |key| Rails.cache.delete(key) }
-      end
       studio
     end
 
