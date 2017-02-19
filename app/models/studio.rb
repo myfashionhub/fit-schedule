@@ -20,8 +20,12 @@ class Studio < ActiveRecord::Base
     scraper_class = "Scraper::#{provider}".constantize rescue nil
 
     if scraper_class.present?
-      scraper = scraper_class.new(url)
-      studio = scraper.parse_studio
+      scraper = scraper_class.new(url) rescue nil
+      if scraper.present?
+        studio = scraper.parse_studio
+      else
+        return studio
+      end
     end
     studio
   end

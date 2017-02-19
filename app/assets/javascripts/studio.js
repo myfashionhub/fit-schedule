@@ -6,6 +6,7 @@ function Studio() {
 
   this.showModal = new Modal($('.studio-show'));
   this.removeModal = new Modal($('.studio-remove'));
+  this.resultList = $('.studio-form .search-results');
 
   this.init = function() {
     this.form = new Form('#studio-schedule', {
@@ -39,22 +40,25 @@ function Studio() {
       type: 'GET',
       data: query,
       success: function(data) {
-        that.renderSearchResults(query, data);
+        if (data.error) {
+          that.resultList.html(data.error);
+        } else {
+          that.renderSearchResults(query, data);
+        }
       }
     });
   };
 
   this.renderSearchResults = function(query, studios) {
-    var list = $('.studio-form .search-results');
-    list.empty();
+    this.resultList.empty();
 
     if (studios.length === 0) {
-      list.html('<h4>No studio matches your search.</h4>');
+      this.resultList.html('<h4>No studio matches your search.</h4>');
     } else {
       if (query.term) {
         var noun = studios.length > 1 ? 'results' : 'result';
         var result = $('<h4>').html(studios.length + ' ' + noun + ' for "' + query.term + '":');
-        list.append(result);
+        this.resultList.append(result);
       }
     }
 
@@ -71,7 +75,7 @@ function Studio() {
       }
     }
 
-    list.append(column1).append(column2);
+    this.resultList.append(column1).append(column2);
   };
 
   this.findOrCreate = function() {
