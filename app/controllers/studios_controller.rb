@@ -22,30 +22,18 @@ class StudiosController < ApplicationController
            }
   end
 
-  def create
-    provider = nil; scraper_class = nil
-    url = params[:url]
-
-    if url.present?
-      provider = url.split('.')[1].downcase.capitalize
-      scraper_class = "Scraper::#{provider}"
-    end
-
-    if studio.blank? && scraper_class.blank?
-      render json: { msg: "Cannot find studio with the name #{params[:term]}" }
-      return
-    end
-
-    scraper = scraper_class.constantize.new(url, studio)
-    studio = scraper.parse_studio
-
-    render json: { studio: studio }
-  end
-
   def search
     if params[:url].present?
       url = params[:url].strip
-      result = [Studio.find_by(schedule_url: url)]
+      result = Studio.find_by(schedule_url: url)
+      result = Studio.find_or_create(params[:url]) if result.blank?
+
+      if result.present?
+        result = [result]
+      else
+        render json: { error: "Cannot find or parse studio from #{params[:url]}" }
+        return
+      end
     elsif params[:term].present?
       result = Studio.match(params[:term])
     end

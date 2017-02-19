@@ -14,6 +14,18 @@ class Studio < ActiveRecord::Base
     Klass.where(studio_id: self.id).where('date < ?', Date.today)
   end
 
+  def self.find_or_create(url)
+    studio = nil
+    provider = url.split('.')[1].downcase.capitalize
+    scraper_class = "Scraper::#{provider}".constantize rescue nil
+
+    if scraper_class.present?
+      scraper = scraper_class.new(url)
+      studio = scraper.parse_studio
+    end
+    studio
+  end
+
   def self.match(term)
     studios_by_name = Studio.where('name iLIKE ?', "%#{term}%").to_a
     if studios_by_name.size > 10
