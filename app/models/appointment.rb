@@ -17,8 +17,11 @@ class Appointment < ActiveRecord::Base
 
     # Remove deleted appts
     future_appts = Appointment.where(user_id: user_id).select do |appt|
-      Klass.find(appt.klass_id).date >= Date.today
-    end
+      klass = Klass.find(appt.klass_id) rescue nil
+      klass.present? ? klass.date >= Date.today : nil
+    end.compact!
+
+    return if !future_appts.is_a?(Array) || future_appts.size == 0
 
     future_appts.each do |appointment|
       if params[:class_ids].index(appointment.klass_id.to_s).blank?

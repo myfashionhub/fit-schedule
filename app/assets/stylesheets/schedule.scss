@@ -124,6 +124,13 @@ section.favorite-studios,
   }
 }
 
+.customize-nav {
+  a.active {
+    background-color: #354443;
+    color: #fff;
+  }
+}
+
 /* AVAILABILITY */
 .time-blocks {
   .days .day {
