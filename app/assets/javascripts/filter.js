@@ -62,17 +62,23 @@ function Filter() {
       },
       success: function(data) {
         var studioName = $('.studio-show .studio-info .name').html();
-        var msg = 'Successfully saved your preferences for ' + studioName;
-
-        that.studioForm.clearInput();
-        $('.studio-new').removeClass('active'); // Hide studio filter info
-        notify.build(msg, 'success');
+        that.updateFiltersSuccess(studioName);
       },
       error: function(err) {
         console.log(err);
       }
     });
   };
+
+  this.updateFiltersSuccess = function(studioName) {
+    that.studioForm.clearInput();
+    $('.studio-form .search-results').empty();
+    $('.studio-form .cancel').removeClass('active');
+    $('.studio-new').removeClass('active');
+
+    var msg = 'Successfully saved your preferences for ' + studioName;
+    notify.build(msg, 'success');
+  }
 
   this.deleteStudioFilters = function(studio_id) {
     var deferred = $.Deferred();

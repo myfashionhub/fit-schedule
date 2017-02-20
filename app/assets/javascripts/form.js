@@ -27,10 +27,10 @@ function Form(selector, options={}) {
   }
 
   this.onCancel = function() {
-    // this.el.find(options.cancelClass).click(function(e) {
-    //   e.preventDefault();
-    //   this.options.cancelCallback();
-    // });
+    this.el.parent().find(options.cancelClass).click(function(e) {
+      e.preventDefault();
+      options.cancelCallback();
+    });
   };
 
   this.init();

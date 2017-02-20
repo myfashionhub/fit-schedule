@@ -10,7 +10,9 @@ function Studio() {
 
   this.init = function() {
     this.form = new Form('#studio-schedule', {
-      submitCallback: that.search
+      submitCallback: that.search,
+      cancelClass: '> .cancel',
+      cancelCallback: that.resetStudioForm
     });
 
     this.form.addEventListeners();
@@ -57,8 +59,8 @@ function Studio() {
     } else {
       if (query.term) {
         var noun = studios.length > 1 ? 'results' : 'result';
-        var result = $('<h4>').html(studios.length + ' ' + noun + ' for "' + query.term + '":');
-        this.resultList.append(result);
+        var heading = $('<h4>').html(studios.length + ' ' + noun + ' for "' + query.term + '":');
+        this.resultList.append(heading);
       }
     }
 
@@ -69,9 +71,13 @@ function Studio() {
     for (var i = 0; i < studios.length; i++) {
       var studioLi = $('<li>').attr('data-id', studios[i].id).html(studios[i].name);
       studioLi.click(function(e) {
+        $('.studio-form .loading').addClass('active');
+
         var studio_id = $(e.target).attr('data-id');
-        that.getStudioFilters(studio_id, true, '.studio-new');
-        $('.studio-new').addClass('active');
+        that.getStudioFilters(studio_id, true, '.studio-new', function() {
+          $('.studio-form .loading').removeClass('active');
+          $('.studio-new').addClass('active');
+        });
       });
 
       if (i < studiosPerCol) {
@@ -82,6 +88,13 @@ function Studio() {
     }
 
     this.resultList.append(column1).append(column2);
+    $('.studio-form .cancel').addClass('active');
+  };
+
+  this.resetStudioForm = function() {
+    $('.studio-form .cancel').removeClass('active');
+    that.resultList.empty();
+    that.form.clearInput();
   };
 
   this.populateStudio = function(studio) {
@@ -157,16 +170,15 @@ function Studio() {
     }
   };
 
-  this.getStudioFilters = function(studio_id, populateStudio, classesDiv) {
+  this.getStudioFilters = function(studio_id, populateStudio, classesDiv, callback) {
     $.ajax({
       url: '/studios/'+studio_id,
       type: 'GET',
       success: function(data) {
-        console.log('Studio', data);
         if (populateStudio) {
           that.populateStudio(data.studio);
         }
-        that.populateFilters(data.unique_classes, studio_id, classesDiv);
+        that.populateFilters(data.unique_classes, studio_id, classesDiv, callback);
       },
       error: function(err) {
         console.log(err);
@@ -174,7 +186,7 @@ function Studio() {
     });
   };
 
-  this.populateFilters = function(classTypes, studio_id, classesDiv) {
+  this.populateFilters = function(classTypes, studio_id, classesDiv, callback) {
     var filter = new Filter();
     var userFilters;
 
@@ -218,6 +230,7 @@ function Studio() {
         resizeClassList();
       }
     );
+    if (callback) callback();
   };
 
   var convertDate = function(dateObj) {
