@@ -67,7 +67,13 @@ function Studio() {
     var studiosPerCol = Math.ceil(studios.length / 2);
 
     for (var i = 0; i < studios.length; i++) {
-      var studioLi = $('<li>').html(studios[i].name);
+      var studioLi = $('<li>').attr('data-id', studios[i].id).html(studios[i].name);
+      studioLi.click(function(e) {
+        var studio_id = $(e.target).attr('data-id');
+        that.getStudioFilters(studio_id, true, '.studio-new');
+        $('.studio-new').addClass('active');
+      });
+
       if (i < studiosPerCol) {
         column1.append(studioLi);
       } else {
@@ -76,27 +82,6 @@ function Studio() {
     }
 
     this.resultList.append(column1).append(column2);
-  };
-
-  this.findOrCreate = function() {
-    $.ajax({
-      url: '/studios',
-      type: 'POST',
-      data: data,
-      success: function(data) {
-        if (data.msg) {
-          notify.build(data.msg, 'error');
-        } else {
-          that.populateStudio(data.studio);
-          that.getStudioFilters(data.studio.id, false, '.studio-new');
-          $('.studio-new').addClass('active');
-        }
-      },
-      error: function(err) {
-        console.log(err);
-        notify.build('Unable to get classes from schedule URL.', 'error');
-      }
-    });
   };
 
   this.populateStudio = function(studio) {
@@ -177,6 +162,7 @@ function Studio() {
       url: '/studios/'+studio_id,
       type: 'GET',
       success: function(data) {
+        console.log('Studio', data);
         if (populateStudio) {
           that.populateStudio(data.studio);
         }
