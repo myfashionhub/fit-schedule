@@ -8,10 +8,11 @@ module Scraper
     def initialize(url)
       @url     = url
       @page    = Nokogiri::HTML(open(url))
+      @studio  = Studio.find_by(schedule_url: url)
       @classes = []
     end
 
-    def parse_classes(page)
+    def parse_classes
       page.css('.row.schedule').each do |day|
         date = parse_date(day.css('.date').text)
 
@@ -40,8 +41,6 @@ module Scraper
     end
 
     def parse_studio
-      @studio = Studio.find_by(schedule_url: url)
-
       name = page.css('.details .name').text
       logo = page.css('.details .logo').last.attributes['src'].value
       address = page.css('.details .address').text.strip.gsub("\n",' ')
@@ -54,9 +53,9 @@ module Scraper
 
       if @studio.blank?
         @studio = Studio.create(studio_params)
-        self.parse_classes(page)
+        self.parse_classes
       elsif studio.updated_at.nil? || studio.updated_at < Time.now - 21600
-        self.parse_classes(page)
+        self.parse_classes
         @studio.update(studio_params)
       end
 

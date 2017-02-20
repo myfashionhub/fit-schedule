@@ -4,22 +4,26 @@ class StudiosController < ApplicationController
     studio_id = params[:id]
     studio = Studio.find(studio_id)
 
+    if studio.updated_at.nil? || studio.updated_at < Time.now - 21600
+      studio.scraper.parse_classes
+    end
+
     classes = Rails.cache.fetch(
       "studios/#{studio_id}/classes", expires_in: 2.hours
     ) do
-      Klass.where(studio_id: studio_id).where('date >= ?', Date.today)
+      studio.all_classes
     end
 
     unique_classes = Rails.cache.fetch(
       "studios/#{studio_id}/unique_classes", expires_in: 2.hours
     ) do
-      Klass.where(studio_id: studio_id).pluck(:name).uniq
+      studio.class_types
     end
 
     render json: {
-             studio: studio, classes: classes,
-             unique_classes: unique_classes
-           }
+      studio: studio, classes: classes,
+      unique_classes: unique_classes
+    }
   end
 
   def search

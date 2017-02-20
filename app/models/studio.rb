@@ -14,6 +14,16 @@ class Studio < ActiveRecord::Base
     Klass.where(studio_id: self.id).where('date < ?', Date.today)
   end
 
+  def class_types
+    Klass.where(studio_id: self.id).pluck(:name).uniq
+  end
+
+  def scraper
+    provider = self.schedule_url.split('.')[1].downcase.capitalize
+    scraper_class = "Scraper::#{provider}".constantize
+    scraper_class.new(self.schedule_url)
+  end
+
   def self.find_or_create(url)
     studio = nil
     provider = url.split('.')[1].downcase.capitalize
