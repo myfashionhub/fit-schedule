@@ -29,6 +29,8 @@ function Studio() {
   };
 
   this.search = function() {
+    $('.studio-new').removeClass('active');
+
     var val = $('.studio-form input').val();
     var query;
     if (val.indexOf('http') > -1) {

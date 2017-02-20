@@ -25,7 +25,7 @@ function Schedule() {
     });
   };
 
-  this.populateClasses = function(classes, el, classState=undefined) {
+  this.populateClasses = function(classes, el, classState) {
     if (!classState) { el.hide(); } // suggested classes
     var dates = [];
 

@@ -1,8 +1,8 @@
-function Form(selector, options={}) {
+function Form(selector, options) {
   this.el = $(selector);
 
   this.init = function() {
-
+    if (!options) options = {};
   };
 
   // This should only be called once
