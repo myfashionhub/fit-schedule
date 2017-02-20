@@ -25,11 +25,7 @@ section.favorite-studios,
 }
 
 .suggested-classes .loading {
-  display: none;
   margin: 2em auto;
-  &.active {
-    display: block;
-  }
 }
 
 /* Class list */

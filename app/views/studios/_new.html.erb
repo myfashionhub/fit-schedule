@@ -11,6 +11,11 @@
   </form>
 
   <div class="search-results"></div>
+  <button class="cancel">Cancel <i class="fa fa-times"></i></button>
 
   <%= render 'studios/show', :studioClass => 'studio-new' %>
+  <div class="loading">
+    <p>Loading classes</p>
+    <img src="/assets/spinner.gif" />
+  </div>
 </div>

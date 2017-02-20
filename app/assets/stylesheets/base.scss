@@ -40,15 +40,6 @@ i {
   cursor: pointer;
 }
 
-.faint {
-  color: #777;
-  font-weight: 300;
-}
-
-.tooltip {
-  display: none;
-}
-
 button {
   @include button-style;
 }
@@ -69,4 +60,20 @@ h4 {
 
 h2, h3 {
   font-weight: 400;
+}
+
+.faint {
+  color: #777;
+  font-weight: 300;
+}
+
+.tooltip {
+  display: none;
+}
+
+.loading {
+  display: none;
+  &.active {
+    display: block;
+  }
 }

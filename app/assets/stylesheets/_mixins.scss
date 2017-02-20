@@ -1,4 +1,4 @@
-@mixin button-style {
+@mixin button-style { /* White button */
   padding: 8px 15px;
   color: #333;
   background-color: #fff;
@@ -7,10 +7,6 @@
 
   &:hover {
     background-color: #ebebeb;
-  }
-  &.active {
-    background-color: #354443;
-    color: #fff;
   }
 }
 
