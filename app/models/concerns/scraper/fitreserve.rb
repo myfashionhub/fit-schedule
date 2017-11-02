@@ -103,7 +103,7 @@ module Scraper
     end
 
     def format_class(class_string)
-      matches = class_string.downcase!.capitalize!.scan(/\W[a-z]/)
+      matches = (class_string || '').downcase.capitalize.scan(/\W[a-z]/)
       matches.each do |letter|
         class_string.gsub!(letter, letter.upcase)
       end
