@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.2.7'
-gem 'pg'
+gem 'pg', '0.21.0'
 
 gem 'clockwork'
 
@@ -27,7 +27,7 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 
 # Google Calendar
-gem 'google-api-client', :require => 'google/api_client'
+gem 'google-api-client'
 
 # Scraping
 gem 'nokogiri'
