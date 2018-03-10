@@ -91,3 +91,8 @@ web: bin/rails server -p $PORT -e $RAILS_ENV
 ```bash
 $ bundle exec rake schedule:update_studios
 ```
+
+- Get updated list of studios:
+```
+$ chrome --headless --dump-dom https://www.fitreserve.com/pricing
+```
