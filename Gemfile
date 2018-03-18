@@ -27,7 +27,7 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 
 # Google Calendar
-gem 'google-api-client'
+gem 'google-api-client', '~> 0.8.6', require: 'google/api_client'
 
 # Scraping
 gem 'nokogiri'
