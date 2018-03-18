@@ -136,7 +136,7 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
     os (0.9.6)
-    pg (0.21.0)
+    pg (0.20.0)
     phantomjs (2.1.1.0)
     poltergeist (1.17.0)
       capybara (~> 2.1)
@@ -237,7 +237,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   omniauth-google-oauth2
-  pg (= 0.21.0)
+  pg (= 0.20.0)
   phantomjs
   poltergeist
   pry

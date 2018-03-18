@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.2.7'
-gem 'pg', '0.21.0'
+gem 'pg', '0.20.0'
 
 gem 'clockwork'
 
