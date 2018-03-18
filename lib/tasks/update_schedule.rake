@@ -8,11 +8,16 @@ namespace :schedule do
         puts "Updating schedule for #{studio.name}"
 
         begin
-          scraper = scraper_class.new(studio.schedule_url, studio)
+          scraper = scraper_class.new(studio.schedule_url)
           scraper.parse_classes
-          studio.update(updated_at: Time.now)
+          scraper.studio.update(updated_at: Time.now)
         rescue => error
-          puts error
+          puts error.message || error
+          if error.message == '404 Not Found'
+            puts "Removing studio #{studio.name}"
+            studio.delete
+            Filter.where(studio_id: studio.id).delete_all
+          end
           next
         end
       end
@@ -26,7 +31,7 @@ namespace :schedule do
     scraper_class = "Scraper::#{provider}".constantize
     puts "Updating schedule for #{studio.name}"
 
-    scraper = scraper_class.new(studio.schedule_url, studio)
+    scraper = scraper_class.new(studio.schedule_url)
     scraper.parse_classes
     studio.update(updated_at: Time.now)
   end

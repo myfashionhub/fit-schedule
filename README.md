@@ -90,6 +90,8 @@ web: bin/rails server -p $PORT -e $RAILS_ENV
 
 ```bash
 $ bundle exec rake schedule:update_studios
+$ rake schedule:update_studios
+$ rake schedule:update_studio[10]
 ```
 
 - Get updated list of studios:
