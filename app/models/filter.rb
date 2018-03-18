@@ -55,12 +55,19 @@ class Filter < ActiveRecord::Base
 
   # Helper
   def self.match_classes(user, studio_id, events)
-    studio = Studio.find(studio_id)
-    class_names = Filter.where(
-                    user_id: user.id, studio_id: studio_id
-                  ).pluck(:class_name).uniq
-
     classes = []
+
+    begin
+      # In case studio was removed
+      studio = Studio.find(studio_id)
+    rescue
+      return classes
+    end
+
+    class_names = Filter.where(
+      user_id: user.id, studio_id: studio_id
+    ).pluck(:class_name).uniq
+
     studio.klasses.each do |klass|
       class_names.each do |name|
         if klass.name == name && klass.date >= Time.now
@@ -70,7 +77,6 @@ class Filter < ActiveRecord::Base
     end
 
     classes.select! { |klass| no_conflict(klass, user, events) }
-
     classes.map do |klass|
       klass.attributes.merge( {
         'studio_name' => studio.name,

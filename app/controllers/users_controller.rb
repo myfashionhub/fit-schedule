@@ -27,9 +27,13 @@ class UsersController < ApplicationController
 
     studio_ids.each do |studio_id|
       object = {}
-      object[:studio] = Studio.find(studio_id)
-      object[:filters] = filters.where(studio_id: studio_id)
-      result.push(object)
+      begin
+        object[:studio] = Studio.find(studio_id)
+        object[:filters] = filters.where(studio_id: studio_id)
+      rescue
+        next
+      end
+      result.push(object) if !object.blank?
     end
 
     render json: { studios: result }
