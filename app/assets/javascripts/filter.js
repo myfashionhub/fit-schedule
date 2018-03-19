@@ -2,7 +2,10 @@ function Filter() {
 
   var that = this;
   this.user_id = $('#user').attr('data-id');
+
   var notify = new Notify();
+  this.studio = new Studio();
+  this.user = new User(that.user_id);
 
   this.init = function() {
     this.studioForm = new Form('#studio-schedule');
@@ -78,6 +81,9 @@ function Filter() {
 
     var msg = 'Successfully saved your preferences for ' + studioName;
     notify.build(msg, 'success');
+
+    // Repopulate favorite studios
+    this.studio.showFavorites();
   }
 
   this.deleteStudioFilters = function(studio_id) {

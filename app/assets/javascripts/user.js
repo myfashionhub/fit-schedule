@@ -1,5 +1,5 @@
 function User(user_id) {
-  this.id = id;
+  this.id = user_id;
 
   var that = this;
   var notify = new Notify();
