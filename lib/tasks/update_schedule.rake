@@ -41,4 +41,14 @@ namespace :schedule do
       Rails.cache.delete("users/#{user.id}/suggested_classes")
     end
   end
+
+  # Hobby dev db limit is 10k rows
+  task free_storage: :environment do |task|
+    num_classes = Klass.all.size
+    if num_classes > 9000
+      Klass.first(5000).each do |klass|
+        klass.delete
+      end
+    end
+  end
 end
