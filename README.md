@@ -9,7 +9,7 @@ A Google Calendar-integrated app that lets you stay on top of your fitness sched
 
   + MindBody Online page is opened in a headless browser by [Poltegeist](https://github.com/myfashionhub/fit-schedule/blob/master/app/models/concerns/scraper/mindbodyonline.rb), a PhantomJS driver for Capybara. Then the page's HTML can be parsed by Nokogiri.
 
-- The [Calendar class](https://github.com/myfashionhub/fit-schedule/blob/master/app/models/calendar.rb), a non-ActiveRecord model used to handle interactions with the Google Calendar API, obtains events in the user's calendar.
+- The [Calendar class](https://github.com/myfashionhub/fit-schedule/blob/master/app/models/calendar.rb), a non-ActiveRecord model used to handle interactions with the [Google API client](https://www.rubydoc.info/github/google/google-api-ruby-client/Google/Apis/CalendarV3/CalendarService), obtains events in the user's calendar.
 
 - When the user goes on their schedule page, they can [view all the classes](https://github.com/myfashionhub/fit-schedule/blob/master/app/controllers/filters_controller.rb) that match their preferences and do not conflict with appointments they already have on the calendar. ([Filter logic](https://github.com/myfashionhub/fit-schedule/blob/master/app/models/filter.rb))
 

@@ -3,22 +3,19 @@ class CalendarsController < ApplicationController
 
   def index
     begin
-      calendars = Rails.cache.fetch(
-        "calendars/#{current_user.id}", expires_in: 2.hours
-      ) do
-        @calendar.list
-      end
-
+      calendars = @calendar.list
       render json: { calendars: calendars }
-    rescue => error
+    rescue => error # TODO: More specific error
       reset_session
       Rails.logger.error(error)
+
       msg = "Your Google session has expired. Please re-authenticate."
       render json: { error: msg }
     end    
   end
 
   def update
+    # TODO: Add appointment to Google cal
   end
 
   def show # for testing only

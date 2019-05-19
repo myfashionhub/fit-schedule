@@ -1,27 +1,22 @@
-class Calendar
+require 'google/apis/calendar_v3'
 
+class Calendar
   def initialize(token)
-    @client = Google::APIClient.new(
-      application_name: 'calendar',
-      application_version: 'v3'
-    )
-    @client.authorization.access_token = token
-    @service = @client.discovered_api('calendar', 'v3')  
+    authorization = Signet::OAuth2::Client.new(access_token: token)
+    Google::Apis::RequestOptions.default.authorization = authorization
+    @service = Google::Apis::CalendarV3::CalendarService.new
   end
   
   def list
     calendars = []
-    result = @client.execute(
-      :api_method => @service.calendar_list.list,
-      :parameters => {},
-      :headers => {'Content-Type' => 'application/json'}
-    )
+    items = nil
 
-    result = JSON.parse(result.response.body)
-
-    result['items'].each do |item|
-      if item['primary']
-        calendars.unshift(item)  
+    @service.list_calendar_lists do |result, err|
+      items = result.items
+    end
+    items.each do |item|
+      if item.primary
+        calendars.unshift(item)
       else
         calendars.push(item)
       end
@@ -31,20 +26,16 @@ class Calendar
   end
 
   def add(params)
-    result = @client.execute(
-      :api_method => @service.events.insert,
-      :parameters => {
-        calendarId: params[:id],
-        event: {
-          kind: 'calendar#event',
-          summary: params[:summary],
-          location: params[:location], # studio location
-          start: { dateTime: params[:start] },
-          end: { dateTime: params[:end] },
-          recurrence: []
-        }
-      },
-      :headers => {'Content-Type' => 'application/json'}
+    result = @service.insert_event(
+      calendarId: params[:id],
+      event: {
+        kind: 'calendar#event',
+        summary: params[:summary],
+        location: params[:location], # studio location
+        start: { dateTime: params[:start] },
+        end: { dateTime: params[:end] },
+        recurrence: []
+      }
     )
   end
 
@@ -55,12 +46,12 @@ class Calendar
         kind: 'calendar#event',
         summary: params[:summary],
         location: params[:location], # studio location
-        start: { dateTime: params[:start] },
-        end: { dateTime: params[:end] },
+        start: {dateTime: params[:start]},
+        end: {dateTime: params[:end]},
         recurrence: []
       }
     }
-
+    puts "UPDAT EVENTS"
     result = @client.execute(
       :api_method => @service.events.update,
       :parameters => params,
@@ -71,50 +62,39 @@ class Calendar
   def remove(params)
   end
 
-  def list_events(id)
-    params = {
-      calendarId: id,
-      timeMin:    Date.today.rfc3339,
-      singleEvents: true,
-      orderBy:   'startTime'
-    }
-
-    result = @client.execute(
-      :api_method => @service.events.list,
-      :parameters => params,
-      :headers => {'Content-Type' => 'application/json'}
-    )
-
-    response = JSON.parse(result.response.body)
-    if response['error'] && response['error']['code'] == 401
-      return {
-        code: response['error']['code'],
-        message: response['error']['message']
-      }
+  def list_events(calendar_id)
+    items = nil
+    @service.list_events(
+      calendar_id,
+      single_events: true,
+      order_by: 'startTime',
+      time_min: Date.today.rfc3339
+    ) do |result, err|
+      items = result.items
     end
 
-    response['items'].map do |event|
-      start_time = parse_time(event['start'])
-      end_time   = parse_time(event['end'])
+    items.map do |event|
+      start_time = parse_time(event.start)
+      end_time   = parse_time(event.end)
 
-      if event['kind'] == 'calendar#event' &&
-         event['status'] == 'confirmed' &&
+      if event.kind == 'calendar#event' &&
+         event.status == 'confirmed' &&
          start_time >= Time.now &&
          start_time <= Time.now + 1814400
          # Events maximum 3 weeks in the future
         {
-          name: event['summary'],
+          name: event.summary,
           start_time: start_time,
           end_time: end_time,
-          link: event['htmlLink']
+          link: event.html_link,
         }
       end
     end.compact
   end
 
-  def parse_time(hash)
-    timestamp = hash['dateTime'] || hash['date']
-    Time.parse(timestamp)
+  def parse_time(event)
+    timestamp = event.date_time || event.date
+    Time.parse(timestamp.to_s)
   end
 
 end

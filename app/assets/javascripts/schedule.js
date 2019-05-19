@@ -57,7 +57,7 @@ function Schedule() {
 
   this.buildClass = function(classObj, classState) {
     var studioUrl = classObj.studio_url;
-    if ( studioUrl.indexOf('fitreserve.com') > -1 ) {
+    if (studioUrl && studioUrl.indexOf('fitreserve.com') > -1) {
       studioUrl += '?tab=schedule';
     }
 

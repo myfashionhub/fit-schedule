@@ -8,10 +8,9 @@ class Appointment < ActiveRecord::Base
 
   def self.update_or_create(params, user_id)
     params[:class_ids].each do |class_id|
-      existing_appt = Appointment.find_by(user_id: user_id, klass_id: class_id)
-
-      if !existing_appt
-        Appointment.create(user_id: user_id, klass_id: class_id)
+      appt = Appointment.find_by(user_id: user_id, klass_id: class_id)
+      if !appt
+        appt = Appointment.create(user_id: user_id, klass_id: class_id)
       end
     end
 
@@ -28,6 +27,8 @@ class Appointment < ActiveRecord::Base
         appointment.destroy
       end
     end
+
+    appt
   end
 
 end

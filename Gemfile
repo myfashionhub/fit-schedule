@@ -26,7 +26,8 @@ gem 'underscore-rails'
 gem 'clockwork'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
-gem 'google-api-client', '~> 0.29.1' #, require: 'google/api_client'
+gem 'google-api-client', '~> 0.9.0'
+gem 'signet' # Auth object for Google API client
 
 # Scraping
 gem 'nokogiri'
