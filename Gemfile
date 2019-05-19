@@ -1,19 +1,18 @@
 source 'https://rubygems.org'
-ruby '2.3.3'
+ruby '2.5.5'
 
-gem 'rails', '4.2.7'
-gem 'pg', '0.20.0'
-
-gem 'clockwork'
+gem 'bundler', '1.15.2'
+gem 'rails', '5.1.0' # For compatability w Google API client
 
 group :development, :test do
   gem 'byebug'
   gem 'pry'
   gem 'pry-nav'  
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', '2.7.2'
 end
 
 group :production do
+  gem 'pg', '~> 0.18'
   gem 'rails_12factor'
 end
 
@@ -23,12 +22,11 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'underscore-rails'
 
-# Authentication
+# Third-party
+gem 'clockwork'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
-
-# Google Calendar
-gem 'google-api-client', '~> 0.8.6', require: 'google/api_client'
+gem 'google-api-client', '~> 0.29.1' #, require: 'google/api_client'
 
 # Scraping
 gem 'nokogiri'

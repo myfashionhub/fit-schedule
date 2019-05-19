@@ -1,15 +1,19 @@
-class BasicTables < ActiveRecord::Migration
+class BasicTables < ActiveRecord::Migration[5.0]
   def change
 
     create_table :users do |t|
       t.string :name
       t.string :email
       t.string :image
+      t.string :zipcode
+      t.text   :availability
+
+      t.string :calendar_id
       t.string :google_uid
       t.string :google_token
-      t.text   :availability
-      t.string :calendar_id
-      t.string :zipcode
+      t.string :refresh_token
+      t.integer :token_expires
+
       t.timestamps
     end
 

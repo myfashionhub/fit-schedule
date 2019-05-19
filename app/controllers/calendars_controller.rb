@@ -1,6 +1,5 @@
 class CalendarsController < ApplicationController
-
-  before_filter :initialize_model
+  before_action :initialize_model
 
   def index
     begin

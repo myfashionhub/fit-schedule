@@ -11,7 +11,6 @@ module Fitschedule
     config.autoload_paths += Dir["#{config.root}/lib",
                                  "#{config.root}/lib/**/"]
 
-    config.active_record.raise_in_transactional_callbacks = true
     Rails.logger = Logger.new(STDOUT)
   end
 end

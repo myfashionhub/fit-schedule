@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,72 +10,69 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151225194850) do
+ActiveRecord::Schema.define(version: 20151004225807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "appointments", force: :cascade do |t|
-    t.integer  "reminder"
-    t.integer  "user_id"
-    t.integer  "klass_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "appointments", id: :serial, force: :cascade do |t|
+    t.integer "reminder"
+    t.integer "user_id"
+    t.integer "klass_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["klass_id"], name: "index_appointments_on_klass_id"
+    t.index ["user_id"], name: "index_appointments_on_user_id"
   end
 
-  add_index "appointments", ["klass_id"], name: "index_appointments_on_klass_id", using: :btree
-  add_index "appointments", ["user_id"], name: "index_appointments_on_user_id", using: :btree
-
-  create_table "classes", force: :cascade do |t|
-    t.string   "name"
-    t.string   "type"
-    t.string   "level"
-    t.string   "start_time"
-    t.string   "end_time"
-    t.integer  "duration"
+  create_table "classes", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "type"
+    t.string "level"
+    t.string "start_time"
+    t.string "end_time"
+    t.integer "duration"
     t.datetime "date"
-    t.string   "instructor"
-    t.integer  "studio_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "instructor"
+    t.integer "studio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["studio_id"], name: "index_classes_on_studio_id"
   end
 
-  add_index "classes", ["studio_id"], name: "index_classes_on_studio_id", using: :btree
-
-  create_table "filters", force: :cascade do |t|
-    t.string   "class_name"
-    t.string   "class_type"
-    t.integer  "studio_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "filters", id: :serial, force: :cascade do |t|
+    t.string "class_name"
+    t.string "class_type"
+    t.integer "studio_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["studio_id"], name: "index_filters_on_studio_id"
+    t.index ["user_id"], name: "index_filters_on_user_id"
   end
 
-  add_index "filters", ["studio_id"], name: "index_filters_on_studio_id", using: :btree
-  add_index "filters", ["user_id"], name: "index_filters_on_user_id", using: :btree
-
-  create_table "studios", force: :cascade do |t|
-    t.string   "name"
-    t.string   "address"
-    t.string   "schedule_url"
-    t.string   "logo"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "studios", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "schedule_url"
+    t.string "logo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "image"
-    t.string   "google_uid"
-    t.string   "google_token"
-    t.text     "availability"
-    t.string   "calendar_id"
-    t.string   "zipcode"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "refresh_token"
-    t.integer  "token_expires"
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "image"
+    t.string "zipcode"
+    t.text "availability"
+    t.string "calendar_id"
+    t.string "google_uid"
+    t.string "google_token"
+    t.string "refresh_token"
+    t.integer "token_expires"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
