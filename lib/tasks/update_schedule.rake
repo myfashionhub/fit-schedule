@@ -26,7 +26,13 @@ namespace :schedule do
   end
 
   # Task definitions
-  task update_studios: :environment do |task|
+  task :scrape_studio_classes => :environment do |task, args|
+    Studio.all.each do |studio|
+      scrape_studio(studio)
+    end
+  end
+
+  task update_studio_schedule: :environment do |task|
     # Only update studios with filters
     # to avoid filling up db rows (limit 10k)
     studios_to_update = Studio.all.select do |studio|
@@ -35,16 +41,11 @@ namespace :schedule do
 
     studios_to_update.each do |studio|
       if studio.updated_at.nil? || studio.updated_at < Time.now - 21600
-        update_studio(studio)
+        scrape_studio(studio)
       end
     end
 
     invalidate_user_cache
-  end
-
-  task :update_studio, [:studio_id] => :environment do |task, args|
-    studio = Studio.find(args[:studio_id])
-    scrape_studio(studio)
   end
 
   # Hobby dev db limit is 10k rows

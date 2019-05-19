@@ -37,6 +37,11 @@ A Google Calendar-integrated app that lets you stay on top of your fitness sched
 
   + Under *APIs & auth > Credentials*, add to *Authorized redirect URIs* your callback URLs, i.e. `http://localhost:3000/auth/google_oauth2/callback`. (Add one for each environment if they have different hostname.)
 
+- Seed the db with studios:
+```sh
+rake db:seed
+```
+
 - Add environment variables in a `.env` file in the project root:
 ```
 FS_GOOGLE_ID=
@@ -56,6 +61,7 @@ $ git push heroku master
 - Create the database:
 ```
 $ heroku run rake db:create db:migrate
+$ heroku run rake db:seed
 ```
 
 - Set environment variables:
@@ -84,14 +90,12 @@ web: bin/rails server -p $PORT -e $RAILS_ENV
 - Add package.json to specify Node version
 
 ### Tasks
-- `schedule:update_studios` rake task is scheduled to run twice a day to update the class schedule for all the studios.
-
-- `schedule:update_studio[:studio_id]` gives the option to update a single studio's schedule.
+- `schedule:scrape_studio_classes`: gets classes for all studios.
+- `schedule:scrape_studios` updates schedule for all studios that are favorited by users (scheduled to run twice a day).
 
 ```bash
 $ bundle exec rake schedule:update_studios
 $ rake schedule:update_studios
-$ rake schedule:update_studio[10]
 ```
 
 - Get updated list of studios:
