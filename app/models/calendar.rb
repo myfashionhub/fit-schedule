@@ -6,13 +6,13 @@ class Calendar
     Google::Apis::RequestOptions.default.authorization = authorization
     @service = Google::Apis::CalendarV3::CalendarService.new
   end
-  
+
   def list
     calendars = []
     items = nil
 
     @service.list_calendar_lists do |result, err|
-      items = result.items
+      items = result.present? ? result.items : []
     end
     items.each do |item|
       if item.primary
@@ -70,7 +70,7 @@ class Calendar
       order_by: 'startTime',
       time_min: Date.today.rfc3339
     ) do |result, err|
-      items = result.items
+      items = result.present? ? result.items : []
     end
 
     items.map do |event|
