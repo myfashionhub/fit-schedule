@@ -32,7 +32,7 @@ A Google Calendar-integrated app that lets you stay on top of your fitness sched
 
 - Obtain Google client id and secret:
   + In the [Google Developer Console](https://console.developers.google.com), create a new project.
-  
+
   + Under *APIs & auth > API*, enable the Google+ API and Calendar API
 
   + Under *APIs & auth > Credentials*, add to *Authorized redirect URIs* your callback URLs, i.e. `http://localhost:3000/auth/google_oauth2/callback`. (Add one for each environment if they have different hostname.)
@@ -93,12 +93,8 @@ web: bin/rails server -p $PORT -e $RAILS_ENV
 - `schedule:scrape_studio_classes`: gets classes for all studios.
 - `schedule:scrape_studios` updates schedule for all studios that are favorited by users (scheduled to run twice a day).
 
-```bash
-$ bundle exec rake schedule:update_studios
-$ rake schedule:update_studios
-```
-
 - Get updated list of studios:
 ```
 $ chrome --headless --dump-dom https://www.fitreserve.com/pricing
 ```
+- Update FitReserve studio entries: `$ rake db:seed`
